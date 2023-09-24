@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    // Black and white
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    // Grey
+    <color name="lightGrey">#C0C0C0</color>
+    <color name="mediumGrey">#808080</color>
+    <color name="darkGrey">#3C3C3C</color>
+
+    // Yellow
+    <color name="lightYellow">#FFFF00</color>
+    <color name="mediumYellow">#ADAD00</color>
+    <color name="darkYellow">#727200</color>
+</resources>

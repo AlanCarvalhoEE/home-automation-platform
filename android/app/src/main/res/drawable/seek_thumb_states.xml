@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false"
+        android:drawable="@drawable/seek_thumb_disabled"/> <!-- disabled state -->
+    <item android:drawable="@drawable/seek_thumb_normal"/> <!-- default state -->
+</selector>
