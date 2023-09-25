@@ -1,19 +1,19 @@
 package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SimpleCursorAdapter;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
-
-    private DBHandler dbHandler;
+public class ConfigurationActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -21,12 +21,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Load the layout
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_configuration);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-        dbHandler = new DBHandler(MainActivity.this);
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
