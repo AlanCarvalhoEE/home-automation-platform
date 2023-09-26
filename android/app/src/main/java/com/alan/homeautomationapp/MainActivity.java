@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        dbHandler.getWritableDatabase();
+
         locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {

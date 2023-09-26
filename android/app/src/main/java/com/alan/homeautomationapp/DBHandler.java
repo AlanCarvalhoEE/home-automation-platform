@@ -66,8 +66,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(TYPE_MAX_COL, "10");
         values.put(TYPE_NUMBER_COL, "0");
 
-        db.insert(LOCATION_TABLE_NAME, null, values);
-        db.close();
+        db.insert(TYPE_TABLE_NAME, null, values);
+        //db.close();
     }
 
     public void addNewDevice(String deviceName, String deviceRoom, String deviceType,

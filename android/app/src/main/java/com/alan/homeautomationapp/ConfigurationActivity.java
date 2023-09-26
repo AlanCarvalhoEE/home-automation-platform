@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
@@ -56,10 +57,13 @@ public class ConfigurationActivity extends AppCompatActivity {
             Window locationWindow = locationDialog.getWindow();
             locationWindow.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
 
+            EditText nameEditText = locationDialog.findViewById(R.id.nameEditText);
             Button confirmButton = locationDialog.findViewById(R.id.confirmButton);
             Button cancelButton = locationDialog.findViewById(R.id.cancelButton);
 
             confirmButton.setOnClickListener(view -> {
+                String locationName = nameEditText.getText().toString();
+                dbHandler.addNewLocation(locationName);
                 locationDialog.dismiss();
             });
 
