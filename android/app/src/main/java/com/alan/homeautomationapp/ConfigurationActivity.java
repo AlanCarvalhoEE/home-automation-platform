@@ -18,8 +18,10 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
 import java.util.Objects;
@@ -78,8 +80,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {                }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() > 0) confirmButton.setEnabled(true);
-                    else confirmButton.setEnabled(false);
+                    confirmButton.setEnabled(s.length() > 0);
                 }
             });
 
@@ -90,9 +91,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 locationDialog.dismiss();
             });
 
-            cancelButton.setOnClickListener(view -> {
-                locationDialog.dismiss();
-            });
+            cancelButton.setOnClickListener(view -> locationDialog.dismiss());
         });
 
         deviceAddImageButton.setOnClickListener(v -> {
@@ -114,8 +113,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {                }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() > 0) confirmButton.setEnabled(true);
-                    else confirmButton.setEnabled(false);
+                    confirmButton.setEnabled(s.length() > 0);
                 }
             });
 
@@ -125,12 +123,12 @@ public class ConfigurationActivity extends AppCompatActivity {
                 typeRadio.setId(View.generateViewId());
                 typeRadio.setText(typeList.get(i));
                 typeRadio.setTextSize(20);
-                typeRadio.setTextColor(getResources().getColor(R.color.lightGrey));
+                typeRadio.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lightGrey));
                 typeRadioGroup.addView(typeRadio);
             }
 
             typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (isChecked) designatorNumberTextView.setText(dbHandler.getDesignator(checkedRadioButton.getText().toString()));
             });
@@ -162,7 +160,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
     }
 

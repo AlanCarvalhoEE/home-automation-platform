@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TYPE_MAX_COL = "Quantidade";
     private static final String TYPE_NUMBER_COL = "Usados";
 
+
     public DBHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -47,13 +47,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 + DEVICE_ROOM_COL + " TEXT,"
                 + DEVICE_TYPE_COL + " TEXT,"
                 + DEVICE_DESIGNATOR_COL + " TEXT)";
-
         db.execSQL(query);
 
         query = "CREATE TABLE " + LOCATION_TABLE_NAME + " ("
                 + LOCATION_ID_COL + " INTEGER PRIMARY KEY, "
                 + LOCATION_NAME_COL + " TEXT)";
-
         db.execSQL(query);
 
         query = "CREATE TABLE " + TYPE_TABLE_NAME + " ("
@@ -62,16 +60,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + TYPE_DESIGNATOR_COL + " TEXT,"
                 + TYPE_MAX_COL + " TEXT,"
                 + TYPE_NUMBER_COL + " TEXT)";
-
         db.execSQL(query);
 
         ContentValues values = new ContentValues();
-
         values.put(TYPE_NAME_COL, "Iluminação");
         values.put(TYPE_DESIGNATOR_COL, "RELAY");
         values.put(TYPE_MAX_COL, "10");
         values.put(TYPE_NUMBER_COL, "0");
-
         db.insert(TYPE_TABLE_NAME, null, values);
         //db.close();
     }
@@ -111,6 +106,7 @@ public class DBHandler extends SQLiteOpenHelper {
             @SuppressLint("Range") String location = cursor.getString(cursor.getColumnIndex(LOCATION_NAME_COL));
             list.add(location);
         }
+        cursor.close();
         return list;
     }
 
@@ -123,6 +119,7 @@ public class DBHandler extends SQLiteOpenHelper {
             @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(TYPE_NAME_COL));
             list.add(type);
         }
+        cursor.close();
         return list;
     }
 
@@ -133,6 +130,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " WHERE Tipo='" + type + "'", null);
         cursor.moveToFirst();
         @SuppressLint("Range") String designator = cursor.getString(cursor.getColumnIndex(TYPE_DESIGNATOR_COL));
+
+        cursor.close();
         return designator;
     }
 
@@ -144,11 +143,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " WHERE Tipo='" + type + "'", null);
         cursor.moveToFirst();
         @SuppressLint("Range") int max = Integer.parseInt(cursor.getString(cursor.getColumnIndex(TYPE_MAX_COL)));
+        cursor.close();
 
         cursor = db.rawQuery("SELECT Usados from " + TYPE_TABLE_NAME
                 + " WHERE Tipo='" + type + "'", null);
         cursor.moveToFirst();
         @SuppressLint("Range") int used = Integer.parseInt(cursor.getString(cursor.getColumnIndex(TYPE_NUMBER_COL)));
+        cursor.close();
 
         if (max - used < 1) return "LIMIT";
         else {

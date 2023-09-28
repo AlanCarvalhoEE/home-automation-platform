@@ -26,8 +26,7 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            >
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/locationTextView"
@@ -64,6 +63,7 @@
                 android:cropToPadding="false"
                 android:padding="5dp"
                 android:scaleType="centerCrop"
+                android:contentDescription="@string/location_add_description"
                 app:layout_constraintStart_toEndOf="@id/locationSpinner"
                 app:layout_constraintTop_toTopOf="@id/locationSpinner"
                 app:layout_constraintBottom_toBottomOf="@id/locationSpinner"
@@ -121,6 +121,7 @@
                 android:cropToPadding="false"
                 android:padding="5dp"
                 android:scaleType="centerCrop"
+                android:contentDescription="@string/device_add_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/roomsTextView"
                 app:srcCompat="@drawable/ic_add" />

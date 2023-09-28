@@ -18,4 +18,10 @@
     <string name="location_name_hint">Nome do local</string>
     <string name="device_name_hint">Nome do dispositivo</string>
 
+    // Descriptions
+    <string name="location_add_description">Adicionar um novo local</string>
+    <string name="device_add_description">Adicionar um novo dispositivo</string>
+    <string name="room_open_description">Mostrar informações do cômodo</string>
+    <string name="configuration_button_description">Abrir janela de configurações</string>
+
 </resources>
