@@ -4,17 +4,24 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
@@ -46,6 +53,12 @@ public class ConfigurationActivity extends AppCompatActivity {
         ImageButton locationAddImageButton = findViewById(R.id.locationAddImageButton);
         ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
 
+        ArrayAdapter<String> adapter;
+        adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, dbHandler.getLocations());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(adapter);
+
         configurationImageButton.setOnClickListener(v -> finish());
 
         locationAddImageButton.setOnClickListener(v -> {
@@ -61,9 +74,19 @@ public class ConfigurationActivity extends AppCompatActivity {
             Button confirmButton = locationDialog.findViewById(R.id.confirmButton);
             Button cancelButton = locationDialog.findViewById(R.id.cancelButton);
 
+            nameEditText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(s.length() > 0) confirmButton.setEnabled(true);
+                    else confirmButton.setEnabled(false);
+                }
+            });
+
             confirmButton.setOnClickListener(view -> {
                 String locationName = nameEditText.getText().toString();
                 dbHandler.addNewLocation(locationName);
+
                 locationDialog.dismiss();
             });
 
@@ -81,16 +104,50 @@ public class ConfigurationActivity extends AppCompatActivity {
             Window deviceWindow = deviceDialog.getWindow();
             deviceWindow.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
 
+            EditText nameEditText = deviceDialog.findViewById(R.id.nameEditText);
+            RadioGroup typeRadioGroup = deviceDialog.findViewById(R.id.typeRadioGroup);
+            TextView designatorNumberTextView = deviceDialog.findViewById(R.id.designatorNumberTextView);
             Button confirmButton = deviceDialog.findViewById(R.id.confirmButton);
             Button cancelButton = deviceDialog.findViewById(R.id.cancelButton);
 
+            nameEditText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(s.length() > 0) confirmButton.setEnabled(true);
+                    else confirmButton.setEnabled(false);
+                }
+            });
+
+            List<String> typeList = dbHandler.getDeviceTypes();
+            for (int i = 0; i < typeList.size(); i++) {
+                RadioButton typeRadio = new RadioButton(this);
+                typeRadio.setId(View.generateViewId());
+                typeRadio.setText(typeList.get(i));
+                typeRadio.setTextSize(20);
+                typeRadio.setTextColor(getResources().getColor(R.color.lightGrey));
+                typeRadioGroup.addView(typeRadio);
+            }
+
+            typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (isChecked) designatorNumberTextView.setText(dbHandler.getDesignator(checkedRadioButton.getText().toString()));
+            });
+
             confirmButton.setOnClickListener(view -> {
+                String name = nameEditText.getText().toString();
+                String room = locationSpinner.getSelectedItem().toString();
+                int selectedTypeIndex = typeRadioGroup.getCheckedRadioButtonId();
+                RadioButton selectedTypeRadio = (RadioButton) typeRadioGroup.getChildAt(selectedTypeIndex - 1);
+                String type = selectedTypeRadio.getText().toString();
+                String designator = designatorNumberTextView.getText().toString();
+
+                dbHandler.addNewDevice(name, room, type, designator);
                 deviceDialog.dismiss();
             });
 
-            cancelButton.setOnClickListener(view -> {
-                deviceDialog.dismiss();
-            });
+            cancelButton.setOnClickListener(view -> deviceDialog.dismiss());
         });
 
         locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -98,11 +155,8 @@ public class ConfigurationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parentView) {}
 
         });
     }

@@ -1,9 +1,15 @@
 package com.alan.homeautomationapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -94,6 +100,62 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.insert(LOCATION_TABLE_NAME, null, values);
         db.close();
+    }
+
+    public List<String> getLocations() {
+
+        SQLiteDatabase db=this.getReadableDatabase();
+        List<String> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT Local from " + LOCATION_TABLE_NAME, null);
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String location = cursor.getString(cursor.getColumnIndex(LOCATION_NAME_COL));
+            list.add(location);
+        }
+        return list;
+    }
+
+    public List<String> getDeviceTypes() {
+
+        SQLiteDatabase db=this.getReadableDatabase();
+        List<String> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT Tipo from " + TYPE_TABLE_NAME, null);
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(TYPE_NAME_COL));
+            list.add(type);
+        }
+        return list;
+    }
+
+    public String getTypeDesignator(String type) {
+
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Prefixo from " + TYPE_TABLE_NAME
+                + " WHERE Tipo='" + type + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String designator = cursor.getString(cursor.getColumnIndex(TYPE_DESIGNATOR_COL));
+        return designator;
+    }
+
+    public String getDesignator(String type) {
+
+        SQLiteDatabase db=this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT Quantidade from " + TYPE_TABLE_NAME
+                + " WHERE Tipo='" + type + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") int max = Integer.parseInt(cursor.getString(cursor.getColumnIndex(TYPE_MAX_COL)));
+
+        cursor = db.rawQuery("SELECT Usados from " + TYPE_TABLE_NAME
+                + " WHERE Tipo='" + type + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") int used = Integer.parseInt(cursor.getString(cursor.getColumnIndex(TYPE_NUMBER_COL)));
+
+        if (max - used < 1) return "LIMIT";
+        else {
+            String designator = getTypeDesignator(type);
+            designator += Integer.toString(used + 1);
+            return designator;
+        }
     }
 
     @Override

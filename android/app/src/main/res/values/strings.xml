@@ -14,4 +14,8 @@
     <string name="confirm_button">Confirmar</string>
     <string name="cancel_button">Cancelar</string>
 
+    // Hints
+    <string name="location_name_hint">Nome do local</string>
+    <string name="device_name_hint">Nome do dispositivo</string>
+
 </resources>
