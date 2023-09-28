@@ -6,5 +6,16 @@
     // Labels
     <string name="location_label">Local</string>
     <string name="rooms_label">Cômodos</string>
+    <string name="name_label">Nome:</string>
+    <string name="type_label">Tipo:</string>
+    <string name="designator_label">Designador:</string>
+
+    // Buttons
+    <string name="confirm_button">Confirmar</string>
+    <string name="cancel_button">Cancelar</string>
+
+    // Hints
+    <string name="location_name_hint">Nome do local</string>
+    <string name="device_name_hint">Nome do dispositivo</string>
 
 </resources>

@@ -1,10 +1,13 @@
 package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+
+    private DBHandler dbHandler;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -24,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        dbHandler = new DBHandler(MainActivity.this);
+
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -32,6 +39,27 @@ public class MainActivity extends AppCompatActivity {
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
+        Spinner locationSpinner = findViewById(R.id.locationSpinner);
+
+        configurationImageButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
+            startActivity(intent);
+        });
+
+        dbHandler.getWritableDatabase();
+
+        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
     }
 
     @Override
