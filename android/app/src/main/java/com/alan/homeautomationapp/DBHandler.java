@@ -157,7 +157,8 @@ public class DBHandler extends SQLiteOpenHelper {
         @SuppressLint("Range") String prefix = cursor.getString(cursor.getColumnIndex(TYPE_PREFIX_COL));
         cursor.close();
 
-        return prefix + getTypeCount(type) + 1;
+        int number = getTypeCount(type) + 1;
+        return prefix + number;
     }
 
     @Override
