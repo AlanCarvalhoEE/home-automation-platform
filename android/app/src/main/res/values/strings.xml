@@ -4,8 +4,8 @@
     <string name="app_name">Home Automation APP</string>
 
     // Labels
-    <string name="location_label">Local</string>
-    <string name="rooms_label">Cômodos</string>
+    <string name="room_label">Cômodo</string>
+    <string name="devices_label">Dispositivos</string>
     <string name="name_label">Nome:</string>
     <string name="type_label">Tipo:</string>
     <string name="designator_label">Designador:</string>

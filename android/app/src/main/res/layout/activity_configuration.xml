@@ -8,7 +8,7 @@
     android:padding="8dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/locationCardView"
+        android:id="@+id/roomCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/darkGrey"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/locationLayout"
+            android:id="@+id/roomLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/darkGrey"
@@ -29,12 +29,12 @@
             android:paddingBottom="5dp">
 
             <TextView
-                android:id="@+id/locationTextView"
+                android:id="@+id/roomTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:singleLine="true"
-                android:text="@string/location_label"
+                android:text="@string/room_label"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -43,19 +43,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/locationSpinner"
+                android:id="@+id/roomSpinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/spinner_normal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/locationAddImageButton"
+                app:layout_constraintEnd_toStartOf="@id/roomAddImageButton"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/locationTextView" />
+                app:layout_constraintTop_toBottomOf="@id/roomTextView" />
 
             <ImageButton
-                android:id="@+id/locationAddImageButton"
+                android:id="@+id/roomAddImageButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
@@ -64,9 +64,9 @@
                 android:padding="5dp"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/location_add_description"
-                app:layout_constraintStart_toEndOf="@id/locationSpinner"
-                app:layout_constraintTop_toTopOf="@id/locationSpinner"
-                app:layout_constraintBottom_toBottomOf="@id/locationSpinner"
+                app:layout_constraintStart_toEndOf="@id/roomSpinner"
+                app:layout_constraintTop_toTopOf="@id/roomSpinner"
+                app:layout_constraintBottom_toBottomOf="@id/roomSpinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_add" />
 
@@ -75,7 +75,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/roomsCardView"
+        android:id="@+id/devicesCardView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cardBackgroundColor="@color/darkGrey"
@@ -84,11 +84,11 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationCardView"
+        app:layout_constraintTop_toBottomOf="@id/roomCardView"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/roomsLayout"
+            android:id="@+id/devicesLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/darkGrey"
@@ -99,12 +99,12 @@
             >
 
             <TextView
-                android:id="@+id/roomsTextView"
+                android:id="@+id/devicesTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:singleLine="true"
-                android:text="@string/rooms_label"
+                android:text="@string/devices_label"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -123,10 +123,11 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/device_add_description"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/roomsTextView"
+                app:layout_constraintTop_toBottomOf="@id/devicesTextView"
                 app:srcCompat="@drawable/ic_add" />
 
             <LinearLayout
+                android:id="@+id/roomDevicesLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"

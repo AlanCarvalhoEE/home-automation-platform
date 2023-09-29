@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
-        Spinner locationSpinner = findViewById(R.id.locationSpinner);
+        Spinner locationSpinner = findViewById(R.id.roomSpinner);
 
         configurationImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);

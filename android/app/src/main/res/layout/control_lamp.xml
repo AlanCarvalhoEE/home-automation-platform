@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/roomsCardView"
+            android:id="@+id/devicesCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/darkGrey"
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/locationLayout"
+                android:id="@+id/roomLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/darkGrey"
@@ -69,7 +69,7 @@
                     app:srcCompat="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/roomControlsLayout"
+                    android:id="@+id/roomDevicesLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

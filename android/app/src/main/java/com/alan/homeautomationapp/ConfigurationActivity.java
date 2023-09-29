@@ -2,12 +2,14 @@ package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.ContentValues;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -25,8 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
-import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,30 +58,27 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
-        Spinner locationSpinner = findViewById(R.id.locationSpinner);
-        ImageButton locationAddImageButton = findViewById(R.id.locationAddImageButton);
+        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        ImageButton roomAddImageButton = findViewById(R.id.roomAddImageButton);
         ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
 
-        ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, dbHandler.getLocations());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationSpinner.setAdapter(adapter);
+        updateRooms();
+        updateDevices();
 
         configurationImageButton.setOnClickListener(v -> finish());
 
-        locationAddImageButton.setOnClickListener(v -> {
-            Dialog locationDialog = new Dialog(this);
-            locationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            locationDialog.setContentView(R.layout.location_add_dialog);
-            locationDialog.show();
-            locationDialog.setCanceledOnTouchOutside(false);
-            Window locationWindow = locationDialog.getWindow();
-            locationWindow.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+        roomAddImageButton.setOnClickListener(v -> {
+            Dialog roomDialog = new Dialog(this);
+            roomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            roomDialog.setContentView(R.layout.room_add_dialog);
+            roomDialog.show();
+            roomDialog.setCanceledOnTouchOutside(false);
+            Window roomWindow = roomDialog.getWindow();
+            roomWindow.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
 
-            EditText nameEditText = locationDialog.findViewById(R.id.nameEditText);
-            Button confirmButton = locationDialog.findViewById(R.id.confirmButton);
-            Button cancelButton = locationDialog.findViewById(R.id.cancelButton);
+            EditText nameEditText = roomDialog.findViewById(R.id.nameEditText);
+            Button confirmButton = roomDialog.findViewById(R.id.confirmButton);
+            Button cancelButton = roomDialog.findViewById(R.id.cancelButton);
 
             nameEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {                }
@@ -91,13 +89,14 @@ public class ConfigurationActivity extends AppCompatActivity {
             });
 
             confirmButton.setOnClickListener(view -> {
-                String locationName = nameEditText.getText().toString();
-                dbHandler.addNewLocation(locationName);
+                String roomName = nameEditText.getText().toString();
+                dbHandler.addNewRoom(roomName);
+                updateRooms();
 
-                locationDialog.dismiss();
+                roomDialog.dismiss();
             });
 
-            cancelButton.setOnClickListener(view -> locationDialog.dismiss());
+            cancelButton.setOnClickListener(view -> roomDialog.dismiss());
         });
 
         deviceAddImageButton.setOnClickListener(v -> {
@@ -123,13 +122,12 @@ public class ConfigurationActivity extends AppCompatActivity {
                 }
             });
 
-            List<String> typeList = dbHandler.getDeviceTypes();
+            List<String> typeList = dbHandler.getTypeList();
             List<Integer> idList = new ArrayList<>();
 
             for (int i = 0; i < typeList.size(); i++) {
                 RadioButton typeRadio = new RadioButton(this);
                 typeRadioGroup.addView(typeRadio);
-                //typeRadio.setId(View.generateViewId());
                 idList.add(typeRadio.getId());
                 typeRadio.setText(typeList.get(i));
                 typeRadio.setTextSize(20);
@@ -145,7 +143,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
             confirmButton.setOnClickListener(view -> {
                 String name = nameEditText.getText().toString();
-                String room = locationSpinner.getSelectedItem().toString();
+                String room = roomSpinner.getSelectedItem().toString();
 
                 int selectedTypeIndex = typeRadioGroup.getCheckedRadioButtonId();
                 RadioButton selectedTypeRadio = typeRadioGroup.findViewById(selectedTypeIndex);
@@ -160,10 +158,10 @@ public class ConfigurationActivity extends AppCompatActivity {
             cancelButton.setOnClickListener(view -> deviceDialog.dismiss());
         });
 
-        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-
+                updateDevices();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -182,4 +180,48 @@ public class ConfigurationActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    public void updateRooms() {
+        Spinner locationSpinner = findViewById(R.id.roomSpinner);
+        ArrayAdapter<String> adapter;
+
+        adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, dbHandler.getRoomsList());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        locationSpinner.setAdapter(adapter);
+    }
+
+    public void updateDevices() {
+        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
+        List<String> devicesList = dbHandler.getDevicesList(roomSpinner.getSelectedItem().toString());
+
+        roomDevicesLayout.removeAllViews();
+
+        for (int i = 0; i < devicesList.size(); i++) {
+            LayoutInflater inflater = (LayoutInflater)
+                    getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View vi;
+
+            String deviceType = dbHandler.getType(devicesList.get(i));
+
+            Log.i("CARALHO", deviceType);
+
+            if (deviceType.equals("Iluminação")) {
+                vi = inflater.inflate(R.layout.control_lamp, null);
+                TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
+                roomNameTextView.setText(devicesList.get(i));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+
+            else if (deviceType.equals("Ar condicionado")) {
+                vi = inflater.inflate(R.layout.control_lamp, null);
+                TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
+                roomNameTextView.setText(devicesList.get(i));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+        }
+    }
 }
