@@ -29,9 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TYPE_TABLE_NAME = "Tipos";
     private static final String TYPE_ID_COL = "ID";
     private static final String TYPE_NAME_COL = "Tipo";
-    private static final String TYPE_DESIGNATOR_COL = "Prefixo";
-    private static final String TYPE_MAX_COL = "Quantidade";
-    private static final String TYPE_NUMBER_COL = "Usados";
+    private static final String TYPE_PREFIX_COL = "Prefixo";
 
 
     public DBHandler(Context context) {
@@ -57,17 +55,19 @@ public class DBHandler extends SQLiteOpenHelper {
         query = "CREATE TABLE " + TYPE_TABLE_NAME + " ("
                 + TYPE_ID_COL + " INTEGER PRIMARY KEY, "
                 + TYPE_NAME_COL + " TEXT,"
-                + TYPE_DESIGNATOR_COL + " TEXT,"
-                + TYPE_MAX_COL + " TEXT,"
-                + TYPE_NUMBER_COL + " TEXT)";
+                + TYPE_PREFIX_COL + " TEXT)";
         db.execSQL(query);
 
         ContentValues values = new ContentValues();
         values.put(TYPE_NAME_COL, "Iluminação");
-        values.put(TYPE_DESIGNATOR_COL, "RELAY");
-        values.put(TYPE_MAX_COL, "10");
-        values.put(TYPE_NUMBER_COL, "0");
+        values.put(TYPE_PREFIX_COL, "RELAY");
         db.insert(TYPE_TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(TYPE_NAME_COL, "Ar condicionado");
+        values.put(TYPE_PREFIX_COL, "AIR");
+        db.insert(TYPE_TABLE_NAME, null, values);
+
         //db.close();
     }
 
@@ -101,7 +101,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db=this.getReadableDatabase();
         List<String> list = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT Local from " + LOCATION_TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT " + LOCATION_NAME_COL + " from "
+                + LOCATION_TABLE_NAME, null);
         while (cursor.moveToNext()) {
             @SuppressLint("Range") String location = cursor.getString(cursor.getColumnIndex(LOCATION_NAME_COL));
             list.add(location);
@@ -114,7 +115,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db=this.getReadableDatabase();
         List<String> list = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT Tipo from " + TYPE_TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT " + TYPE_NAME_COL + " from "
+                + TYPE_TABLE_NAME, null);
         while (cursor.moveToNext()) {
             @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(TYPE_NAME_COL));
             list.add(type);
@@ -123,40 +125,39 @@ public class DBHandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public String getTypeDesignator(String type) {
+    public Integer getTypeCount(String type) {
 
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT Prefixo from " + TYPE_TABLE_NAME
-                + " WHERE Tipo='" + type + "'", null);
+        Cursor cursor = db.rawQuery("SELECT " + TYPE_PREFIX_COL + " from " + TYPE_TABLE_NAME
+                + " WHERE " + TYPE_NAME_COL + "='" + type + "'", null);
         cursor.moveToFirst();
-        @SuppressLint("Range") String designator = cursor.getString(cursor.getColumnIndex(TYPE_DESIGNATOR_COL));
+
+        @SuppressLint("Range") String prefix = cursor.getString(cursor.getColumnIndex(TYPE_PREFIX_COL));
+        cursor.close();
+
+        cursor = db.rawQuery("SELECT COUNT(" + DEVICE_DESIGNATOR_COL + ") from "
+                + DEVICE_TABLE_NAME + " WHERE " + DEVICE_DESIGNATOR_COL + " LIKE '" + prefix
+                +"%'", null);
+
+        cursor.moveToFirst();
+        int typeCount = cursor.getInt(0);
 
         cursor.close();
-        return designator;
+        return typeCount;
     }
 
     public String getDesignator(String type) {
 
-        SQLiteDatabase db=this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT Quantidade from " + TYPE_TABLE_NAME
-                + " WHERE Tipo='" + type + "'", null);
+        Cursor cursor = db.rawQuery("SELECT " + TYPE_PREFIX_COL + " from " + TYPE_TABLE_NAME
+                + " WHERE " + TYPE_NAME_COL + "='" + type + "'", null);
         cursor.moveToFirst();
-        @SuppressLint("Range") int max = Integer.parseInt(cursor.getString(cursor.getColumnIndex(TYPE_MAX_COL)));
+
+        @SuppressLint("Range") String prefix = cursor.getString(cursor.getColumnIndex(TYPE_PREFIX_COL));
         cursor.close();
 
-        cursor = db.rawQuery("SELECT Usados from " + TYPE_TABLE_NAME
-                + " WHERE Tipo='" + type + "'", null);
-        cursor.moveToFirst();
-        @SuppressLint("Range") int used = Integer.parseInt(cursor.getString(cursor.getColumnIndex(TYPE_NUMBER_COL)));
-        cursor.close();
-
-        if (max - used < 1) return "LIMIT";
-        else {
-            String designator = getTypeDesignator(type);
-            designator += Integer.toString(used + 1);
-            return designator;
-        }
+        return prefix + getTypeCount(type) + 1;
     }
 
     @Override

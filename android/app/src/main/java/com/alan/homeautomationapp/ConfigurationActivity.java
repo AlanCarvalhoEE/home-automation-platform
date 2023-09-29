@@ -2,11 +2,14 @@ package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +26,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.appbar.AppBarLayout;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -118,13 +124,17 @@ public class ConfigurationActivity extends AppCompatActivity {
             });
 
             List<String> typeList = dbHandler.getDeviceTypes();
+            List<Integer> idList = new ArrayList<>();
+
             for (int i = 0; i < typeList.size(); i++) {
                 RadioButton typeRadio = new RadioButton(this);
-                typeRadio.setId(View.generateViewId());
+                typeRadioGroup.addView(typeRadio);
+                //typeRadio.setId(View.generateViewId());
+                idList.add(typeRadio.getId());
                 typeRadio.setText(typeList.get(i));
                 typeRadio.setTextSize(20);
+                typeRadio.setHeight(120);
                 typeRadio.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lightGrey));
-                typeRadioGroup.addView(typeRadio);
             }
 
             typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -136,12 +146,14 @@ public class ConfigurationActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(view -> {
                 String name = nameEditText.getText().toString();
                 String room = locationSpinner.getSelectedItem().toString();
+
                 int selectedTypeIndex = typeRadioGroup.getCheckedRadioButtonId();
-                RadioButton selectedTypeRadio = (RadioButton) typeRadioGroup.getChildAt(selectedTypeIndex - 1);
+                RadioButton selectedTypeRadio = typeRadioGroup.findViewById(selectedTypeIndex);
                 String type = selectedTypeRadio.getText().toString();
                 String designator = designatorNumberTextView.getText().toString();
 
                 dbHandler.addNewDevice(name, room, type, designator);
+
                 deviceDialog.dismiss();
             });
 
