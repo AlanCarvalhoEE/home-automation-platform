@@ -165,7 +165,6 @@ public class ConfigurationActivity extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
-
         });
     }
 
@@ -196,7 +195,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
         List<String> devicesList = dbHandler.getDevicesList(roomSpinner.getSelectedItem().toString());
 
-        roomDevicesLayout.removeAllViews();
+        if (roomDevicesLayout.getChildCount() > 0) roomDevicesLayout.removeAllViews();
 
         for (int i = 0; i < devicesList.size(); i++) {
             LayoutInflater inflater = (LayoutInflater)
@@ -204,8 +203,6 @@ public class ConfigurationActivity extends AppCompatActivity {
             View vi;
 
             String deviceType = dbHandler.getType(devicesList.get(i));
-
-            Log.i("CARALHO", deviceType);
 
             if (deviceType.equals("Iluminação")) {
                 vi = inflater.inflate(R.layout.control_lamp, null);
