@@ -76,7 +76,8 @@ public class ConfigurationActivity extends AppCompatActivity {
             roomDialog.show();
             roomDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = roomDialog.getWindow();
-            roomWindow.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+            roomWindow.setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+            roomWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
             EditText nameEditText = roomDialog.findViewById(R.id.nameEditText);
             Button confirmButton = roomDialog.findViewById(R.id.confirmButton);
@@ -108,7 +109,8 @@ public class ConfigurationActivity extends AppCompatActivity {
             deviceDialog.show();
             deviceDialog.setCanceledOnTouchOutside(false);
             Window deviceWindow = deviceDialog.getWindow();
-            deviceWindow.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+            deviceWindow.setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+            deviceWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
             EditText nameEditText = deviceDialog.findViewById(R.id.nameEditText);
             RadioGroup typeRadioGroup = deviceDialog.findViewById(R.id.typeRadioGroup);
@@ -134,6 +136,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 typeRadio.setText(typeList.get(i));
                 typeRadio.setTextSize(20);
                 typeRadio.setHeight(120);
+                typeRadio.setSingleLine();
                 typeRadio.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lightGrey));
             }
 
