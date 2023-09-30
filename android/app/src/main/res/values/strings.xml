@@ -4,8 +4,8 @@
     <string name="app_name">Home Automation APP</string>
 
     // Labels
-    <string name="location_label">Local</string>
-    <string name="rooms_label">Cômodos</string>
+    <string name="room_label">Cômodo</string>
+    <string name="devices_label">Dispositivos</string>
     <string name="name_label">Nome:</string>
     <string name="type_label">Tipo:</string>
     <string name="designator_label">Designador:</string>
@@ -17,5 +17,11 @@
     // Hints
     <string name="location_name_hint">Nome do local</string>
     <string name="device_name_hint">Nome do dispositivo</string>
+
+    // Descriptions
+    <string name="location_add_description">Adicionar um novo local</string>
+    <string name="device_add_description">Adicionar um novo dispositivo</string>
+    <string name="room_open_description">Mostrar informações do cômodo</string>
+    <string name="configuration_button_description">Abrir janela de configurações</string>
 
 </resources>

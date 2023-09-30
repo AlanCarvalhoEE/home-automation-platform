@@ -26,6 +26,7 @@
         android:cropToPadding="false"
         android:padding="5dp"
         android:scaleType="centerCrop"
+        android:contentDescription="@string/configuration_button_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
