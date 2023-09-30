@@ -62,6 +62,8 @@ public class ConfigurationActivity extends AppCompatActivity {
         ImageButton roomAddImageButton = findViewById(R.id.roomAddImageButton);
         ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
 
+        configurationImageButton.setImageResource(R.drawable.ic_return);
+
         updateRooms();
         updateDevices();
 
@@ -184,8 +186,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter;
 
         adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, dbHandler.getRoomsList());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                this, R.layout.spinner_item, dbHandler.getRoomsList());
 
         locationSpinner.setAdapter(adapter);
     }
