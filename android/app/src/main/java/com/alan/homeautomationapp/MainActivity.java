@@ -26,8 +26,8 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DBHandler dbHandler;
-    private TCPclient tcpClient;
+    private DBHandler dbHandler;        // Database handler instance
+    private TCPclient tcpClient;        // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -37,12 +37,21 @@ public class MainActivity extends AppCompatActivity {
         // Load the layout
         setContentView(R.layout.activity_main);
 
+        // Setup the StrictMode tool
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        // Initialize database instance
         dbHandler = new DBHandler(MainActivity.this);
+
+        // Initialize TCP client instance
         tcpClient = new TCPclient(message -> {});
+
+        // Start the TCP client
         AsyncTask.execute(() -> tcpClient.run());
+
+        // Open the database
+        dbHandler.getWritableDatabase();
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -54,16 +63,17 @@ public class MainActivity extends AppCompatActivity {
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
 
+        // Update the activity views from database
         updateRooms();
         updateDevices();
 
+        // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
             startActivity(intent);
         });
 
-        dbHandler.getWritableDatabase();
-
+        // Room selection spinner listener
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -85,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    // Function to update rooms from database
     public void updateRooms() {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         ArrayAdapter<String> adapter;
@@ -95,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setAdapter(adapter);
     }
 
+    // Function to update devices from database
     @SuppressLint("InflateParams")
     public void updateDevices() {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);

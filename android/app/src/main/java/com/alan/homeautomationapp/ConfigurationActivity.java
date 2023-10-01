@@ -6,9 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,7 @@ import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler;    // Database handler instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -45,9 +43,11 @@ public class ConfigurationActivity extends AppCompatActivity {
         // Load the layout
         setContentView(R.layout.activity_configuration);
 
+        // Setup the StrictMode tool
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        // Initialize database instance
         dbHandler = new DBHandler(ConfigurationActivity.this);
 
         // Configure the action bar
@@ -62,13 +62,17 @@ public class ConfigurationActivity extends AppCompatActivity {
         ImageButton roomAddImageButton = findViewById(R.id.roomAddImageButton);
         ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
 
+        // Change the configuration button icon
         configurationImageButton.setImageResource(R.drawable.ic_return);
 
+        // Update the activity views from database
         updateRooms();
         updateDevices();
 
+        // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
 
+        // Room add button listener
         roomAddImageButton.setOnClickListener(v -> {
             Dialog roomDialog = new Dialog(this);
             roomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -102,6 +106,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             cancelButton.setOnClickListener(view -> roomDialog.dismiss());
         });
 
+        // Device add button listener
         deviceAddImageButton.setOnClickListener(v -> {
             Dialog deviceDialog = new Dialog(this);
             deviceDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -184,6 +189,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    // Function to update rooms from database
     public void updateRooms() {
         Spinner locationSpinner = findViewById(R.id.roomSpinner);
         ArrayAdapter<String> adapter;
@@ -194,6 +200,8 @@ public class ConfigurationActivity extends AppCompatActivity {
         locationSpinner.setAdapter(adapter);
     }
 
+    // Function to update devices from database
+    @SuppressLint("InflateParams")
     public void updateDevices() {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);

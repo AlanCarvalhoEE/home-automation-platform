@@ -1,6 +1,5 @@
 package com.alan.homeautomationapp;
 
-import android.os.Message;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -13,113 +12,75 @@ import java.net.Socket;
 
 public class TCPclient {
 
+    // Server information
     public static final String SERVER_IP = "192.168.0.110";
     public static final int SERVER_PORT = 5560;
-    // message to send to the server
-    private String mServerMessage;
-    // sends message received notifications
-    private OnMessageReceived mMessageListener = null;
-    // while this is true, the server will continue running
-    private boolean mRun = false;
-    // used to send messages
-    private PrintWriter mBufferOut;
-    // used to read messages from the server
-    private BufferedReader mBufferIn;
 
-    /**
-     * Constructor of the class. OnMessagedReceived listens for the messages received from server
-     */
-    public TCPclient(OnMessageReceived listener) {
-        mMessageListener = listener;
+    // Variables
+    private String serverMessage;
+    private onMessageReceived messageListener;
+    private boolean running = false;
+    private PrintWriter bufferOut;
+    private BufferedReader bufferIn;
+
+
+    // Incoming message listener
+    public TCPclient(onMessageReceived listener) {
+        messageListener = listener;
     }
 
-    /**
-     * Sends the message entered by client to the server
-     *
-     * @param message text entered by client
-     */
+    // Function to send messages
     public void sendMessage(String message) {
-        if (mBufferOut != null && !mBufferOut.checkError()) {
-            mBufferOut.println(message);
-            mBufferOut.flush();
+        if (bufferOut != null && !bufferOut.checkError()) {
+            bufferOut.println(message);
+            bufferOut.flush();
         }
     }
 
-    /**
-     * Close the connection and release the members
-     */
+    // Function to stop the TCP client
     public void stopClient() {
-        Log.i("Debug", "stopClient");
+        running = false;
 
-        // send mesage that we are closing the connection
-        //sendMessage(Constants.CLOSED_CONNECTION + "Kazy");
-
-        mRun = false;
-
-        if (mBufferOut != null) {
-            mBufferOut.flush();
-            mBufferOut.close();
+        if (bufferOut != null) {
+            bufferOut.flush();
+            bufferOut.close();
         }
 
-        mMessageListener = null;
-        mBufferIn = null;
-        mBufferOut = null;
-        mServerMessage = null;
+        messageListener = null;
+        bufferIn = null;
+        bufferOut = null;
+        serverMessage = null;
     }
 
+    // Function to start the TCP client
     public void run() {
 
-        mRun = true;
+        running = true;
 
         try {
-            //here you must put your computer's IP address.
             InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
 
-            Log.e("TCP Client", "C: Connecting...");
+            try (Socket socket = new Socket(serverAddr, SERVER_PORT)) {
+                bufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                bufferIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            //create a socket to make the connection with the server
-            Socket socket = new Socket(serverAddr, SERVER_PORT);
-
-            try {
-                Log.i("Debug", "inside try catch");
-                //sends the message to the server
-                mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-
-                //receives the message which the server sends back
-                mBufferIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                // send login name
-                //sendMessage(Constants.LOGIN_NAME + PreferencesManager.getInstance().getUserName());
-                //sendMessage("Hi");
-                //in this while the client listens for the messages sent by the server
-                while (mRun) {
-                    mServerMessage = mBufferIn.readLine();
-                    if (mServerMessage != null && mMessageListener != null) {
-                        //call the method messageReceived from MyActivity class
-                        mMessageListener.messageReceived(mServerMessage);
+                while (running) {
+                    serverMessage = bufferIn.readLine();
+                    if (serverMessage != null && messageListener != null) {
+                        messageListener.messageReceived(serverMessage);
                     }
-
                 }
-                Log.e("RESPONSE FROM SERVER", "S: Received Message: '" + mServerMessage + "'");
-
             } catch (Exception e) {
-
                 Log.e("TCP", "S: Error", e);
-
-            } finally {
-                //the socket must be closed. It is not possible to reconnect to this socket
-                // after it is closed, which means a new socket instance has to be created.
-                socket.close();
             }
 
         } catch (Exception e) {
             Log.e("TCP", "C: Error", e);
         }
-
     }
 
-    //Declare the interface. The method messageReceived(String message) will must be implemented in the MyActivity
-    //class at on asynckTask doInBackground
-    public interface OnMessageReceived {
-        public void messageReceived(String message);
+    // Function to process the received message
+    public interface onMessageReceived {
+        void messageReceived(String message);
     }
 }
