@@ -3,6 +3,7 @@ package com.alan.homeautomationapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -25,6 +27,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private DBHandler dbHandler;
+    private TCPclient tcpClient;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         dbHandler = new DBHandler(MainActivity.this);
+        tcpClient = new TCPclient(message -> {});
+        AsyncTask.execute(() -> tcpClient.run());
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setAdapter(adapter);
     }
 
+    @SuppressLint("InflateParams")
     public void updateDevices() {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
@@ -110,6 +116,16 @@ public class MainActivity extends AppCompatActivity {
                 roomNameTextView.setText(devicesList.get(i));
                 roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                ToggleButton lampControlToggleButton = findViewById(R.id.lampControlToggleButton);
+                lampControlToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        tcpClient.sendMessage("RELAY1-1");
+                    }
+                    else {
+                        tcpClient.sendMessage("RELAY1-0");
+                    }
+                });
             }
 
             else if (deviceType.equals("Ar condicionado")) {
