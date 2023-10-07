@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Function to update devices from database
-    @SuppressLint("InflateParams")
+    @SuppressLint({"InflateParams", "SetTextI18n"})
     public void updateDevices() {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
@@ -121,31 +122,59 @@ public class MainActivity extends AppCompatActivity {
             View vi;
 
             String deviceType = dbHandler.getType(devicesList.get(i));
+            String deviceDesignator = dbHandler.getDesignator(devicesList.get(i));
 
             if (deviceType.equals("Iluminação")) {
-                vi = inflater.inflate(R.layout.control_lamp, null);
-                TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
+                vi = inflater.inflate(R.layout.device_lamp, null);
+                TextView roomNameTextView = vi.findViewById(R.id.lampNameTextView);
                 roomNameTextView.setText(devicesList.get(i));
                 roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 ToggleButton lampControlToggleButton = findViewById(R.id.lampControlToggleButton);
+
                 lampControlToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
-                        tcpClient.sendMessage("RELAY1-1");
+                        tcpClient.sendMessage(deviceDesignator + "-ON");
                     }
                     else {
-                        tcpClient.sendMessage("RELAY1-0");
+                        tcpClient.sendMessage(deviceDesignator + "-OFF");
                     }
                 });
             }
 
             else if (deviceType.equals("Ar condicionado")) {
-                vi = inflater.inflate(R.layout.control_lamp, null);
-                TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
-                roomNameTextView.setText(devicesList.get(i));
+                vi = inflater.inflate(R.layout.device_air_conditioner, null);
+                TextView airNameTextView = vi.findViewById(R.id.airNameTextView);
+                airNameTextView.setText(devicesList.get(i));
                 roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                AtomicInteger temperature = new AtomicInteger(20);
+
+                ToggleButton airControlToggleButton = findViewById(R.id.airControlToggleButton);
+                ImageButton upImageButton = findViewById(R.id.upImageButton);
+                ImageButton downImageButton = findViewById(R.id.downImageButton);
+                TextView temperatureTextView = findViewById(R.id.temperatureTextView);
+
+                airControlToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        tcpClient.sendMessage(deviceDesignator + "-ON");
+                    }
+                    else {
+                        tcpClient.sendMessage(deviceDesignator + "-OFF");
+                    }
+                });
+
+                upImageButton.setOnClickListener(v -> {
+                    temperature.getAndIncrement();
+                    temperatureTextView.setText(temperature + "°C");
+                });
+
+                downImageButton.setOnClickListener(v -> {
+                    temperature.getAndDecrement();
+                    temperatureTextView.setText(temperature + "°C");
+                });
             }
         }
     }
