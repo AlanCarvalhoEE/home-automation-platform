@@ -35,9 +35,6 @@ class Client(threading.Thread):
                 break
             if data != "":
                 pub.sendMessage('commands', arg1 = data)
-                for client in connections:
-                    if client.id != self.id:
-                        client.socket.sendall(data)
 
 # Wait for new connections
 def newConnections(socket):

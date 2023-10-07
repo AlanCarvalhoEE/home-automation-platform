@@ -8,12 +8,19 @@ def listener(arg1 = None):
 
     if b'RELAY' in arg1:
 
-        data = arg1.decode('utf-8').split('-')
+        data = arg1.decode('utf-8').replace("\n", "").split('-')
         number = int(data[0][-1])
-        state = int(data[1][0])
+        state = data[1]
 
-        devices.setRelay(configuration.relays[number - 1], state);
+        devices.setRelayState(configuration.relays[number - 1], state)
 
+    elif b'AIR' in arg1:
+
+        data = arg1.decode('utf-8').replace("\n" ,"").split('-')
+        address = server.connections[0].address
+        state = data[1]
+
+        devices.setAirConditionerState(address, state)
 
 server.main()                           # Initialize the TCP server
 pub.subscribe(listener, 'commands')     # Subscribe to the 'commands' topic
