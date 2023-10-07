@@ -113,7 +113,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<String> getDevicesList(String room) {
 
-        SQLiteDatabase db=this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         List<String> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT " + DEVICE_NAME_COL + " from "
                 + DEVICE_TABLE_NAME + " WHERE " + DEVICE_ROOM_COL + "='" + room + "'", null);
@@ -174,19 +174,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return type;
     }
 
-    public String getDesignator(String type) {
+    public String getDesignator(String deviceName) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT " + TYPE_PREFIX_COL + " from " + TYPE_TABLE_NAME
-                + " WHERE " + TYPE_NAME_COL + "='" + type + "'", null);
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_DESIGNATOR_COL + " from " + DEVICE_TABLE_NAME
+                + " WHERE " + DEVICE_NAME_COL + "='" + deviceName + "'", null);
         cursor.moveToFirst();
 
-        @SuppressLint("Range") String prefix = cursor.getString(cursor.getColumnIndex(TYPE_PREFIX_COL));
+        @SuppressLint("Range") String designator = cursor.getString(cursor.getColumnIndex(DEVICE_DESIGNATOR_COL));
         cursor.close();
 
-        int number = getTypeCount(type) + 1;
-        return prefix + number;
+        return designator;
     }
 
     @Override

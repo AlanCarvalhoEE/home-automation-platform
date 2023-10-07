@@ -217,16 +217,16 @@ public class ConfigurationActivity extends AppCompatActivity {
             String deviceType = dbHandler.getType(devicesList.get(i));
 
             if (deviceType.equals("Iluminação")) {
-                vi = inflater.inflate(R.layout.control_lamp, null);
-                TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
+                vi = inflater.inflate(R.layout.device_lamp, null);
+                TextView roomNameTextView = vi.findViewById(R.id.lampNameTextView);
                 roomNameTextView.setText(devicesList.get(i));
                 roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
 
             else if (deviceType.equals("Ar condicionado")) {
-                vi = inflater.inflate(R.layout.control_lamp, null);
-                TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
+                vi = inflater.inflate(R.layout.device_lamp, null);
+                TextView roomNameTextView = vi.findViewById(R.id.lampNameTextView);
                 roomNameTextView.setText(devicesList.get(i));
                 roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));

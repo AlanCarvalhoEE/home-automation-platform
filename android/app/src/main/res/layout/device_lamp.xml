@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/devicesCardView"
+            android:id="@+id/deviceCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/mediumGrey"
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/roomLayout"
+                android:id="@+id/lampLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/mediumGrey"
@@ -41,7 +41,7 @@
                 android:paddingBottom="5dp">
 
                 <TextView
-                    android:id="@+id/roomNameTextView"
+                    android:id="@+id/lampNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -61,10 +61,10 @@
                     android:background="@drawable/button_light_states"
                     android:textOn=""
                     android:textOff=""
-                    android:contentDescription="@string/room_open_description"
-                    app:layout_constraintBottom_toBottomOf="@id/roomNameTextView"
+                    android:contentDescription="@string/lamp_control_description"
+                    app:layout_constraintBottom_toBottomOf="@id/lampNameTextView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/roomNameTextView" />
+                    app:layout_constraintTop_toTopOf="@id/lampNameTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

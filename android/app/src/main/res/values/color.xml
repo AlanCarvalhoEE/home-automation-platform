@@ -14,4 +14,10 @@
     <color name="lightYellow">#FFFF00</color>
     <color name="mediumYellow">#ADAD00</color>
     <color name="darkYellow">#727200</color>
+
+    // Blue
+    <color name="lightBlue">#00B6FF</color>
+    <color name="mediumBlue">#0042FF</color>
+    <color name="darkBlue">#0000BA</color>
+
 </resources>
