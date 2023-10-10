@@ -1,0 +1,22 @@
+import RPi.GPIO as GPIO     # Library for GPIO manipulation
+import socket
+
+# Function to control relays
+# parameter 1 = relay port
+# parameter 2 = relay state (ON or OFF)
+def setRelayState(port, state):
+    if state == 'ON':
+        GPIO.output(port, GPIO.HIGH)
+    elif state == 'OFF':
+        GPIO.output(port, GPIO.LOW)
+
+def setAirConditionerState(address, state):
+   # airSocket = socket.socket()
+   # airSocket.bind(address)
+    if state == 'ON':
+        print("AIR_ON")
+        .send(b'AAAA')
+    elif state == 'OFF':
+        print("AIR_OFF")
+        airSocket.send(b'BBBB')
+
