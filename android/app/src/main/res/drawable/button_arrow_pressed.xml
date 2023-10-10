@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <item>
-        <rotate
-            android:fromDegrees="45"
-            android:toDegrees="45"
-            android:pivotX="-40%"
-            android:pivotY="87%" >
-            <shape
-                android:shape="rectangle" >
-                <stroke android:color="@color/white" android:width="10dp"/>
-                <solid
-                    android:color="@color/mediumYellow" />
-            </shape>
-        </rotate>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="@dimen/circular_button_corner_radius" />
+            <stroke
+                android:width="3dp"
+                android:color="@android:color/transparent"/>
+        </shape>
     </item>
+    <item android:drawable="@drawable/ic_arrow_down"
+        android:bottom="10dp"
+        android:top="10dp"
+        android:right="10dp"
+        android:left="10dp"/>
 </layer-list>
