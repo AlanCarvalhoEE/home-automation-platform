@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -21,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DBHandler(MainActivity.this);
 
         // Initialize TCP client instance
-        tcpClient = new TCPclient(message -> {});
+        tcpClient = new TCPclient(this::handleServerMessage);
 
         // Start the TCP client
         AsyncTask.execute(() -> tcpClient.run());
@@ -65,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
 
         // Update the activity views from database
-        updateRooms();
-        updateDevices();
+        tcpClient.sendMessage("GET_DATABASE");
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                updateDevices();
+                tcpClient.sendMessage("GET_DEVICES_LIST(" + roomSpinner.getSelectedItem().toString() + ")");
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -97,28 +100,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Function to update rooms from database
-    public void updateRooms() {
+    public void getRoomsList(String message) {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         ArrayAdapter<String> adapter;
 
+        String cleanMessage = message.substring(message.indexOf("-") + 1);
+        cleanMessage = cleanMessage.replaceAll("[\\[\\]\",]", "");
+        String[] items = cleanMessage.split(" ");
+        List<String> roomsList = new ArrayList<>(Arrays.asList(items));
         adapter = new ArrayAdapter<>(
-                this, R.layout.spinner_item, dbHandler.getRoomsList());
+                this, R.layout.spinner_item, roomsList);
 
         roomSpinner.setAdapter(adapter);
     }
 
     // Function to update devices from database
-    @SuppressLint({"InflateParams", "SetTextI18n"})
-    public void updateDevices() {
-        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+    public void getDevicesList(String message) {
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
-        List<String> devicesList = dbHandler.getDevicesList(roomSpinner.getSelectedItem().toString());
+        ArrayAdapter<String> adapter;
 
         if (roomDevicesLayout.getChildCount() > 0) roomDevicesLayout.removeAllViews();
 
+        String cleanMessage = message.substring(message.indexOf("-") + 1);
+        cleanMessage = cleanMessage.replaceAll("[\\[\\]\",]", "");
+        String[] items = cleanMessage.split(" ");
+        List<String> devicesList = new ArrayList<>(Arrays.asList(items));
+        Log.d("DEBUG_TCP", devicesList.toString());
+
         for (int i = 0; i < devicesList.size(); i++) {
-            LayoutInflater inflater = (LayoutInflater)
-                    getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View vi;
 
             String deviceType = dbHandler.getType(devicesList.get(i));
@@ -155,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
                 ToggleButton airControlToggleButton = findViewById(R.id.airControlToggleButton);
                 ImageButton upImageButton = findViewById(R.id.upImageButton);
                 ImageButton downImageButton = findViewById(R.id.downImageButton);
-                TextView temperatureTextView = findViewById(R.id.temperatureTextView);
+                EditText temperatureEditText = findViewById(R.id.temperatureEditText);
+
+                temperatureEditText.setText(temperature + "°C");
 
                 airControlToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
@@ -168,14 +180,20 @@ public class MainActivity extends AppCompatActivity {
 
                 upImageButton.setOnClickListener(v -> {
                     temperature.getAndIncrement();
-                    temperatureTextView.setText(temperature + "°C");
+                    temperatureEditText.setText(temperature + "°C");
+                    tcpClient.sendMessage(deviceDesignator + "-TEMP_UP");
                 });
 
                 downImageButton.setOnClickListener(v -> {
                     temperature.getAndDecrement();
-                    temperatureTextView.setText(temperature + "°C");
+                    temperatureEditText.setText(temperature + "°C");
+                    tcpClient.sendMessage(deviceDesignator + "-TEMP_DOWN");
                 });
             }
         }
+    }
+
+    public void handleServerMessage(String message) {
+        if (message.contains("DATABASE")) dbHandler.updateDatabase(message);
     }
 }

@@ -86,6 +86,10 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateDatabase(String databaseJSON) {
+        
+    }
+
     public void addNewRoom(String roomName) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -137,27 +141,6 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         return list;
-    }
-
-    public Integer getTypeCount(String type) {
-
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + TYPE_PREFIX_COL + " from " + TYPE_TABLE_NAME
-                + " WHERE " + TYPE_NAME_COL + "='" + type + "'", null);
-        cursor.moveToFirst();
-
-        @SuppressLint("Range") String prefix = cursor.getString(cursor.getColumnIndex(TYPE_PREFIX_COL));
-        cursor.close();
-
-        cursor = db.rawQuery("SELECT COUNT(" + DEVICE_DESIGNATOR_COL + ") from "
-                + DEVICE_TABLE_NAME + " WHERE " + DEVICE_DESIGNATOR_COL + " LIKE '" + prefix
-                +"%'", null);
-
-        cursor.moveToFirst();
-        int typeCount = cursor.getInt(0);
-
-        cursor.close();
-        return typeCount;
     }
 
     public String getType(String deviceName) {
