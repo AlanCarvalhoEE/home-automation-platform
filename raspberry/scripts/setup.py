@@ -9,7 +9,7 @@ dbName = "home_automation_db.db"    # Database name
 dbStructure = [
                ["Dispositivos"],                                         # Table 1 name
                ["ID", "Dispositivo", "Cômodo", "Tipo", "Designador"],    # Table 1 columns
-               ["INTEGER_PRIMARY_KEY", "TEXT", "TEXT", "TEXT"],          # Table 1 types
+               ["INTEGER_PRIMARY_KEY", "TEXT", "TEXT", "TEXT", "TEXT"],  # Table 1 types
                ["Cômodos"],                                              # Table 2 name
                ["ID", "Cômodo"],                                         # Table 2 columns
                ["INTEGER PRIMARY KEY", "TEXT"],                          # Table 2 types
