@@ -9,9 +9,12 @@ def listener(arg1 = None):
 
     if b'GET_DATABASE' in arg1:
         database = dbhandler.getDatabase()
+        firstTable = True
         databaseMessage = "DATABASE-"
         for table in database:
+            if (not firstTable): databaseMessage += '/'
             databaseMessage += table
+            firstTable = False
         databaseMessage += '\r\n'
         server.connections[0].socket.sendto((databaseMessage).encode('utf-8'), server.connections[0].address)
 
@@ -19,15 +22,12 @@ def listener(arg1 = None):
         data = arg1.decode('utf-8').replace("\n", "").split('-')
         number = int(data[0][-1])
         state = data[1]
-
         devices.controlRelay(setup.relays[number - 1], state)
 
     elif b'AIR' in arg1:
-
         data = arg1.decode('utf-8').replace("\n" ,"").split('-')
         address = server.connections[0].address
         command = data[1]
-
         devices.controlAirConditioner(address, command)
 
 server.main()                           # Initialize the TCP server
