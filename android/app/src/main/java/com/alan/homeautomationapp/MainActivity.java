@@ -68,10 +68,6 @@ public class MainActivity extends AppCompatActivity {
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
 
-        // Update the activity views from database
-        Handler handler = new Handler();
-        handler.postDelayed(() -> tcpClient.sendMessage("GET_DATABASE"), 5000);
-
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);

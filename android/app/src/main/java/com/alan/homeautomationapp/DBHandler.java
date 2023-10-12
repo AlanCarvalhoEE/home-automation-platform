@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,14 +96,14 @@ public class DBHandler extends SQLiteOpenHelper {
         String data = databaseString.substring(startIndex + 1);
         String[] tables = data.split("\\|");
 
-        for (int i = 0; i < tables.length; i++) {
+        for (String table : tables) {
 
             SQLiteDatabase database = this.getWritableDatabase();
 
             String tableName;
             String[] headers = new String[0];
 
-            String[] rows = tables[i].split("/");
+            String[] rows = table.split("/");
 
             if (rows.length > 2) {
                 ContentValues values = new ContentValues();
@@ -117,8 +114,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
                     if (j == 1) {
                         headers = rows[j].split(", ");
-                    }
-                    else {
+                    } else {
                         String[] fields = rows[j].split(", ");
 
                         for (int k = 0; k < fields.length; k++) {

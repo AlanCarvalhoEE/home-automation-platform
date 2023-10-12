@@ -4,6 +4,7 @@
     <string name="app_name">Home Automation APP</string>
 
     // Labels
+    <string name="loading_label">Carregando dados</string>
     <string name="room_label">Cômodo</string>
     <string name="devices_label">Dispositivos</string>
     <string name="name_label">Nome:</string>
