@@ -6,6 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,8 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DEVICE_NAME_COL = "Dispositivo";
     private static final String DEVICE_ROOM_COL = "Cômodo";
     private static final String DEVICE_TYPE_COL = "Tipo";
-    private static final String DEVICE_DESIGNATOR_COL = "Identificação";
+    private static final String DEVICE_DESIGNATOR_COL = "Designador";
+    private static final String DEVICE_ADDRESS_COL = "Endereço";
 
     private static final String ROOM_TABLE_NAME = "Cômodos";
     private static final String ROOM_ID_COL = "ID";
@@ -30,6 +35,12 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TYPE_ID_COL = "ID";
     private static final String TYPE_NAME_COL = "Tipo";
     private static final String TYPE_PREFIX_COL = "Prefixo";
+
+    private static final String USER_TABLE_NAME = "Usuários";
+    private static final String USER_ID_COL = "ID";
+    private static final String USER_NAME_COL = "Usuário";
+    private static final String USER_PASSWORD_COL = "Senha";
+    private static final String USER_LEVEL_COL = "Nível";
 
 
     public DBHandler(Context context) {
@@ -44,7 +55,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + DEVICE_NAME_COL + " TEXT,"
                 + DEVICE_ROOM_COL + " TEXT,"
                 + DEVICE_TYPE_COL + " TEXT,"
-                + DEVICE_DESIGNATOR_COL + " TEXT)";
+                + DEVICE_DESIGNATOR_COL + " TEXT,"
+                + DEVICE_ADDRESS_COL + " TEXT)";
         db.execSQL(query);
 
         query = "CREATE TABLE " + ROOM_TABLE_NAME + " ("
@@ -58,17 +70,12 @@ public class DBHandler extends SQLiteOpenHelper {
                 + TYPE_PREFIX_COL + " TEXT)";
         db.execSQL(query);
 
-        ContentValues values = new ContentValues();
-        values.put(TYPE_NAME_COL, "Iluminação");
-        values.put(TYPE_PREFIX_COL, "RELAY");
-        db.insert(TYPE_TABLE_NAME, null, values);
-
-        values = new ContentValues();
-        values.put(TYPE_NAME_COL, "Ar condicionado");
-        values.put(TYPE_PREFIX_COL, "AIR");
-        db.insert(TYPE_TABLE_NAME, null, values);
-
-        //db.close();
+        query = "CREATE TABLE " + USER_TABLE_NAME + " ("
+                + USER_ID_COL + " INTEGER PRIMARY KEY, "
+                + USER_NAME_COL + " TEXT,"
+                + USER_PASSWORD_COL + " TEXT,"
+                + USER_LEVEL_COL + " TEXT)";
+        db.execSQL(query);
     }
 
     public void addNewDevice(String deviceName, String deviceRoom, String deviceType,
@@ -86,8 +93,43 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateDatabase(String databaseJSON) {
-        
+    public void updateDatabase(String databaseString) {
+
+        int startIndex = databaseString.indexOf("|");
+        String data = databaseString.substring(startIndex + 1);
+        String[] tables = data.split("\\|");
+
+        for (int i = 0; i < tables.length; i++) {
+
+            SQLiteDatabase database = this.getWritableDatabase();
+
+            String tableName;
+            String[] headers = new String[0];
+
+            String[] rows = tables[i].split("/");
+
+            if (rows.length > 2) {
+                ContentValues values = new ContentValues();
+                tableName = rows[0];
+                Log.d("DEBUG_DB", tableName);
+
+                for (int j = 1; j < rows.length; j++) {
+
+                    if (j == 1) {
+                        headers = rows[j].split(", ");
+                    }
+                    else {
+                        String[] fields = rows[j].split(", ");
+
+                        for (int k = 0; k < fields.length; k++) {
+                            values.put(headers[k], fields[k]);
+                        }
+                        database.insert(tableName, null, values);
+                    }
+                }
+            }
+            database.close();
+        }
     }
 
     public void addNewRoom(String roomName) {
@@ -103,7 +145,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<String> getRoomsList() {
 
-        SQLiteDatabase db=this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         List<String> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT " + ROOM_NAME_COL + " from "
                 + ROOM_TABLE_NAME, null);

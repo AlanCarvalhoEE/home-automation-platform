@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
 
         // Update the activity views from database
-        tcpClient.sendMessage("GET_DATABASE");
+        Handler handler = new Handler();
+        handler.postDelayed(() -> tcpClient.sendMessage("GET_DATABASE"), 5000);
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
@@ -125,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         cleanMessage = cleanMessage.replaceAll("[\\[\\]\",]", "");
         String[] items = cleanMessage.split(" ");
         List<String> devicesList = new ArrayList<>(Arrays.asList(items));
-        Log.d("DEBUG_TCP", devicesList.toString());
 
         for (int i = 0; i < devicesList.size(); i++) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
