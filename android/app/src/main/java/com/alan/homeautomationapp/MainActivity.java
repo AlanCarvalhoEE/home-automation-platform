@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
 
-        // Update the activity views from database
-        tcpClient.sendMessage("GET_DATABASE");
+        updateRooms();
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
@@ -100,18 +99,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Function to update rooms from database
-    public void getRoomsList(String message) {
-        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+    public void updateRooms() {
+        Spinner locationSpinner = findViewById(R.id.roomSpinner);
         ArrayAdapter<String> adapter;
-
-        String cleanMessage = message.substring(message.indexOf("-") + 1);
-        cleanMessage = cleanMessage.replaceAll("[\\[\\]\",]", "");
-        String[] items = cleanMessage.split(" ");
-        List<String> roomsList = new ArrayList<>(Arrays.asList(items));
         adapter = new ArrayAdapter<>(
-                this, R.layout.spinner_item, roomsList);
-
-        roomSpinner.setAdapter(adapter);
+                this, R.layout.spinner_item, dbHandler.getRoomsList());
+        locationSpinner.setAdapter(adapter);
     }
 
     // Function to update devices from database
@@ -125,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         cleanMessage = cleanMessage.replaceAll("[\\[\\]\",]", "");
         String[] items = cleanMessage.split(" ");
         List<String> devicesList = new ArrayList<>(Arrays.asList(items));
-        Log.d("DEBUG_TCP", devicesList.toString());
 
         for (int i = 0; i < devicesList.size(); i++) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

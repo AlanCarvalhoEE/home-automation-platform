@@ -83,13 +83,13 @@
                     android:background="@color/mediumGrey" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/typeLayout"
+                    android:id="@+id/messageLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
                     <TextView
-                        android:id="@+id/typeTextView"
+                        android:id="@+id/errorTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
@@ -108,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginStart="20dp"
-                        app:layout_constraintStart_toEndOf="@id/typeTextView"
+                        app:layout_constraintStart_toEndOf="@id/errorTextView"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" >
@@ -177,7 +177,7 @@
                     android:layout_marginTop="10dp">
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/confirmButton"
+                        android:id="@+id/yesButton"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_margin="10dp"
@@ -186,13 +186,13 @@
                         android:paddingEnd="10dp"
                         android:enabled="false"
                         android:background="@drawable/button_text_states"
-                        app:layout_constraintEnd_toStartOf="@id/cancelButton"
+                        app:layout_constraintEnd_toStartOf="@id/noButton"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/cancelButton"
+                        android:id="@+id/noButton"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_margin="10dp"
@@ -200,7 +200,7 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:background="@drawable/button_text_normal"
-                        app:layout_constraintStart_toEndOf="@id/confirmButton"
+                        app:layout_constraintStart_toEndOf="@id/yesButton"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />

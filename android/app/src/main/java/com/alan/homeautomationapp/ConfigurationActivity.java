@@ -84,8 +84,8 @@ public class ConfigurationActivity extends AppCompatActivity {
             roomWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
             EditText nameEditText = roomDialog.findViewById(R.id.nameEditText);
-            Button confirmButton = roomDialog.findViewById(R.id.confirmButton);
-            Button cancelButton = roomDialog.findViewById(R.id.cancelButton);
+            Button confirmButton = roomDialog.findViewById(R.id.yesButton);
+            Button cancelButton = roomDialog.findViewById(R.id.noButton);
 
             nameEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {                }
@@ -120,8 +120,8 @@ public class ConfigurationActivity extends AppCompatActivity {
             EditText nameEditText = deviceDialog.findViewById(R.id.nameEditText);
             RadioGroup typeRadioGroup = deviceDialog.findViewById(R.id.typeRadioGroup);
             TextView designatorNumberTextView = deviceDialog.findViewById(R.id.designatorNumberTextView);
-            Button confirmButton = deviceDialog.findViewById(R.id.confirmButton);
-            Button cancelButton = deviceDialog.findViewById(R.id.cancelButton);
+            Button confirmButton = deviceDialog.findViewById(R.id.yesButton);
+            Button cancelButton = deviceDialog.findViewById(R.id.noButton);
 
             nameEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {                }
