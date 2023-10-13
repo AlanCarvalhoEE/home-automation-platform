@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class TCPclient {
 
@@ -35,6 +37,18 @@ public class TCPclient {
         if (bufferOut != null && !bufferOut.checkError()) {
             bufferOut.println(message);
             bufferOut.flush();
+        }
+    }
+
+    // Function to ping devices
+    public boolean pingDevice (String address, int port) {
+        try {
+            try (Socket soc = new Socket()) {
+                soc.connect(new InetSocketAddress(address, port), 5000);
+            }
+            return true;
+        } catch (IOException ex) {
+            return false;
         }
     }
 

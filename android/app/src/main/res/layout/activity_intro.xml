@@ -28,7 +28,6 @@
 
         <ProgressBar
             android:id="@+id/loadingProgressBar"
-
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
@@ -37,10 +36,11 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
+            android:id="@+id/messageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/loading_label"
+            android:text="@string/connecting_message"
             android:textColor="@color/lightGrey"
             android:textSize="24sp"
             android:textStyle="bold"

@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
 
+        updateRooms();
+
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
@@ -97,18 +99,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Function to update rooms from database
-    public void getRoomsList(String message) {
-        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+    public void updateRooms() {
+        Spinner locationSpinner = findViewById(R.id.roomSpinner);
         ArrayAdapter<String> adapter;
-
-        String cleanMessage = message.substring(message.indexOf("-") + 1);
-        cleanMessage = cleanMessage.replaceAll("[\\[\\]\",]", "");
-        String[] items = cleanMessage.split(" ");
-        List<String> roomsList = new ArrayList<>(Arrays.asList(items));
         adapter = new ArrayAdapter<>(
-                this, R.layout.spinner_item, roomsList);
-
-        roomSpinner.setAdapter(adapter);
+                this, R.layout.spinner_item, dbHandler.getRoomsList());
+        locationSpinner.setAdapter(adapter);
     }
 
     // Function to update devices from database
