@@ -2,17 +2,14 @@ package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -61,13 +58,14 @@ public class ConfigurationActivity extends AppCompatActivity {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         ImageButton roomAddImageButton = findViewById(R.id.roomAddImageButton);
         ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
         // Change the configuration button icon
         configurationImageButton.setImageResource(R.drawable.ic_return);
 
         // Update the activity views from database
-        updateRooms();
-        updateDevices();
+        Commom.updateRooms(this, dbHandler, roomSpinner);
+        Commom.updateDevices(this, dbHandler, roomSpinner, roomDevicesLayout);
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
@@ -98,7 +96,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(view -> {
                 String roomName = nameEditText.getText().toString();
                 dbHandler.addNewRoom(roomName);
-                updateRooms();
+                Commom.updateRooms(this, dbHandler, roomSpinner);
 
                 roomDialog.dismiss();
             });
@@ -171,7 +169,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                updateDevices();
+                Commom.updateDevices(ConfigurationActivity.this, dbHandler, roomSpinner, roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -183,54 +181,8 @@ public class ConfigurationActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    // Function to update rooms from database
-    public void updateRooms() {
-        Spinner locationSpinner = findViewById(R.id.roomSpinner);
-        ArrayAdapter<String> adapter;
-
-        adapter = new ArrayAdapter<>(
-                this, R.layout.spinner_item, dbHandler.getRoomsList());
-
-        locationSpinner.setAdapter(adapter);
-    }
-
-    // Function to update devices from database
-    @SuppressLint("InflateParams")
-    public void updateDevices() {
-        Spinner roomSpinner = findViewById(R.id.roomSpinner);
-        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
-        List<String> devicesList = dbHandler.getDevicesList(roomSpinner.getSelectedItem().toString());
-
-        if (roomDevicesLayout.getChildCount() > 0) roomDevicesLayout.removeAllViews();
-
-        for (int i = 0; i < devicesList.size(); i++) {
-            LayoutInflater inflater = (LayoutInflater)
-                    getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View vi;
-
-            String deviceType = dbHandler.getType(devicesList.get(i));
-
-            if (deviceType.equals("Iluminação")) {
-                vi = inflater.inflate(R.layout.device_lamp, null);
-                TextView roomNameTextView = vi.findViewById(R.id.lampNameTextView);
-                roomNameTextView.setText(devicesList.get(i));
-                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
-
-            else if (deviceType.equals("Ar condicionado")) {
-                vi = inflater.inflate(R.layout.device_lamp, null);
-                TextView roomNameTextView = vi.findViewById(R.id.lampNameTextView);
-                roomNameTextView.setText(devicesList.get(i));
-                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
-        }
     }
 }

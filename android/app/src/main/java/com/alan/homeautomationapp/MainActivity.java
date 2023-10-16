@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MainActivity extends AppCompatActivity {
 
     private DBHandler dbHandler;        // Database handler instance
-    private TCPclient tcpClient;        // TCP client instance
+    //private TCPclient tcpClient;        // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -50,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DBHandler(MainActivity.this);
 
         // Initialize TCP client instance
-        tcpClient = new TCPclient(this::handleServerMessage);
+        //tcpClient = new TCPclient(this::handleServerMessage);
 
         // Start the TCP client
-        AsyncTask.execute(() -> tcpClient.run());
+        //AsyncTask.execute(() -> tcpClient.run());
 
         // Open the database
         dbHandler.getWritableDatabase();
@@ -67,8 +66,10 @@ public class MainActivity extends AppCompatActivity {
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        updateRooms();
+        Commom.updateRooms(this, dbHandler, roomSpinner);
+        Commom.updateDevices(this, dbHandler, roomSpinner, roomDevicesLayout);
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                tcpClient.sendMessage("GET_DEVICES_LIST(" + roomSpinner.getSelectedItem().toString() + ")");
+                Commom.updateDevices(MainActivity.this, dbHandler, roomSpinner, roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -94,17 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    // Function to update rooms from database
-    public void updateRooms() {
-        Spinner locationSpinner = findViewById(R.id.roomSpinner);
-        ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<>(
-                this, R.layout.spinner_item, dbHandler.getRoomsList());
-        locationSpinner.setAdapter(adapter);
     }
 
     // Function to update devices from database
@@ -137,10 +129,10 @@ public class MainActivity extends AppCompatActivity {
 
                 lampControlToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
-                        tcpClient.sendMessage(deviceDesignator + "-ON");
+                        //tcpClient.sendMessage(deviceDesignator + "-ON");
                     }
                     else {
-                        tcpClient.sendMessage(deviceDesignator + "-OFF");
+                        //tcpClient.sendMessage(deviceDesignator + "-OFF");
                     }
                 });
             }
@@ -159,27 +151,30 @@ public class MainActivity extends AppCompatActivity {
                 ImageButton downImageButton = findViewById(R.id.downImageButton);
                 EditText temperatureEditText = findViewById(R.id.temperatureEditText);
 
-                temperatureEditText.setText(temperature + "°C");
+                String temperatureString = temperature + "°C";
+                temperatureEditText.setText(temperatureString);
 
                 airControlToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
-                        tcpClient.sendMessage(deviceDesignator + "-ON");
+                        //tcpClient.sendMessage(deviceDesignator + "-ON");
                     }
                     else {
-                        tcpClient.sendMessage(deviceDesignator + "-OFF");
+                        //tcpClient.sendMessage(deviceDesignator + "-OFF");
                     }
                 });
 
                 upImageButton.setOnClickListener(v -> {
                     temperature.getAndIncrement();
-                    temperatureEditText.setText(temperature + "°C");
-                    tcpClient.sendMessage(deviceDesignator + "-TEMP_UP");
+                    //String temperatureString = temperature + "°C";
+                    //temperatureEditText.setText(temperatureString);
+                    //tcpClient.sendMessage(deviceDesignator + "-TEMP_UP");
                 });
 
                 downImageButton.setOnClickListener(v -> {
                     temperature.getAndDecrement();
-                    temperatureEditText.setText(temperature + "°C");
-                    tcpClient.sendMessage(deviceDesignator + "-TEMP_DOWN");
+                    //String temperatureString = temperature + "°C";
+                    //temperatureEditText.setText(temperatureString);
+                    //tcpClient.sendMessage(deviceDesignator + "-TEMP_DOWN");
                 });
             }
         }
