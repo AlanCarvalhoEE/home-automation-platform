@@ -32,7 +32,7 @@ public class IntroActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = new DBHandler(IntroActivity.this);
+        dbHandler = DBHandler.getInstance(this);
 
         // Initialize TCP client instance
         tcpClient = TCPclient.getInstance();

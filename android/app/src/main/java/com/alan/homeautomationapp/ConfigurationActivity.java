@@ -45,7 +45,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = new DBHandler(ConfigurationActivity.this);
+        dbHandler = DBHandler.getInstance(this);
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

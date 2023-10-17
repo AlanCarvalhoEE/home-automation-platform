@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = new DBHandler(MainActivity.this);
+        dbHandler = DBHandler.getInstance(this);
 
         // Initialize TCP client instance
         tcpClient = TCPclient.getInstance();
