@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/mediumGrey"
-                android:layout_margin="5dp"
+
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
@@ -56,8 +56,8 @@
 
                 <ToggleButton
                     android:id="@+id/airControlToggleButton"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:background="@drawable/button_air_states"
                     android:textOn=""
                     android:textOff=""
@@ -68,8 +68,8 @@
 
                 <ImageButton
                     android:id="@+id/upImageButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/button_arrow_states"
                     android:contentDescription="@string/temperature_up_button_description"
@@ -81,8 +81,8 @@
 
                 <ImageButton
                     android:id="@+id/downImageButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/button_arrow_states"
                     android:contentDescription="@string/temperature_down_button_description"
@@ -99,7 +99,7 @@
                     android:layout_marginEnd="10dp"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:background="@color/darkGrey"
                     android:textColorHint="@drawable/selector"

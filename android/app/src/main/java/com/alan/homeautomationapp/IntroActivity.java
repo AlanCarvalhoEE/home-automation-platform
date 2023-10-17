@@ -59,7 +59,7 @@ public class IntroActivity extends AppCompatActivity {
 
     public void checkConnection() {
         TextView messageTextView = findViewById(R.id.messageTextView);
-        boolean online = tcpClient.pingDevice("192.168.0.110", 22);
+        boolean online = tcpClient.pingDevice(TCPclient.SERVER_IP, 22);
 
         if (online) {
             tcpClient.sendMessage("GET_DATABASE");

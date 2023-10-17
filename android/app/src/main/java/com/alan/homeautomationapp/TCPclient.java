@@ -15,7 +15,7 @@ import java.net.Socket;
 public class TCPclient {
 
     // Server information
-    public static final String SERVER_IP = "192.168.0.110";
+    public static final String SERVER_IP = "192.168.0.104";
     public static final int SERVER_PORT = 5560;
 
     // Variables

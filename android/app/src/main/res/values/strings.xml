@@ -26,6 +26,8 @@
     <string name="room_open_description">Mostrar informações do cômodo</string>
     <string name="configuration_button_description">Abrir janela de configurações</string>
     <string name="lamp_control_description">Ligar/Desligar lâmpada</string>
+    <string name="socket_control_description">Ligar/Desligar tomada</string>
+    <string name="door_control_description">Abrir/Fechar porta</string>
     <string name="air_control_description">Ligar/Desligar ar condicionado</string>
     <string name="temperature_up_button_description">Aumentar a temperatura</string>
     <string name="temperature_down_button_description">Diminuir a temperatura</string>

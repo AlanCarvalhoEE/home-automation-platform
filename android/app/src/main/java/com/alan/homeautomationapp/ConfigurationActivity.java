@@ -65,7 +65,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Update the activity views from database
         Commom.updateRooms(this, dbHandler, roomSpinner);
-        Commom.updateDevices(this, dbHandler, roomSpinner, roomDevicesLayout);
+        //Commom.updateDevices(this, dbHandler, roomSpinner, roomDevicesLayout);
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
@@ -169,7 +169,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Commom.updateDevices(ConfigurationActivity.this, dbHandler, roomSpinner, roomDevicesLayout);
+                //Commom.updateDevices(ConfigurationActivity.this, dbHandler, roomSpinner, roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}

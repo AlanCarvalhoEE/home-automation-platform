@@ -1,8 +1,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="false"
-        android:drawable="@drawable/button_lamp_off"/>
+        android:drawable="@drawable/button_socket_off"/>
     <item android:state_checked="true"
-        android:drawable="@drawable/button_lamp_on"/>
+        android:drawable="@drawable/button_socket_on"/>
     <item android:state_enabled="false"
-        android:drawable="@drawable/button_lamp_disabled"/>
+        android:drawable="@drawable/button_socket_disabled"/>
 </selector>
