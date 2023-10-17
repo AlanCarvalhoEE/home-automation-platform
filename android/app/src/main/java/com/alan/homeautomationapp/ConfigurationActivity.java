@@ -78,7 +78,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             roomDialog.show();
             roomDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = roomDialog.getWindow();
-            roomWindow.setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(roomWindow).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
             roomWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
             EditText nameEditText = roomDialog.findViewById(R.id.nameEditText);
@@ -112,7 +112,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             deviceDialog.show();
             deviceDialog.setCanceledOnTouchOutside(false);
             Window deviceWindow = deviceDialog.getWindow();
-            deviceWindow.setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(deviceWindow).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
             deviceWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
             EditText nameEditText = deviceDialog.findViewById(R.id.nameEditText);
@@ -182,7 +182,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
 }

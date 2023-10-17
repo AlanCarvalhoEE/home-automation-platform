@@ -2,12 +2,10 @@ package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,7 +37,7 @@ public class Commom {
             View vi;
 
             String deviceType = database.getType(devicesList.get(i));
-            Log.d("DEVICE_TYPE", deviceType);
+            String designator = database.getDesignator(devicesList.get(i));
 
             switch (deviceType) {
                 case "Lâmpada":
@@ -49,19 +47,17 @@ public class Commom {
                     lampNameTextView.setText(devicesList.get(i));
                     layout.addView(vi, 0, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    String designator = database.getDesignator(devicesList.get(i));
+
                     lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
                         if (isChecked) {
                             tcpClient.sendMessage(designator + "-ON");
-                            Log.d("LAMP_TEST", designator);
                         }
                         else {
                             tcpClient.sendMessage(designator + "-OFF");
-                            Log.d("LAMP_TEST", designator);
                         }
-                    }) ;
-
+                    });
                     break;
+
                 case "Tomada":
                     vi = inflater.inflate(R.layout.device_socket, null);
                     TextView socketNameTextView = vi.findViewById(R.id.socketNameTextView);
@@ -69,7 +65,17 @@ public class Commom {
                     socketNameTextView.setText(devicesList.get(i));
                     layout.addView(vi, 0, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                    socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        if (isChecked) {
+                            tcpClient.sendMessage(designator + "-ON");
+                        }
+                        else {
+                            tcpClient.sendMessage(designator + "-OFF");
+                        }
+                    });
                     break;
+
                 case "Porta":
                     vi = inflater.inflate(R.layout.device_door, null);
                     TextView doorNameTextView = vi.findViewById(R.id.doorNameTextView);
@@ -77,7 +83,17 @@ public class Commom {
                     doorNameTextView.setText(devicesList.get(i));
                     layout.addView(vi, 0, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                    doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        if (isChecked) {
+                            tcpClient.sendMessage(designator + "-OPEN");
+                        }
+                        else {
+                            tcpClient.sendMessage(designator + "-CLOSED");
+                        }
+                    });
                     break;
+
                 case "Ar condicionado":
                     vi = inflater.inflate(R.layout.device_air_conditioner, null);
                     TextView airNameTextView = vi.findViewById(R.id.airNameTextView);
@@ -85,6 +101,15 @@ public class Commom {
                     airNameTextView.setText(devicesList.get(i));
                     layout.addView(vi, 0, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                    airControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        if (isChecked) {
+                            tcpClient.sendMessage(designator + "-ON");
+                        }
+                        else {
+                            tcpClient.sendMessage(designator + "-OFF");
+                        }
+                    });
                     break;
             }
         }
