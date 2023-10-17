@@ -38,4 +38,7 @@
     <string name="connection_failed_message">Falha na conexão.\nDeseja tentar novamente?</string>
     <string name="database_failed_message">Falha na atualização dos dados.\nDeseja tentar novamente?</string>
 
+    // Units
+    <string name="temperature_unit">°C</string>
+
 </resources>

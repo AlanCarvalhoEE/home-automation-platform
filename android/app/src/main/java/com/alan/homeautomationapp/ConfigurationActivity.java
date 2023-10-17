@@ -74,7 +74,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         roomAddImageButton.setOnClickListener(v -> {
             Dialog roomDialog = new Dialog(this);
             roomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            roomDialog.setContentView(R.layout.room_add_dialog);
+            roomDialog.setContentView(R.layout.dialog_room_add);
             roomDialog.show();
             roomDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = roomDialog.getWindow();

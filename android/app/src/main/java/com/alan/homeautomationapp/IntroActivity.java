@@ -71,7 +71,7 @@ public class IntroActivity extends AppCompatActivity {
         else {
             Dialog connectionDialog = new Dialog(IntroActivity.this);
             connectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            connectionDialog.setContentView(R.layout.connection_dialog);
+            connectionDialog.setContentView(R.layout.dialog_connection);
             connectionDialog.show();
             connectionDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = connectionDialog.getWindow();
@@ -102,7 +102,7 @@ public class IntroActivity extends AppCompatActivity {
         else {
             Dialog connectionDialog = new Dialog(IntroActivity.this);
             connectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            connectionDialog.setContentView(R.layout.connection_dialog);
+            connectionDialog.setContentView(R.layout.dialog_connection);
             connectionDialog.show();
             connectionDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = connectionDialog.getWindow();
