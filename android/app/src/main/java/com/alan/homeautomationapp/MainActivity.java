@@ -1,32 +1,21 @@
 package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DBHandler(MainActivity.this);
 
         // Initialize TCP client instance
-        tcpClient = new TCPclient(this::handleServerMessage);
+        tcpClient = TCPclient.getInstance();
+        tcpClient.setMessageListener(this::receiveMessage);
 
         // Start the TCP client
         AsyncTask.execute(() -> tcpClient.run());
@@ -98,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    public void handleServerMessage(String message) {
+    public void receiveMessage(String message) {
         if (message.contains("DATABASE")) dbHandler.updateDatabase(message);
     }
 }

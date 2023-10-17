@@ -18,6 +18,9 @@ public class TCPclient {
     public static final String SERVER_IP = "192.168.0.104";
     public static final int SERVER_PORT = 5560;
 
+    // Singleton instance
+    private static TCPclient instance;
+
     // Variables
     private String serverMessage;
     private onMessageReceived messageListener;
@@ -25,10 +28,21 @@ public class TCPclient {
     private PrintWriter bufferOut;
     private BufferedReader bufferIn;
 
+    // Private constructor to prevent external instantiation
+    private TCPclient() {
+    }
 
-    // Incoming message listener
-    public TCPclient(onMessageReceived listener) {
-        messageListener = listener;
+    // Method to get the Singleton instance
+    public static TCPclient getInstance() {
+        if (instance == null) {
+            instance = new TCPclient();
+        }
+        return instance;
+    }
+
+    // Function to set the message listener
+    public void setMessageListener(onMessageReceived listener) {
+        this.messageListener = listener;
     }
 
     // Function to send messages
@@ -40,7 +54,7 @@ public class TCPclient {
     }
 
     // Function to ping devices
-    public boolean pingDevice (String address, int port) {
+    public boolean pingDevice(String address, int port) {
         try {
             try (Socket soc = new Socket()) {
                 soc.connect(new InetSocketAddress(address, port), 5000);
@@ -68,7 +82,6 @@ public class TCPclient {
 
     // Function to start the TCP client
     public void run() {
-
         running = true;
 
         try {

@@ -35,7 +35,8 @@ public class IntroActivity extends AppCompatActivity {
         dbHandler = new DBHandler(IntroActivity.this);
 
         // Initialize TCP client instance
-        tcpClient = new TCPclient(this::handleServerMessage);
+        tcpClient = TCPclient.getInstance();
+        tcpClient.setMessageListener(this::receiveMessage);
 
         // Start the TCP client
         AsyncTask.execute(() -> tcpClient.run());
@@ -50,7 +51,7 @@ public class IntroActivity extends AppCompatActivity {
         introHandler.postDelayed(this::checkConnection, 3000);
     }
 
-    public void handleServerMessage(String message) {
+    public void receiveMessage(String message) {
         if (message.contains("DATABASE")) {
             dbHandler.updateDatabase(message);
             waitingForDatabase = false;
