@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/lampLayout"
+                android:id="@+id/doorLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/mediumGrey"
@@ -40,7 +40,7 @@
                 android:paddingBottom="5dp">
 
                 <TextView
-                    android:id="@+id/lampNameTextView"
+                    android:id="@+id/doorNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -54,16 +54,16 @@
                     />
 
                 <ToggleButton
-                    android:id="@+id/lampControlToggleButton"
+                    android:id="@+id/doorControlToggleButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:background="@drawable/button_light_states"
+                    android:background="@drawable/button_door_states"
                     android:textOn=""
                     android:textOff=""
-                    android:contentDescription="@string/lamp_control_description"
-                    app:layout_constraintBottom_toBottomOf="@id/lampNameTextView"
+                    android:contentDescription="@string/door_control_description"
+                    app:layout_constraintBottom_toBottomOf="@id/doorNameTextView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/lampNameTextView" />
+                    app:layout_constraintTop_toTopOf="@id/doorNameTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

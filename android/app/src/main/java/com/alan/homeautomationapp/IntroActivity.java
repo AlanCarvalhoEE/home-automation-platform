@@ -32,10 +32,11 @@ public class IntroActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = new DBHandler(IntroActivity.this);
+        dbHandler = DBHandler.getInstance(this);
 
         // Initialize TCP client instance
-        tcpClient = new TCPclient(this::handleServerMessage);
+        tcpClient = TCPclient.getInstance();
+        tcpClient.setMessageListener(this::receiveMessage);
 
         // Start the TCP client
         AsyncTask.execute(() -> tcpClient.run());
@@ -50,7 +51,7 @@ public class IntroActivity extends AppCompatActivity {
         introHandler.postDelayed(this::checkConnection, 3000);
     }
 
-    public void handleServerMessage(String message) {
+    public void receiveMessage(String message) {
         if (message.contains("DATABASE")) {
             dbHandler.updateDatabase(message);
             waitingForDatabase = false;
@@ -59,7 +60,7 @@ public class IntroActivity extends AppCompatActivity {
 
     public void checkConnection() {
         TextView messageTextView = findViewById(R.id.messageTextView);
-        boolean online = tcpClient.pingDevice("192.168.0.110", 22);
+        boolean online = tcpClient.pingDevice(TCPclient.SERVER_IP, 22);
 
         if (online) {
             tcpClient.sendMessage("GET_DATABASE");
@@ -70,7 +71,7 @@ public class IntroActivity extends AppCompatActivity {
         else {
             Dialog connectionDialog = new Dialog(IntroActivity.this);
             connectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            connectionDialog.setContentView(R.layout.connection_dialog);
+            connectionDialog.setContentView(R.layout.dialog_connection);
             connectionDialog.show();
             connectionDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = connectionDialog.getWindow();
@@ -101,7 +102,7 @@ public class IntroActivity extends AppCompatActivity {
         else {
             Dialog connectionDialog = new Dialog(IntroActivity.this);
             connectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            connectionDialog.setContentView(R.layout.connection_dialog);
+            connectionDialog.setContentView(R.layout.dialog_connection);
             connectionDialog.show();
             connectionDialog.setCanceledOnTouchOutside(false);
             Window roomWindow = connectionDialog.getWindow();

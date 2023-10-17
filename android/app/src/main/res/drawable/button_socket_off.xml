@@ -5,11 +5,11 @@
             <solid android:color="@color/lightGrey" />
             <corners android:radius="@dimen/circular_button_corner_radius" />
             <stroke
-        android:width="3dp"
-        android:color="@color/darkYellow"/>
+                android:width="3dp"
+                android:color="@color/darkGrey"/>
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_lamp_off"
+    <item android:drawable="@drawable/ic_socket"
         android:bottom="5dp"
         android:top="5dp"
         android:right="5dp"

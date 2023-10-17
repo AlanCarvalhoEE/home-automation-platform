@@ -6,12 +6,12 @@
             <corners android:radius="@dimen/circular_button_corner_radius" />
             <stroke
                 android:width="3dp"
-                android:color="@color/darkGrey"/>
+                android:color="@color/mediumGrey"/>
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_air_conditioner_off"
-        android:bottom="7dp"
-        android:top="7dp"
-        android:right="7dp"
-        android:left="7dp"/>
+    <item android:drawable="@drawable/ic_door_closed"
+        android:bottom="5dp"
+        android:top="5dp"
+        android:right="5dp"
+        android:left="5dp"/>
 </layer-list>

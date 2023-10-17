@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/mediumGrey"
-                android:layout_margin="5dp"
+
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
@@ -56,8 +56,8 @@
 
                 <ToggleButton
                     android:id="@+id/airControlToggleButton"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:background="@drawable/button_air_states"
                     android:textOn=""
                     android:textOff=""
@@ -68,8 +68,8 @@
 
                 <ImageButton
                     android:id="@+id/upImageButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/button_arrow_states"
                     android:contentDescription="@string/temperature_up_button_description"
@@ -81,8 +81,8 @@
 
                 <ImageButton
                     android:id="@+id/downImageButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/button_arrow_states"
                     android:contentDescription="@string/temperature_down_button_description"
@@ -92,18 +92,38 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/temperatureEditText"
-                    android:layout_width="60dp"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    android:layout_marginEnd="10dp"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:textSize="20sp"
+                    android:selectAllOnFocus="true"
+                    android:cursorVisible="false"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:background="@color/darkGrey"
                     android:textColorHint="@drawable/selector"
                     android:textColor="@color/lightGrey"
+                    app:layout_constraintEnd_toStartOf="@id/unitTextView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/unitTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:singleLine="true"
+                    android:layout_marginEnd="10dp"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:text="@string/temperature_unit"
+                    android:textColor="@color/lightGrey"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:background="@color/darkGrey"
                     app:layout_constraintEnd_toStartOf="@id/upImageButton"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
