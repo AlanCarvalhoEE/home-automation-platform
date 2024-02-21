@@ -428,7 +428,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "lamp_module.step",
+      "step": "3D/Parts to manufacture/Lamp Module PCB.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
