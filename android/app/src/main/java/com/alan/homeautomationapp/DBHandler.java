@@ -96,40 +96,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateDatabase(String databaseString) {
-        int startIndex = databaseString.indexOf("|");
-        String data = databaseString.substring(startIndex + 1);
-        String[] tables = data.split("\\|");
-
-        for (String table : tables) {
-            SQLiteDatabase database = this.getWritableDatabase();
-
-            String tableName;
-            String[] headers = new String[0];
-
-            String[] rows = table.split("/");
-
-            if (rows.length > 2) {
-                ContentValues values = new ContentValues();
-                tableName = rows[0];
-                Log.d("DEBUG_DB", tableName);
-
-                for (int j = 1; j < rows.length; j++) {
-                    if (j == 1) {
-                        headers = rows[j].split(", ");
-                    } else {
-                        String[] fields = rows[j].split(", ");
-                        for (int k = 0; k < fields.length; k++) {
-                            values.put(headers[k], fields[k]);
-                        }
-                        database.insert(tableName, null, values);
-                    }
-                }
-            }
-            database.close();
-        }
-    }
-
     public void addNewRoom(String roomName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -137,6 +103,37 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ROOM_NAME_COL, roomName);
         db.insert(ROOM_TABLE_NAME, null, values);
         db.close();
+    }
+
+    public void addNewType(String typeName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(TYPE_NAME_COL, typeName);
+        db.insert(TYPE_TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public void updateDatabase(String databaseString) {
+        int startIndex = databaseString.indexOf("-") + 1;
+        String data = databaseString.substring(startIndex);
+        String[] tables = data.split("/");
+
+        for (int i = 0; i < tables.length; i++) {
+            tables[i] = tables[i].substring(1, tables[i].length() - 1);
+            String[] rows = tables[i].split("], \\[");
+
+            for (int j = 0; j < rows.length; j++) {
+                rows[j] = rows[j].replaceAll("[\\[\\]]", "");
+                String[] fields = rows[j].split(", ");
+
+                for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
+
+                if (i == 0) addNewDevice(fields[1], fields[2], fields[3], fields[4]);
+                else if (i == 1) addNewRoom(fields[1]);
+                else if (i == 2) addNewType(fields[1]);
+            }
+        }
     }
 
     public List<String> getRoomsList() {
