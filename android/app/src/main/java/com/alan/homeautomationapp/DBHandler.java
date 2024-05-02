@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -114,7 +115,18 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(DEVICE_TABLE_NAME, null, null);
+        db.delete(ROOM_TABLE_NAME, null, null);
+        db.delete(TYPE_TABLE_NAME, null, null);
+        db.delete(USER_TABLE_NAME, null, null);
+    }
+
     public void updateDatabase(String databaseString) {
+        clearDatabase();
+
         int startIndex = databaseString.indexOf("-") + 1;
         String data = databaseString.substring(startIndex);
         String[] tables = data.split("/");
@@ -123,15 +135,19 @@ public class DBHandler extends SQLiteOpenHelper {
             tables[i] = tables[i].substring(1, tables[i].length() - 1);
             String[] rows = tables[i].split("], \\[");
 
-            for (int j = 0; j < rows.length; j++) {
-                rows[j] = rows[j].replaceAll("[\\[\\]]", "");
-                String[] fields = rows[j].split(", ");
+            if (rows.length > 0) {
+                for (int j = 0; j < rows.length; j++) {
+                    rows[j] = rows[j].replaceAll("[\\[\\]]", "");
+                    String[] fields = rows[j].split(", ");
 
-                for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
+                    if (fields.length > 1) {
+                        for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
 
-                if (i == 0) addNewDevice(fields[1], fields[2], fields[3], fields[4]);
-                else if (i == 1) addNewRoom(fields[1]);
-                else if (i == 2) addNewType(fields[1]);
+                        if (i == 0) addNewDevice(fields[1], fields[2], fields[3], fields[4]);
+                        else if (i == 1) addNewRoom(fields[1]);
+                        else if (i == 2) addNewType(fields[1]);
+                    }
+                }
             }
         }
     }

@@ -59,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
         Commom.updateRooms(this, dbHandler, roomSpinner);
-        Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
