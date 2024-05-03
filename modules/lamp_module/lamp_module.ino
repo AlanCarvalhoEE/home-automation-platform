@@ -4,16 +4,19 @@
 
 #define ID 1
 
-#define RELAY_S_PIN 12             // ON/OFF button pin
-#define RELAY_P_PIN 13             // Temperature up button pin
-#define FEEDBACK_PIN 14            // Temperatura down button pin
+#define RELAY_S_PIN 12             // Series relay pin
+#define RELAY_P_PIN 13             // Parallel relay pin
+#define FEEDBACK_PIN 14            // Voltage feedback pin
 
 
 // Network parameters
 const char* ssid = "Mhnet - Luana_2.4G";
 const char* password = "dracarys";
-const char* host = "192.168.88.11";
-const uint16_t port = 5560;
+IPAddress serverIP (192,168,88,11); 
+IPAddress moduleIP (192,168,88,20); 
+IPAddress gateway (192,168,88,1); 
+IPAddress subnet (255,255,255,0);
+const uint16_t serverPort = 5560;
 
 WiFiClient tcpClient;   // TCP client instance
 
@@ -29,6 +32,7 @@ void setup()
 
   WiFi.mode(WIFI_STA);                        // Configure the WiFi mode to STATION
   WiFi.begin(ssid, password);                // Configure the WiFi connection credentials
+  WiFi.config(moduleIP, gateway, subnet);
   tcpClient.setTimeout(50);
 
   Serial.print("Waiting for WiFi... ");
@@ -44,16 +48,10 @@ void setup()
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  while (!tcpClient.connect(host, port)) {
+  while (!tcpClient.connect(serverIP, serverPort)) {
     Serial.println("connection failed");
     delay(5000);
   }
-
-  String id = "ID-";
-  id += ID;
-  id += ",";
-  id += WiFi.localIP().toString();
-  tcpClient.print(id);
 
   delay(500);
 }
@@ -65,6 +63,8 @@ void loop()
   {
     String command = tcpClient.readString();
     Serial.println(command);
-   
+
+    if (command.indexOf("ON") > -1) digitalWrite(RELAY_S_PIN, HIGH);
+    else if (command.indexOf("OFF") > -1) digitalWrite(RELAY_S_PIN, LOW);
   }
 }
