@@ -27,14 +27,14 @@ class Client(threading.Thread):
     def run(self):
         while self.signal:
             try:
-                data = self.socket.recv(80)
+                data = self.socket.recv(32)
             except:
                 print("Client " + str(self.address) + " has disconnected")
                 self.signal = False
                 connections.remove(self)
                 break
             if data != "":
-                pub.sendMessage('commands', arg1 = data)
+                pub.sendMessage('commands', arg1 = data, arg2 = self.socket)
 
 # Wait for new connections
 def newConnections(socket):
@@ -48,7 +48,7 @@ def newConnections(socket):
 
 def main():
     #Get host and port
-    host = '192.168.88.11'
+    host = '192.168.0.110'
     port = 5560
 
     #Create new server socket
