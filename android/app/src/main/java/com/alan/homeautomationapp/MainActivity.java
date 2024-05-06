@@ -81,6 +81,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
+
+        Commom.updateRooms(this, dbHandler, roomSpinner);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
     }

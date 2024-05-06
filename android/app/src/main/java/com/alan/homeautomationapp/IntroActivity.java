@@ -116,6 +116,7 @@ public class IntroActivity extends AppCompatActivity {
             errorTextView.setText(getResources().getString(R.string.database_failed_message));
 
             yesButton.setOnClickListener(view -> {
+                tcpClient.sendMessage("GET_DATABASE");
                 introHandler.postDelayed(this::checkDatabase, 5000);
                 connectionDialog.dismiss();
             });

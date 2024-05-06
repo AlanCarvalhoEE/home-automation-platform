@@ -84,7 +84,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void addNewDevice(String deviceName, String deviceRoom, String deviceType,
-                             String deviceDesignator) {
+                             String deviceDesignator, String deviceAddress) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -92,6 +92,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(DEVICE_ROOM_COL, deviceRoom);
         values.put(DEVICE_TYPE_COL, deviceType);
         values.put(DEVICE_DESIGNATOR_COL, deviceDesignator);
+        values.put(DEVICE_ADDRESS_COL, deviceAddress);
 
         db.insert(DEVICE_TABLE_NAME, null, values);
         db.close();
@@ -143,7 +144,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     if (fields.length > 1) {
                         for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
 
-                        if (i == 0) addNewDevice(fields[1], fields[2], fields[3], fields[4]);
+                        if (i == 0) addNewDevice(fields[1], fields[2], fields[3], fields[4], fields[5]);
                         else if (i == 1) addNewRoom(fields[1]);
                         else if (i == 2) addNewType(fields[1]);
                     }
