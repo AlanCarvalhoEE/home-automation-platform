@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.Objects;
 
@@ -69,11 +70,15 @@ public class IntroActivity extends AppCompatActivity {
             introHandler.postDelayed(this::checkDatabase, 3000);
         }
         else {
+            ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+            mainLayout.setAlpha(0.25f);
+
             Dialog connectionDialog = new Dialog(IntroActivity.this);
             connectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             connectionDialog.setContentView(R.layout.dialog_connection);
             connectionDialog.show();
             connectionDialog.setCanceledOnTouchOutside(false);
+
             Window roomWindow = connectionDialog.getWindow();
             Objects.requireNonNull(roomWindow).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
             roomWindow.setBackgroundDrawableResource(android.R.color.transparent);
@@ -84,6 +89,7 @@ public class IntroActivity extends AppCompatActivity {
             yesButton.setOnClickListener(view -> {
                 introHandler.postDelayed(this::checkConnection, 5000);
                 connectionDialog.dismiss();
+                mainLayout.setAlpha(1f);
             });
 
             noButton.setOnClickListener(view -> {
@@ -100,6 +106,9 @@ public class IntroActivity extends AppCompatActivity {
             finish();
         }
         else {
+            ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+            mainLayout.setAlpha(0.25f);
+
             Dialog connectionDialog = new Dialog(IntroActivity.this);
             connectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             connectionDialog.setContentView(R.layout.dialog_connection);
@@ -116,6 +125,7 @@ public class IntroActivity extends AppCompatActivity {
             errorTextView.setText(getResources().getString(R.string.database_failed_message));
 
             yesButton.setOnClickListener(view -> {
+                mainLayout.setAlpha(1f);
                 tcpClient.sendMessage("GET_DATABASE");
                 introHandler.postDelayed(this::checkDatabase, 5000);
                 connectionDialog.dismiss();

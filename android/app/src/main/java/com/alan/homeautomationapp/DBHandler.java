@@ -6,10 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -23,7 +21,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DEVICE_ROOM_COL = "Cômodo";
     private static final String DEVICE_TYPE_COL = "Tipo";
     private static final String DEVICE_DESIGNATOR_COL = "Designador";
-    private static final String DEVICE_ADDRESS_COL = "Endereço";
+    private static final String DEVICE_IP_COL = "IP";
 
     private static final String ROOM_TABLE_NAME = "Cômodos";
     private static final String ROOM_ID_COL = "ID";
@@ -61,7 +59,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + DEVICE_ROOM_COL + " TEXT,"
                 + DEVICE_TYPE_COL + " TEXT,"
                 + DEVICE_DESIGNATOR_COL + " TEXT,"
-                + DEVICE_ADDRESS_COL + " TEXT)";
+                + DEVICE_IP_COL + " TEXT)";
         db.execSQL(query);
 
         query = "CREATE TABLE " + ROOM_TABLE_NAME + " ("
@@ -84,7 +82,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void addNewDevice(String deviceName, String deviceRoom, String deviceType,
-                             String deviceDesignator, String deviceAddress) {
+                             String deviceDesignator, String deviceIP) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -92,7 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(DEVICE_ROOM_COL, deviceRoom);
         values.put(DEVICE_TYPE_COL, deviceType);
         values.put(DEVICE_DESIGNATOR_COL, deviceDesignator);
-        values.put(DEVICE_ADDRESS_COL, deviceAddress);
+        values.put(DEVICE_IP_COL, deviceIP);
 
         db.insert(DEVICE_TABLE_NAME, null, values);
         db.close();

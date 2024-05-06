@@ -1,7 +1,8 @@
 <resources>
 
     // APP name
-    <string name="app_name">Home Automation APP</string>
+    <string name="app_name">Home Automation Platform</string>
+    <string name="app_nickname">HAP</string>
 
     // Labels
     <string name="room_label">Cômodo</string>
@@ -9,6 +10,7 @@
     <string name="name_label">Nome:</string>
     <string name="type_label">Tipo:</string>
     <string name="designator_label">Designador:</string>
+    <string name="ip_label">IP:</string>
 
     // Buttons
     <string name="confirm_button">Confirmar</string>
@@ -17,8 +19,11 @@
     <string name="no_button">Não</string>
 
     // Hints
+    <string name="logo_hint">HAP icon</string>
     <string name="location_name_hint">Nome do local</string>
     <string name="device_name_hint">Nome do dispositivo</string>
+    <string name="device_designator_hint">Designador do dispositivo</string>
+    <string name="device_ip_hint">Endereço IP do dispositivo</string>
 
     // Descriptions
     <string name="location_add_description">Adicionar um novo local</string>

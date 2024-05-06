@@ -7,7 +7,6 @@ import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,11 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -57,7 +56,9 @@ public class ConfigurationActivity extends AppCompatActivity {
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
-        View actionBarView =getSupportActionBar().getCustomView();
+        View actionBarView = getSupportActionBar().getCustomView();
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) actionBarView.getParent();
+        toolbar.setContentInsetsAbsolute(0,0);
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
@@ -78,6 +79,9 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Room add button listener
         roomAddImageButton.setOnClickListener(v -> {
+            ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+            mainLayout.setAlpha(0.25f);
+
             Dialog roomDialog = new Dialog(this);
             roomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             roomDialog.setContentView(R.layout.dialog_room_add);
@@ -108,14 +112,21 @@ public class ConfigurationActivity extends AppCompatActivity {
                 newRoomRequest += roomName;
                 tcpClient.sendMessage(newRoomRequest);
 
+                mainLayout.setAlpha(1f);
                 roomDialog.dismiss();
             });
 
-            cancelButton.setOnClickListener(view -> roomDialog.dismiss());
+            cancelButton.setOnClickListener(view -> {
+                mainLayout.setAlpha(1f);
+                roomDialog.dismiss();
+            });
         });
 
         // Device add button listener
         deviceAddImageButton.setOnClickListener(v -> {
+            ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+            mainLayout.setAlpha(0.25f);
+
             Dialog deviceDialog = new Dialog(this);
             deviceDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             deviceDialog.setContentView(R.layout.device_add_dialog);
@@ -128,12 +139,13 @@ public class ConfigurationActivity extends AppCompatActivity {
             EditText nameEditText = deviceDialog.findViewById(R.id.nameEditText);
             RadioGroup typeRadioGroup = deviceDialog.findViewById(R.id.typeRadioGroup);
             EditText designatorEditText = deviceDialog.findViewById(R.id.designatorEditText);
+            EditText ipEditText = deviceDialog.findViewById(R.id.ipEditText);
             Button confirmButton = deviceDialog.findViewById(R.id.yesButton);
             Button cancelButton = deviceDialog.findViewById(R.id.noButton);
 
             List<String> typeList = dbHandler.getTypeList();
             List<Integer> idList = new ArrayList<>();
-            String[] deviceInfo = new String[3];
+            String[] deviceInfo = new String[4];
 
             for (int i = 0; i < typeList.size(); i++) {
                 RadioButton typeRadio = new RadioButton(this);
@@ -149,32 +161,35 @@ public class ConfigurationActivity extends AppCompatActivity {
             nameEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {
                     deviceInfo[0] = s.toString();
-                    if (!TextUtils.isEmpty(deviceInfo[0]) && !TextUtils.isEmpty(deviceInfo[1]) && !TextUtils.isEmpty(deviceInfo[2])) {
-                        confirmButton.setEnabled(true);
-                    }
+                    checkInfo(deviceInfo, confirmButton);
                 }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {                }
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
             });
 
             typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 RadioButton checkedRadioButton = group.findViewById(checkedId);
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (isChecked) deviceInfo[1] = checkedRadioButton.getText().toString();
-                if (!TextUtils.isEmpty(deviceInfo[0]) && !TextUtils.isEmpty(deviceInfo[1]) && !TextUtils.isEmpty(deviceInfo[2])) {
-                    confirmButton.setEnabled(true);
-                }
+                checkInfo(deviceInfo, confirmButton);
             });
 
             designatorEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {                }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                public void afterTextChanged(Editable s) {
                     deviceInfo[2] = s.toString();
-                    if (!TextUtils.isEmpty(deviceInfo[0]) && !TextUtils.isEmpty(deviceInfo[1]) && !TextUtils.isEmpty(deviceInfo[2])) {
-                        confirmButton.setEnabled(true);
-                    }
+                    checkInfo(deviceInfo, confirmButton);
                 }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            });
+
+            ipEditText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    deviceInfo[3] = s.toString();
+                    checkInfo(deviceInfo, confirmButton);
+                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
             });
 
             confirmButton.setOnClickListener(view -> {
@@ -183,25 +198,29 @@ public class ConfigurationActivity extends AppCompatActivity {
                 String designator = deviceInfo[2];
 
                 String room = roomSpinner.getSelectedItem().toString();
-                String address = "192.168.88.20";
+                String ip = "192.168.88.20";
 
-                dbHandler.addNewDevice(name, room, type, designator, address);
+                dbHandler.addNewDevice(name, room, type, designator, ip);
 
                 String newDeviceRequest = "ADD_DEVICE-";
                 newDeviceRequest += name + ",";
                 newDeviceRequest += room + ",";
                 newDeviceRequest += type + ",";
                 newDeviceRequest += designator + ",";
-                newDeviceRequest += address;
-                Log.d("DEBUG_MESSAGE", newDeviceRequest);
+                newDeviceRequest += ip;
+
                 tcpClient.sendMessage(newDeviceRequest);
 
                 Commom.updateDevices(ConfigurationActivity.this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
 
+                mainLayout.setAlpha(1f);
                 deviceDialog.dismiss();
             });
 
-            cancelButton.setOnClickListener(view -> deviceDialog.dismiss());
+            cancelButton.setOnClickListener(view -> {
+                mainLayout.setAlpha(1f);
+                deviceDialog.dismiss();
+            });
         });
 
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -222,5 +241,12 @@ public class ConfigurationActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void checkInfo (String[] deviceInfo, Button confirmButton) {
+        boolean infoComplete = true;
+        for (String info : deviceInfo) {
+            if (TextUtils.isEmpty(info)) infoComplete = false;}
+        confirmButton.setEnabled(infoComplete);
     }
 }
