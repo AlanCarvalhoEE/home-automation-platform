@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,6 +33,7 @@ import java.util.Objects;
 public class ConfigurationActivity extends AppCompatActivity {
 
     private DBHandler dbHandler;    // Database handler instance
+    private TCPclient tcpClient;    // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -46,6 +49,9 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Initialize database instance
         dbHandler = DBHandler.getInstance(this);
+
+        // Initialize TCP client instance
+        tcpClient = TCPclient.getInstance();
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -65,7 +71,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Update the activity views from database
         Commom.updateRooms(this, dbHandler, roomSpinner);
-        //Commom.updateDevices(this, dbHandler, roomSpinner, roomDevicesLayout);
+        Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
@@ -86,7 +92,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             Button cancelButton = roomDialog.findViewById(R.id.noButton);
 
             nameEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {                }
+                public void afterTextChanged(Editable s) {}
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     confirmButton.setEnabled(s.length() > 0);
@@ -97,6 +103,10 @@ public class ConfigurationActivity extends AppCompatActivity {
                 String roomName = nameEditText.getText().toString();
                 dbHandler.addNewRoom(roomName);
                 Commom.updateRooms(this, dbHandler, roomSpinner);
+
+                String newRoomRequest = "ADD_ROOM-";
+                newRoomRequest += roomName;
+                tcpClient.sendMessage(newRoomRequest);
 
                 roomDialog.dismiss();
             });
@@ -117,20 +127,13 @@ public class ConfigurationActivity extends AppCompatActivity {
 
             EditText nameEditText = deviceDialog.findViewById(R.id.nameEditText);
             RadioGroup typeRadioGroup = deviceDialog.findViewById(R.id.typeRadioGroup);
-            TextView designatorNumberTextView = deviceDialog.findViewById(R.id.designatorNumberTextView);
+            EditText designatorEditText = deviceDialog.findViewById(R.id.designatorEditText);
             Button confirmButton = deviceDialog.findViewById(R.id.yesButton);
             Button cancelButton = deviceDialog.findViewById(R.id.noButton);
 
-            nameEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {                }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    confirmButton.setEnabled(s.length() > 0);
-                }
-            });
-
             List<String> typeList = dbHandler.getTypeList();
             List<Integer> idList = new ArrayList<>();
+            String[] deviceInfo = new String[3];
 
             for (int i = 0; i < typeList.size(); i++) {
                 RadioButton typeRadio = new RadioButton(this);
@@ -143,22 +146,57 @@ public class ConfigurationActivity extends AppCompatActivity {
                 typeRadio.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lightGrey));
             }
 
+            nameEditText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    deviceInfo[0] = s.toString();
+                    if (!TextUtils.isEmpty(deviceInfo[0]) && !TextUtils.isEmpty(deviceInfo[1]) && !TextUtils.isEmpty(deviceInfo[2])) {
+                        confirmButton.setEnabled(true);
+                    }
+                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {                }
+            });
+
             typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 RadioButton checkedRadioButton = group.findViewById(checkedId);
                 boolean isChecked = checkedRadioButton.isChecked();
-                if (isChecked) designatorNumberTextView.setText(dbHandler.getDesignator(checkedRadioButton.getText().toString()));
+                if (isChecked) deviceInfo[1] = checkedRadioButton.getText().toString();
+                if (!TextUtils.isEmpty(deviceInfo[0]) && !TextUtils.isEmpty(deviceInfo[1]) && !TextUtils.isEmpty(deviceInfo[2])) {
+                    confirmButton.setEnabled(true);
+                }
+            });
+
+            designatorEditText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    deviceInfo[2] = s.toString();
+                    if (!TextUtils.isEmpty(deviceInfo[0]) && !TextUtils.isEmpty(deviceInfo[1]) && !TextUtils.isEmpty(deviceInfo[2])) {
+                        confirmButton.setEnabled(true);
+                    }
+                }
             });
 
             confirmButton.setOnClickListener(view -> {
-                String name = nameEditText.getText().toString();
+                String name = deviceInfo[0];
+                String type = deviceInfo[1];
+                String designator = deviceInfo[2];
+
                 String room = roomSpinner.getSelectedItem().toString();
+                String address = "192.168.88.20";
 
-                int selectedTypeIndex = typeRadioGroup.getCheckedRadioButtonId();
-                RadioButton selectedTypeRadio = typeRadioGroup.findViewById(selectedTypeIndex);
-                String type = selectedTypeRadio.getText().toString();
-                String designator = designatorNumberTextView.getText().toString();
+                dbHandler.addNewDevice(name, room, type, designator, address);
 
-                dbHandler.addNewDevice(name, room, type, designator);
+                String newDeviceRequest = "ADD_DEVICE-";
+                newDeviceRequest += name + ",";
+                newDeviceRequest += room + ",";
+                newDeviceRequest += type + ",";
+                newDeviceRequest += designator + ",";
+                newDeviceRequest += address;
+                Log.d("DEBUG_MESSAGE", newDeviceRequest);
+                tcpClient.sendMessage(newDeviceRequest);
+
+                Commom.updateDevices(ConfigurationActivity.this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
 
                 deviceDialog.dismiss();
             });
@@ -169,7 +207,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                //Commom.updateDevices(ConfigurationActivity.this, dbHandler, roomSpinner, roomDevicesLayout);
+                Commom.updateDevices(ConfigurationActivity.this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}

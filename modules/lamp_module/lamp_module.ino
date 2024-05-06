@@ -62,7 +62,6 @@ void loop()
   if (tcpClient.available())
   {
     String command = tcpClient.readString();
-    Serial.println(command);
 
     if (command.indexOf("ON") > -1) digitalWrite(RELAY_S_PIN, HIGH);
     else if (command.indexOf("OFF") > -1) digitalWrite(RELAY_S_PIN, LOW);

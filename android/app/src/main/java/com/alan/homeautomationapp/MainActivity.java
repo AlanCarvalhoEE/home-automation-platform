@@ -59,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
         Commom.updateRooms(this, dbHandler, roomSpinner);
-        Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
@@ -76,6 +78,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
+
+        Commom.updateRooms(this, dbHandler, roomSpinner);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
     }
 
     @Override
