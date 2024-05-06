@@ -8,7 +8,7 @@ dbName = "home_automation_db.db"    # Database name
 # Database schema
 dbStructure = [
                ["Dispositivos"],                                                     # Table 1 name
-               ["ID", "Dispositivo", "Cômodo", "Tipo", "Designador", "Endereço"],    # Table 1 columns
+               ["ID", "Dispositivo", "Cômodo", "Tipo", "Designador", "IP"],          # Table 1 columns
                ["INTEGER_PRIMARY_KEY", "TEXT", "TEXT", "TEXT", "TEXT", "TEXT"],      # Table 1 types
                ["Cômodos"],                                                          # Table 2 name
                ["ID", "Cômodo"],                                                     # Table 2 columns
