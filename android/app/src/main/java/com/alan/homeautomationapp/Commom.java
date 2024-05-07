@@ -57,8 +57,8 @@ public class Commom {
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                     lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage("CONTROL" + "-" + designator + "_ON");
-                        else tcpClient.sendMessage("CONTROL" + "-" + designator + "_OFF");
+                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                        else tcpClient.sendMessage("SET-" + designator + "_OFF");
                     });
 
                     break;
@@ -72,8 +72,8 @@ public class Commom {
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                     socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage(designator + "-ON");
-                        else tcpClient.sendMessage(designator + "-OFF");
+                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                        else tcpClient.sendMessage("SET-" + designator + "_OFF");
                     });
 
                     break;
@@ -87,8 +87,8 @@ public class Commom {
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                     doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage(designator + "-OPEN");
-                        else tcpClient.sendMessage(designator + "-CLOSED");
+                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_OPEN");
+                        else tcpClient.sendMessage("SET-" + designator + "_CLOSED");
                     });
 
                     break;
@@ -106,8 +106,8 @@ public class Commom {
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                     airControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage(designator + "-ON");
-                        else tcpClient.sendMessage(designator + "-OFF");
+                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                        else tcpClient.sendMessage("SET-" + designator + "_OFF");
                     });
 
                     upImageButton.setOnClickListener(view -> {
@@ -123,7 +123,7 @@ public class Commom {
                     temperatureEditText.addTextChangedListener(new TextWatcher() {
                         public void afterTextChanged(Editable s) {
                             temperature = Integer.parseInt(s.toString());
-                            tcpClient.sendMessage(designator + "-T" + temperature);
+                            tcpClient.sendMessage("SET-" + designator + "_T" + temperature);
                         }
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                         public void onTextChanged(CharSequence s, int start, int before, int count) {}
