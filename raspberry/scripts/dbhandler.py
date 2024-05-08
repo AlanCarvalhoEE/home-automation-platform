@@ -66,10 +66,10 @@ def addRoom(roomName):
     connection.commit()
 
 # Function to add new devices
-def addDevice(deviceName, deviceRoom, deviceType, deviceDesignator):
+def addDevice(deviceName, deviceRoom, deviceType, deviceDesignator, deviceIP):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
-    query = "INSERT INTO Dispositivos (ID, Dispositivo, Cômodo, Tipo, Designador) VALUES (null, '"
+    query = "INSERT INTO Dispositivos (ID, Dispositivo, Cômodo, Tipo, Designador, Endereço) VALUES (null, '"
     query += deviceName
     query += "', '"
     query += deviceRoom
@@ -77,8 +77,8 @@ def addDevice(deviceName, deviceRoom, deviceType, deviceDesignator):
     query += deviceType
     query += "', '"
     query += deviceDesignator
+    query += "', '"
+    query += deviceIP
     query += "')"
     cursor.execute(query)
     connection.commit()
-
-

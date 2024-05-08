@@ -51,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
-        View actionBarView =getSupportActionBar().getCustomView();
+        View actionBarView = getSupportActionBar().getCustomView();
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) actionBarView.getParent();
+        toolbar.setContentInsetsAbsolute(0,0);
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
         Commom.updateRooms(this, dbHandler, roomSpinner);
-        Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> {
@@ -76,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
+
+        Commom.updateRooms(this, dbHandler, roomSpinner);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
     }
 
     @Override
