@@ -1,12 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <Arduino.h>
 
+#define DESIGNATOR "LAMP1"
 
-#define ID 1
-
-#define RELAY_S_PIN 12             // Series relay pin
-#define RELAY_P_PIN 13             // Parallel relay pin
-#define FEEDBACK_PIN 14            // Voltage feedback pin
+#define RELAY_PIN 13       
+#define SWITCH_PIN 12
 
 
 // Network parameters
@@ -20,12 +18,16 @@ const uint16_t serverPort = 5560;
 
 WiFiClient tcpClient;   // TCP client instance
 
+bool lampOn = false;
+bool switchState = false;
+unsigned long lastSwitchCheck = 0;        
+const long switchCheckInterval = 200;  
+
 
 void setup() 
 {
-  pinMode(RELAY_S_PIN, OUTPUT);
-  pinMode(RELAY_P_PIN, OUTPUT);
-  pinMode(FEEDBACK_PIN, INPUT);
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(SWITCH_PIN, INPUT_PULLUP);
 
   Serial.begin(115200);                       // Start the serial port
   while (!Serial) delay(50);                  // Wait until the serial port is open
@@ -53,6 +55,7 @@ void setup()
     delay(5000);
   }
 
+  switchState = !digitalRead(SWITCH_PIN);
   delay(500);
 }
 
@@ -62,24 +65,35 @@ void loop()
   if (tcpClient.available())
   {
     String command = tcpClient.readString();
-    Serial.println(command);
 
     if (command.indexOf("ON") > -1) 
     {
-      if (!digitalRead(FEEDBACK_PIN))
-      {
-        digitalWrite(RELAY_S_PIN, LOW);
-        digitalWrite(RELAY_P_PIN, HIGH);
-      }
+      digitalWrite(RELAY_PIN, HIGH);
+      lampOn = true;
     }
     
     else if (command.indexOf("OFF") > -1)
     {
-      if (digitalRead(FEEDBACK_PIN))
-      {
-        digitalWrite(RELAY_S_PIN, HIGH);
-        digitalWrite(RELAY_P_PIN, LOW);
-      }
+      digitalWrite(RELAY_PIN, LOW);
+      lampOn = false;
+    }
+  }
+
+  if ((millis() - lastSwitchCheck) > switchCheckInterval)
+  {
+    if (digitalRead(SWITCH_PIN) != switchState)
+    {
+      switchState = digitalRead(SWITCH_PIN);
+      lampOn = !lampOn;
+      digitalWrite(RELAY_PIN, lampOn);
+
+      String message = "MANUAL-";
+      message += DESIGNATOR;
+      if (lampOn) message += "_ON";
+      else message += "_OFF";
+      tcpClient.print(message);
+
+      lastSwitchCheck = millis();
     }
   }
 }
