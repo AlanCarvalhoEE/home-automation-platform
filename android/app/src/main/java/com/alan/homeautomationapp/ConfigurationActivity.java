@@ -72,7 +72,9 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Update the activity views from database
         Commom.updateRooms(this, dbHandler, roomSpinner);
-        Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        if (roomSpinner.getAdapter().getCount() > 0) {
+            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+        }
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
