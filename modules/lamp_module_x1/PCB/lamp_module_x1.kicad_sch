@@ -1846,9 +1846,9 @@
   (no_connect (at 281.94 123.19) (uuid 5b302c24-21f2-4a1d-b549-9a83c5a5fbb5))
   (no_connect (at 284.48 123.19) (uuid 7b9afe47-c2b1-4206-ae5b-91332ad830a2))
   (no_connect (at 162.56 144.78) (uuid 94f32e33-a5f7-4172-9ff1-8c29371e3efb))
-  (no_connect (at 257.81 100.33) (uuid 9f372ee3-7a33-47f4-89f5-ffe68d592966))
   (no_connect (at 303.53 105.41) (uuid d4455ab8-ab13-4895-9960-448424003a29))
   (no_connect (at 303.53 97.79) (uuid ddc3625a-cc2c-4e85-9947-feb09d0b4720))
+  (no_connect (at 257.81 100.33) (uuid e86a5065-330b-424f-8dd5-5046279a4c84))
   (no_connect (at 276.86 123.19) (uuid f0904551-d646-493c-9274-389a6ab946f3))
   (no_connect (at 257.81 95.25) (uuid fefdf162-0285-4df3-97be-d0535e77d068))
 
@@ -1915,6 +1915,10 @@
   (wire (pts (xy 157.48 82.55) (xy 157.48 83.82))
     (stroke (width 0) (type default))
     (uuid 2c204408-c987-46c7-81d9-b2944a2fc6b0)
+  )
+  (wire (pts (xy 255.27 105.41) (xy 257.81 105.41))
+    (stroke (width 0) (type default))
+    (uuid 2d916bea-12eb-4f81-9986-c3d0cb1cc754)
   )
   (wire (pts (xy 128.27 90.17) (xy 129.54 90.17))
     (stroke (width 0) (type default))
@@ -2004,10 +2008,6 @@
     (stroke (width 0) (type default))
     (uuid 5d92844c-6c48-4811-b1ae-95fb0892442a)
   )
-  (wire (pts (xy 255.27 105.41) (xy 257.81 105.41))
-    (stroke (width 0) (type default))
-    (uuid 5e1d9084-fc2d-40b9-a5d2-20397c0b4843)
-  )
   (wire (pts (xy 104.14 163.83) (xy 106.68 163.83))
     (stroke (width 0) (type default))
     (uuid 5f2687ef-7126-4006-bad5-3786c5f41135)
@@ -2051,6 +2051,10 @@
   (wire (pts (xy 240.03 82.55) (xy 246.38 82.55))
     (stroke (width 0) (type default))
     (uuid 8c77f92e-2a10-44c8-8930-407bace6126e)
+  )
+  (wire (pts (xy 255.27 102.87) (xy 257.81 102.87))
+    (stroke (width 0) (type default))
+    (uuid 8c895d7b-19bd-4a0a-81ee-836ead8413b0)
   )
   (wire (pts (xy 201.93 90.17) (xy 201.93 95.25))
     (stroke (width 0) (type default))
@@ -2223,10 +2227,6 @@
   (wire (pts (xy 134.62 168.91) (xy 135.89 168.91))
     (stroke (width 0) (type default))
     (uuid e4c94a52-29f4-4a47-9ae1-bdbd5ffba0c3)
-  )
-  (wire (pts (xy 255.27 102.87) (xy 257.81 102.87))
-    (stroke (width 0) (type default))
-    (uuid e5a842c7-60bd-4907-b830-02d18794d9f9)
   )
   (wire (pts (xy 326.39 171.45) (xy 328.93 171.45))
     (stroke (width 0) (type default))
@@ -2540,7 +2540,7 @@
   (symbol (lib_id "Device:R") (at 134.62 173.99 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 1bf9f1f3-38b9-4fef-b83c-f6b2ac6e0e3d)
-    (property "Reference" "R6" (at 133.35 172.72 0)
+    (property "Reference" "R5" (at 133.35 172.72 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "10k" (at 133.35 175.26 0)
@@ -2563,7 +2563,7 @@
     (instances
       (project "lamp_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R6") (unit 1)
+          (reference "R5") (unit 1)
         )
       )
     )
@@ -2929,7 +2929,7 @@
   (symbol (lib_id "Device:R") (at 311.15 113.03 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4f48485a-c4a5-4594-8a71-d7f656564f12)
-    (property "Reference" "R4" (at 312.42 111.76 0)
+    (property "Reference" "R3" (at 312.42 111.76 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10k" (at 312.42 114.3 0)
@@ -2952,7 +2952,7 @@
     (instances
       (project "lamp_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R4") (unit 1)
+          (reference "R3") (unit 1)
         )
       )
     )
@@ -3129,7 +3129,7 @@
   (symbol (lib_id "Device:R") (at 110.49 163.83 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 79fd7dfd-e557-426c-a20b-a933a8bf129a)
-    (property "Reference" "R5" (at 110.49 158.75 90)
+    (property "Reference" "R4" (at 110.49 158.75 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "390" (at 110.49 161.29 90)
@@ -3152,7 +3152,7 @@
     (instances
       (project "lamp_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R5") (unit 1)
+          (reference "R4") (unit 1)
         )
       )
     )
@@ -3345,7 +3345,7 @@
   (symbol (lib_id "Device:R") (at 205.74 167.64 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 894fdd88-0ba5-45f2-b842-b30cd441b03c)
-    (property "Reference" "R7" (at 205.74 162.56 90)
+    (property "Reference" "R6" (at 205.74 162.56 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "2.2k" (at 205.74 165.1 90)
@@ -3368,7 +3368,7 @@
     (instances
       (project "lamp_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R7") (unit 1)
+          (reference "R6") (unit 1)
         )
       )
     )
@@ -3402,7 +3402,7 @@
   (symbol (lib_id "Isolator:PC817") (at 123.19 166.37 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8fde77ab-e09e-4ea1-ab43-b880f0bddd30)
-    (property "Reference" "U4" (at 123.19 158.75 0)
+    (property "Reference" "U3" (at 123.19 158.75 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "PC817" (at 123.19 161.29 0)
@@ -3421,7 +3421,7 @@
     (instances
       (project "lamp_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U4") (unit 1)
+          (reference "U3") (unit 1)
         )
       )
     )
