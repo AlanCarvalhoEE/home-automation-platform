@@ -65,10 +65,10 @@
       40
     ],
     "visible_layers": "fffffff_ffffffff",
-    "zone_display_mode": 1
+    "zone_display_mode": 0
   },
   "meta": {
-    "filename": "lamp_module.kicad_prl",
+    "filename": "lamp_module_x1.kicad_prl",
     "version": 3
   },
   "project": {
