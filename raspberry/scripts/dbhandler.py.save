@@ -1,13 +1,6 @@
-# Project: HAP - Home Automation Platform
-# Code: Raspberry database handler script
-# Author: Alan Carvalho
-# Date: 08/05/20124
-
-# Libraries
 import setup            # setup.py script
 import sqlite3 as lite  # Library to work sqlite database
-import json             # Library to work with json packages
-
+import json
 
 # Function to create and configure the database
 def createDatabase():
@@ -19,7 +12,6 @@ def createDatabase():
     # Create the tables
     cursor = connection.cursor()
 
-    # Create the database tables
     for table in range(0, len(setup.dbStructure), 3):
         query = "CREATE TABLE IF NOT EXISTS "
         query += setup.dbStructure[table][0] + " ("
@@ -46,7 +38,7 @@ def createDatabase():
         connection.commit()
 
 
-# Function to get the database as a JSON list
+# Function to get the database as JSON list
 def getDatabase():
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
@@ -63,25 +55,20 @@ def getDatabase():
     connection.commit()
     return jsonList
 
-
 # Function to add new room
 def addRoom(roomName):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
-
     query = "INSERT INTO Cômodos (ID, Cômodo) VALUES (null, '"
     query += roomName
     query += "')"
-
     cursor.execute(query)
     connection.commit()
-
 
 # Function to add new devices
 def addDevice(deviceName, deviceRoom, deviceType, deviceDesignator, deviceIP):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
-
     query = "INSERT INTO Dispositivos (ID, Dispositivo, Cômodo, Tipo, Designador, IP) VALUES (null, '"
     query += deviceName
     query += "', '"
@@ -93,36 +80,16 @@ def addDevice(deviceName, deviceRoom, deviceType, deviceDesignator, deviceIP):
     query += "', '"
     query += deviceIP
     query += "')"
-
     cursor.execute(query)
     connection.commit()
-
 
 # Function to get a device IP
 def getIP(deviceDesignator):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
-
     query = "SELECT IP FROM Dispositivos WHERE DESIGNADOR='"
     query += deviceDesignator
     query += "'"
     cursor.execute(query)
-
-    ip = ''
-    ip = ip + cursor.fetchone()[0]
-    ip = ip.replace("[", "")
-
-    return ip
-
-
-# Function to search an IP in the database
-def searchIP(deviceIP):
-    connection = lite.connect(setup.dbName)
-    cursor = connection.cursor()
-
-    query = "SELECT IP FROM Dispositivos WHERE IP="
-    query += deviceIP
-    cursor.execute(query)
-
-    if (cursor.rowcount > 0): return True
-    else: return False
+    ip cursor.fetchall()[0]
+    

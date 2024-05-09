@@ -1,9 +1,11 @@
-import RPi.GPIO as GPIO     # Library for GPIO manipulation
+# Project: HAP - Home Automation Platform
+# Code: Raspberry setup script
+# Author: Alan Carvalho
+# Date: 08/05/2024
 
 
-##### Databae info #####
-
-dbName = "home_automation_db.db"    # Database name
+# Database name
+dbName = "home_automation_db.db"
 
 # Database schema
 dbStructure = [
@@ -27,14 +29,3 @@ dbTypes = [("Lâmpada", "LAMP"),
            ("Ar condicionado", "AIR"),
            ("Cortina", "CURTAIN"),
            ("Porta", "DOOR")]
-
-#############################
-
-##### GPIO setup #####
-
-GPIO.setmode(GPIO.BCM)
-relays=[4, 17, 27, 22, 5, 6, 26, 23, 24, 36]
-for i in range(9):
-    GPIO.setup(relays[i], GPIO.OUT)
-
-#############################
