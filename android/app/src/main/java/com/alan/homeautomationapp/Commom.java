@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Commom {
@@ -60,6 +61,8 @@ public class Commom {
                         if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
                         else tcpClient.sendMessage("SET-" + designator + "_OFF");
                     });
+
+                    lampControlToggleButton.setTag(designator);
 
                     break;
 
