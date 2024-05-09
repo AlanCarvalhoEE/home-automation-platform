@@ -1,7 +1,15 @@
-import dbhandler
+# Project: HAP - Home Automation Platform
+# Code: Raspberry database populating test code
+# Author: Alan Carvalho
+# Date: 08/05/2024
 
+# Libraries
+import dbhandler    # dbhandler.py script
+
+# Create the database
 dbhandler.createDatabase()
 
+# Populate the database
 dbhandler.addRoom('Sala')
 dbhandler.addRoom('Quarto 1')
 dbhandler.addRoom('Quarto 2')
