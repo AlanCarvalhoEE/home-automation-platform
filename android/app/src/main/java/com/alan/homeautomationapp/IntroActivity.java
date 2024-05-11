@@ -118,7 +118,7 @@ public class IntroActivity extends AppCompatActivity {
             Objects.requireNonNull(roomWindow).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
             roomWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
-            TextView errorTextView = connectionDialog.findViewById(R.id.errorTextView);
+            TextView errorTextView = connectionDialog.findViewById(R.id.typeTextView);
             Button yesButton = connectionDialog.findViewById(R.id.yesButton);
             Button noButton = connectionDialog.findViewById(R.id.noButton);
 
