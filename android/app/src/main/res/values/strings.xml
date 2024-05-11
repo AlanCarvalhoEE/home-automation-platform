@@ -22,8 +22,8 @@
     <string name="logo_hint">HAP icon</string>
     <string name="location_name_hint">Nome do local</string>
     <string name="device_name_hint">Nome do dispositivo</string>
-    <string name="device_designator_hint">Designador do dispositivo</string>
-    <string name="device_ip_hint">Endereço IP do dispositivo</string>
+    <string name="device_designator_hint">ID do dispositivo</string>
+    <string name="device_ip_hint">IP do dispositivo</string>
 
     // Descriptions
     <string name="location_add_description">Adicionar um novo local</string>
@@ -36,6 +36,7 @@
     <string name="air_control_description">Ligar/Desligar ar condicionado</string>
     <string name="temperature_up_button_description">Aumentar a temperatura</string>
     <string name="temperature_down_button_description">Diminuir a temperatura</string>
+    <string name="device_config_description">Configurar dispositivo</string>
 
     //  Messages
     <string name="connecting_message">Conectando ao servidor</string>

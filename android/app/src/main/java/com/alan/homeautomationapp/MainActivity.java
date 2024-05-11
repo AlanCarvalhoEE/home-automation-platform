@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -18,9 +15,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,12 +59,10 @@ public class MainActivity extends AppCompatActivity {
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
-        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-
-        Commom.updateRooms(this, dbHandler, roomSpinner);
+        Utils.updateRooms(this, dbHandler);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+            Utils.updateDevices(this, dbHandler, tcpClient);
         }
 
         // Configuration button listener
@@ -82,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Commom.updateDevices(MainActivity.this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+                Utils.updateDevices(MainActivity.this, dbHandler, tcpClient);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -94,11 +87,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
-        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        Commom.updateRooms(this, dbHandler, roomSpinner);
+        Utils.updateRooms(this, dbHandler);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Commom.updateDevices(this, dbHandler, tcpClient, roomSpinner, roomDevicesLayout);
+            Utils.updateDevices(this, dbHandler, tcpClient);
         }
     }
 
@@ -121,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
             int endIndex = changeMessage.indexOf("_");
             String designator = changeMessage.substring(startIndex, endIndex);
 
-            View view = findViewByTag(designator);
+            LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
+            View view = Utils.findViewByTag(designator, roomDevicesLayout);
 
             if (view instanceof ToggleButton) {
                 ToggleButton toggleButton = (ToggleButton) view;
@@ -134,32 +127,5 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-    }
-
-    private View findViewByTag(ViewGroup parent, String tag) {
-        if (parent == null || tag == null) {
-            return null;
-        }
-
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = parent.getChildAt(i);
-            if (tag.equals(child.getTag())) {
-                return child;
-            }
-
-            if (child instanceof ViewGroup) {
-                View foundView = findViewByTag((ViewGroup) child, tag);
-                if (foundView != null) {
-                    return foundView;
-                }
-            }
-        }
-        return null;
-    }
-
-    private View findViewByTag(String tag) {
-        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
-        return findViewByTag(roomDevicesLayout, tag);
     }
 }
