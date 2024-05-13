@@ -129,6 +129,31 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     />
 
+                <ImageButton
+                    android:id="@+id/airConfigImageButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_gear_states"
+                    android:scaleType="centerCrop"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@string/device_config_description"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/airDeleteImageButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/airDeleteImageButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_delete_states"
+                    android:scaleType="centerCrop"
+                    android:visibility="invisible"
+                    android:contentDescription="@string/device_delete_description"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>

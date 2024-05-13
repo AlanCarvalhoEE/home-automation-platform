@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         Utils.updateRooms(this, dbHandler);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler, tcpClient);
+            Utils.updateDevices(this, dbHandler);
         }
 
         // Configuration button listener
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Utils.updateDevices(MainActivity.this, dbHandler, tcpClient);
+                Utils.updateDevices(MainActivity.this, dbHandler);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         Utils.updateRooms(this, dbHandler);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler, tcpClient);
+            Utils.updateDevices(this, dbHandler);
         }
     }
 
