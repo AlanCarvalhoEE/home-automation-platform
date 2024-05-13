@@ -98,6 +98,19 @@ def addDevice(deviceName, deviceRoom, deviceType, deviceDesignator, deviceIP):
     connection.commit()
 
 
+
+def deleteDevice(deviceName):
+    connection = lite.connect(setup.dbName)
+    cursor = connection.cursor()
+
+    query = "DELETE FROM Dispositivos WHERE Dispositivo ='"
+    query += deviceName
+    query += "'"
+
+    cursor.execute(query)
+    connection.commit()
+
+
 # Function to get a device IP
 def getIP(deviceDesignator):
     connection = lite.connect(setup.dbName)

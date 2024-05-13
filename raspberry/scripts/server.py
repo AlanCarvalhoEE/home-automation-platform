@@ -37,7 +37,8 @@ class Client(threading.Thread):
                 connections.remove(self)
                 break
             if input != "":
-                pub.sendMessage('commands', message = input)
+                pub.sendMessage('commands', message = input, socket = self.socket, address = self.address)
+
 
 # Wait for new connections
 def newConnections(socket):
@@ -49,6 +50,7 @@ def newConnections(socket):
         print("New connection at ID " + str(connections[len(connections) - 1]))
         total_connections += 1
 
+
 def main():
     # Server host and port
     host = '192.168.88.11'
@@ -56,6 +58,7 @@ def main():
 
     # Create new server socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((host, port))
     sock.listen(5)
 
