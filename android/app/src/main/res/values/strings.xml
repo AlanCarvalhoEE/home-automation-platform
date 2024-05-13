@@ -37,12 +37,14 @@
     <string name="temperature_up_button_description">Aumentar a temperatura</string>
     <string name="temperature_down_button_description">Diminuir a temperatura</string>
     <string name="device_config_description">Configurar dispositivo</string>
+    <string name="device_delete_description">Apagar dispositivo</string>
 
     //  Messages
     <string name="connecting_message">Conectando ao servidor</string>
     <string name="loading_message">Carregando dados</string>
     <string name="connection_failed_message">Falha na conexão.\nDeseja tentar novamente?</string>
     <string name="database_failed_message">Falha na atualização dos dados.\nDeseja tentar novamente?</string>
+    <string name="confirm_delete_message">Deseja realmente apagar esse dispositivo?</string>
 
     // Units
     <string name="temperature_unit">°C</string>

@@ -81,8 +81,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public void addNewDevice(String deviceName, String deviceRoom, String deviceType,
-                             String deviceDesignator, String deviceIP) {
+    public void addDevice(String deviceName, String deviceRoom, String deviceType,
+                          String deviceDesignator, String deviceIP) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -96,7 +96,35 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addNewRoom(String roomName) {
+    public void updateDevice(String deviceName, String deviceRoom, String deviceType,
+                             String deviceDesignator, String deviceIP) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(DEVICE_NAME_COL, deviceName);
+        values.put(DEVICE_ROOM_COL, deviceRoom);
+        values.put(DEVICE_TYPE_COL, deviceType);
+        values.put(DEVICE_DESIGNATOR_COL, deviceDesignator);
+        values.put(DEVICE_IP_COL, deviceIP);
+
+        String whereClause = DEVICE_NAME_COL + " = ?";
+        String[] whereArgs = new String[]{deviceName};
+        db.update(DEVICE_TABLE_NAME, values, whereClause, whereArgs);
+
+        db.close();
+    }
+
+    public void deleteDevice(String deviceName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selection = DEVICE_NAME_COL + "=?";
+        String[] selectionArgs = { deviceName };
+
+        db.delete(DEVICE_TABLE_NAME, selection, selectionArgs);
+        db.close();
+    }
+
+    public void addRoom(String roomName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -142,8 +170,8 @@ public class DBHandler extends SQLiteOpenHelper {
                     if (fields.length > 1) {
                         for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
 
-                        if (i == 0) addNewDevice(fields[1], fields[2], fields[3], fields[4], fields[5]);
-                        else if (i == 1) addNewRoom(fields[1]);
+                        if (i == 0) addDevice(fields[1], fields[2], fields[3], fields[4], fields[5]);
+                        else if (i == 1) addRoom(fields[1]);
                         else if (i == 2) addNewType(fields[1]);
                     }
                 }
@@ -208,6 +236,28 @@ public class DBHandler extends SQLiteOpenHelper {
         @SuppressLint("Range") String designator = cursor.getString(cursor.getColumnIndex(DEVICE_DESIGNATOR_COL));
         cursor.close();
         return designator;
+    }
+
+    public String getAddress(String deviceName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_IP_COL + " from "
+                + DEVICE_TABLE_NAME + " WHERE " + DEVICE_NAME_COL + "='" + deviceName
+                + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String ip = cursor.getString(cursor.getColumnIndex(DEVICE_IP_COL));
+        cursor.close();
+        return ip;
+    }
+
+    public String getID(String deviceName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_ID_COL + " from "
+                + DEVICE_TABLE_NAME + " WHERE " + DEVICE_NAME_COL + "='" + deviceName
+                + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
+        cursor.close();
+        return id;
     }
 
     @Override

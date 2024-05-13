@@ -58,7 +58,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         // Update the activity views from database
         Utils.updateRooms(this, dbHandler);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler, tcpClient);
+            Utils.updateDevices(this, dbHandler);
         }
 
         // Configuration button listener
@@ -66,16 +66,16 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Room add button listener
         roomAddImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, tcpClient, dbHandler, "dialog_room_add"));
+                Utils.openDialog(this, dbHandler, "dialog_room_add", null));
 
         // Device add button listener
         deviceAddImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, tcpClient, dbHandler, "dialog_device_add"));
+                Utils.openDialog(this, dbHandler, "dialog_device_add", null));
 
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Utils.updateDevices(ConfigurationActivity.this, dbHandler, tcpClient);
+                Utils.updateDevices(ConfigurationActivity.this, dbHandler);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}

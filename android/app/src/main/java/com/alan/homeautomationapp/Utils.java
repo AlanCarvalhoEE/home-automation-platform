@@ -31,6 +31,8 @@ import java.util.Objects;
 
 public class Utils {
 
+    static TCPclient tcpClient = TCPclient.getInstance();
+
     private static int temperature = 20;
 
     // Function to update rooms from database
@@ -46,7 +48,7 @@ public class Utils {
 
     // Function to update devices from database
     @SuppressLint({"InflateParams", "SetTextI18n"})
-    public static void updateDevices(Context context, DBHandler database, TCPclient tcpClient) {
+    public static void updateDevices(Context context, DBHandler database) {
         Activity activity = (Activity) context;
         Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
@@ -58,7 +60,6 @@ public class Utils {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View vi;
-
             String deviceType = database.getType(devicesList.get(i));
             String designator = database.getDesignator(devicesList.get(i));
 
@@ -69,6 +70,7 @@ public class Utils {
                     TextView lampNameTextView = vi.findViewById(R.id.lampNameTextView);
                     ToggleButton lampControlToggleButton = vi.findViewById(R.id.lampControlToggleButton);
                     ImageButton lampConfigImageButton = vi.findViewById(R.id.lampConfigImageButton);
+                    ImageButton lampDeleteImageButton = vi.findViewById(R.id.lampDeleteImageButton);
 
                     lampNameTextView.setText(devicesList.get(i));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
@@ -79,6 +81,7 @@ public class Utils {
                     if (context instanceof MainActivity) {
                         lampControlToggleButton.setVisibility(View.VISIBLE);
                         lampConfigImageButton.setVisibility(View.INVISIBLE);
+                        lampDeleteImageButton.setVisibility(View.INVISIBLE);
 
                         lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
                             if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
@@ -89,9 +92,17 @@ public class Utils {
                     else if (context instanceof ConfigurationActivity) {
                         lampControlToggleButton.setVisibility(View.INVISIBLE);
                         lampConfigImageButton.setVisibility(View.VISIBLE);
+                        lampDeleteImageButton.setVisibility(View.VISIBLE);
 
-                        lampConfigImageButton.setOnClickListener(v ->
-                                openDialog(context, tcpClient, database, "dialog_device_add"));
+                        lampConfigImageButton.setOnClickListener(v -> {
+                            String name = (String) lampNameTextView.getText();
+                            openDialog(context, database, "dialog_device_config", name);
+                        });
+
+                        lampDeleteImageButton.setOnClickListener(v -> {
+                            String name = (String) lampNameTextView.getText();
+                            openDialog(context, database, "dialog_delete", name);
+                        });
                     }
 
                     break;
@@ -100,14 +111,41 @@ public class Utils {
                     vi = inflater.inflate(R.layout.device_socket, null);
                     TextView socketNameTextView = vi.findViewById(R.id.socketNameTextView);
                     ToggleButton socketControlToggleButton = vi.findViewById(R.id.socketControlToggleButton);
+                    ImageButton socketConfigImageButton = vi.findViewById(R.id.socketConfigImageButton);
+                    ImageButton socketDeleteImageButton = vi.findViewById(R.id.socketDeleteImageButton);
+
                     socketNameTextView.setText(devicesList.get(i));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                    socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                        else tcpClient.sendMessage("SET-" + designator + "_OFF");
-                    });
+                    socketControlToggleButton.setTag(designator);
+
+                    if (context instanceof MainActivity) {
+                        socketControlToggleButton.setVisibility(View.VISIBLE);
+                        socketConfigImageButton.setVisibility(View.INVISIBLE);
+                        socketDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                        socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                            if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                            else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                        });
+                    }
+
+                    else if (context instanceof ConfigurationActivity) {
+                        socketControlToggleButton.setVisibility(View.INVISIBLE);
+                        socketConfigImageButton.setVisibility(View.VISIBLE);
+                        socketDeleteImageButton.setVisibility(View.VISIBLE);
+
+                        socketConfigImageButton.setOnClickListener(v -> {
+                            String name = (String) socketNameTextView.getText();
+                            openDialog(context, database, "dialog_device_config", name);
+                        });
+
+                        socketDeleteImageButton.setOnClickListener(v -> {
+                            String name = (String) socketNameTextView.getText();
+                            openDialog(context, database, "dialog_delete", name);
+                        });
+                    }
 
                     break;
 
@@ -115,14 +153,41 @@ public class Utils {
                     vi = inflater.inflate(R.layout.device_door, null);
                     TextView doorNameTextView = vi.findViewById(R.id.doorNameTextView);
                     ToggleButton doorControlToggleButton = vi.findViewById(R.id.doorControlToggleButton);
+                    ImageButton doorConfigImageButton = vi.findViewById(R.id.doorConfigImageButton);
+                    ImageButton doorDeleteImageButton = vi.findViewById(R.id.doorDeleteImageButton);
+
                     doorNameTextView.setText(devicesList.get(i));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                    doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_OPEN");
-                        else tcpClient.sendMessage("SET-" + designator + "_CLOSED");
-                    });
+                    doorControlToggleButton.setTag(designator);
+
+                    if (context instanceof MainActivity) {
+                        doorControlToggleButton.setVisibility(View.VISIBLE);
+                        doorConfigImageButton.setVisibility(View.INVISIBLE);
+                        doorDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                        doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                            if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                            else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                        });
+                    }
+
+                    else if (context instanceof ConfigurationActivity) {
+                        doorControlToggleButton.setVisibility(View.INVISIBLE);
+                        doorConfigImageButton.setVisibility(View.VISIBLE);
+                        doorDeleteImageButton.setVisibility(View.VISIBLE);
+
+                        doorConfigImageButton.setOnClickListener(v -> {
+                            String name = (String) doorNameTextView.getText();
+                            openDialog(context, database, "dialog_device_config", name);
+                        });
+
+                        doorDeleteImageButton.setOnClickListener(v -> {
+                            String name = (String) doorNameTextView.getText();
+                            openDialog(context, database, "dialog_delete", name);
+                        });
+                    }
 
                     break;
 
@@ -168,7 +233,7 @@ public class Utils {
     }
 
     @SuppressLint("InflateParams")
-    public static void openDialog(Context context, TCPclient tcpClient, DBHandler dbHandler, String dialogType) {
+    public static void openDialog(Context context, DBHandler dbHandler, String dialogType, String deviceName) {
         Activity activity = (Activity) context;
         ConstraintLayout backgroundLayout = activity.findViewById(R.id.mainLayout);
         backgroundLayout.setAlpha(0.25f);
@@ -178,8 +243,11 @@ public class Utils {
         if (dialogType.equals("dialog_room_add")) {
             dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_room_add, null);
         }
-        else if (dialogType.equals("dialog_device_add")) {
+        else if (dialogType.contains("dialog_device")) {
             dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_device_add, null);
+        }
+        else if (dialogType.contains("dialog_delete")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_delete, null);
         }
 
         Dialog dialog = new Dialog(context);
@@ -191,11 +259,17 @@ public class Utils {
         Objects.requireNonNull(window).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
+        Button confirmButton = dialog.findViewById(R.id.yesButton);
+        Button cancelButton = dialog.findViewById(R.id.noButton);
+
+        cancelButton.setOnClickListener(view -> {
+            backgroundLayout.setAlpha(1f);
+            dialog.dismiss();
+        });
+
         if (dialogType.equals("dialog_room_add")) {
 
             EditText nameEditText = dialog.findViewById(R.id.nameEditText);
-            Button confirmButton = dialog.findViewById(R.id.yesButton);
-            Button cancelButton = dialog.findViewById(R.id.noButton);
 
             nameEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {}
@@ -207,7 +281,7 @@ public class Utils {
 
             confirmButton.setOnClickListener(v -> {
                 String roomName = nameEditText.getText().toString();
-                dbHandler.addNewRoom(roomName);
+                dbHandler.addRoom(roomName);
                 Utils.updateRooms(context, dbHandler);
 
                 String newRoomRequest = "ADD_ROOM-";
@@ -217,22 +291,15 @@ public class Utils {
                 backgroundLayout.setAlpha(1f);
                 dialog.dismiss();
             });
-
-            cancelButton.setOnClickListener(v -> {
-                backgroundLayout.setAlpha(1f);
-                dialog.dismiss();
-            });
         }
 
-        else if (dialogType.equals("dialog_device_add")) {
+        else if (dialogType.contains("dialog_device")) {
 
             Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
             EditText nameEditText = dialog.findViewById(R.id.nameEditText);
             RadioGroup typeRadioGroup = dialog.findViewById(R.id.typeRadioGroup);
             EditText designatorEditText = dialog.findViewById(R.id.designatorEditText);
             EditText ipEditText = dialog.findViewById(R.id.ipEditText);
-            Button confirmButton = dialog.findViewById(R.id.yesButton);
-            Button cancelButton = dialog.findViewById(R.id.noButton);
 
             List<String> typeList = dbHandler.getTypeList();
             List<Integer> idList = new ArrayList<>();
@@ -283,32 +350,81 @@ public class Utils {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
             });
 
+            if (dialogType.equals("dialog_device_add")) {
+                confirmButton.setOnClickListener(view -> {
+                    String name = deviceInfo[0];
+                    String type = deviceInfo[1];
+                    String designator = deviceInfo[2];
+                    String ip = deviceInfo[3];
+
+                    String room = roomSpinner.getSelectedItem().toString();
+
+                    dbHandler.addDevice(name, room, type, designator, ip);
+
+                    String newDeviceRequest = "ADD_DEVICE-";
+                    newDeviceRequest += name + ",";
+                    newDeviceRequest += room + ",";
+                    newDeviceRequest += type + ",";
+                    newDeviceRequest += designator + ",";
+                    newDeviceRequest += ip;
+
+                    tcpClient.sendMessage(newDeviceRequest);
+                    updateDevices(context, dbHandler);
+
+                    backgroundLayout.setAlpha(1f);
+                    dialog.dismiss();
+                });
+            }
+
+            else if (dialogType.equals("dialog_device_config")) {
+                nameEditText.setText(deviceName);
+                designatorEditText.setText(dbHandler.getDesignator(deviceName));
+                ipEditText.setText(dbHandler.getAddress(deviceName));
+                for (int i = 0; i < typeRadioGroup.getChildCount(); i++) {
+                    View child = typeRadioGroup.getChildAt(i);
+                    RadioButton radio = (RadioButton) child;
+                    if (radio.getText().toString().equals(deviceName)) {
+                        radio.setChecked(true);
+                    }
+                }
+
+                confirmButton.setOnClickListener(view -> {
+                    String name = deviceInfo[0];
+                    String type = deviceInfo[1];
+                    String designator = deviceInfo[2];
+                    String ip = deviceInfo[3];
+
+                    String room = roomSpinner.getSelectedItem().toString();
+
+                    dbHandler.updateDevice(name, room, type, designator, ip);
+
+                    String updateDeviceRequest = "UPDATE_DEVICE-";
+                    updateDeviceRequest += name + ",";
+                    updateDeviceRequest += room + ",";
+                    updateDeviceRequest += type + ",";
+                    updateDeviceRequest += designator + ",";
+                    updateDeviceRequest += ip;
+
+                    tcpClient.sendMessage(updateDeviceRequest);
+                    updateDevices(context, dbHandler);
+
+                    backgroundLayout.setAlpha(1f);
+                    dialog.dismiss();
+                });
+            }
+        }
+
+        else if (dialogType.equals("dialog_delete")) {
+
             confirmButton.setOnClickListener(view -> {
-                String name = deviceInfo[0];
-                String type = deviceInfo[1];
-                String designator = deviceInfo[2];
+                dbHandler.deleteDevice(deviceName);
 
-                String room = roomSpinner.getSelectedItem().toString();
-                String ip = "192.168.88.20";
+                String deleteDeviceRequest = "DELETE_DEVICE-";
+                deleteDeviceRequest += deviceName;
 
-                dbHandler.addNewDevice(name, room, type, designator, ip);
+                tcpClient.sendMessage(deleteDeviceRequest);
+                updateDevices(context, dbHandler);
 
-                String newDeviceRequest = "ADD_DEVICE-";
-                newDeviceRequest += name + ",";
-                newDeviceRequest += room + ",";
-                newDeviceRequest += type + ",";
-                newDeviceRequest += designator + ",";
-                newDeviceRequest += ip;
-
-                tcpClient.sendMessage(newDeviceRequest);
-
-                updateDevices(context, dbHandler, tcpClient);
-
-                backgroundLayout.setAlpha(1f);
-                dialog.dismiss();
-            });
-
-            cancelButton.setOnClickListener(view -> {
                 backgroundLayout.setAlpha(1f);
                 dialog.dismiss();
             });
