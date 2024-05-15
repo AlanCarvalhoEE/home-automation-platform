@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -30,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/lampLayout"
+                android:id="@+id/cameraLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/mediumGrey"
@@ -40,34 +41,33 @@
                 android:paddingBottom="5dp">
 
                 <TextView
-                    android:id="@+id/lampNameTextView"
+                    android:id="@+id/cameraNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:singleLine="true"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ToggleButton
-                    android:id="@+id/lampControlToggleButton"
+                    android:id="@+id/cameraControlToggleButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:background="@drawable/button_lamp_states"
+                    android:background="@drawable/button_camera_states"
                     android:textOn=""
                     android:textOff=""
                     android:visibility="visible"
-                    android:contentDescription="@string/lamp_control_description"
-                    app:layout_constraintBottom_toBottomOf="@id/lampNameTextView"
+                    android:contentDescription="@string/camera_control_description"
+                    app:layout_constraintBottom_toBottomOf="@id/cameraNameTextView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/lampNameTextView" />
+                    app:layout_constraintTop_toTopOf="@id/cameraNameTextView" />
 
                 <ImageButton
-                    android:id="@+id/lampConfigImageButton"
+                    android:id="@+id/cameraConfigImageButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/button_gear_states"
@@ -75,21 +75,38 @@
                     android:visibility="invisible"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@string/device_config_description"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/lampDeleteImageButton"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="@id/cameraControlToggleButton"
+                    app:layout_constraintEnd_toStartOf="@id/cameraDeleteImageButton"
+                    app:layout_constraintTop_toTopOf="@id/cameraControlToggleButton" />
 
                 <ImageButton
-                    android:id="@+id/lampDeleteImageButton"
+                    android:id="@+id/cameraDeleteImageButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/button_delete_states"
                     android:scaleType="centerCrop"
                     android:visibility="invisible"
                     android:contentDescription="@string/device_delete_description"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/cameraControlToggleButton"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/cameraControlToggleButton" />
+
+                <FrameLayout
+                    android:id="@+id/videoLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintDimensionRatio="640:480"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cameraNameTextView" >
+
+                    <org.videolan.libvlc.util.VLCVideoLayout
+                        android:id="@+id/cameraVideoLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

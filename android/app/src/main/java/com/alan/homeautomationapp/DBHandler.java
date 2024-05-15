@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +154,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void updateDatabase(String databaseString) {
         clearDatabase();
-
+        Log.d("DEBUG_DATABASE", databaseString);
         int startIndex = databaseString.indexOf("-") + 1;
         String data = databaseString.substring(startIndex);
         String[] tables = data.split("/");
