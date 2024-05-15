@@ -1,5 +1,8 @@
 package com.alan.homeautomationapp;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,6 +17,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -25,6 +29,8 @@ import android.widget.ToggleButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import org.videolan.libvlc.util.VLCVideoLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +38,9 @@ import java.util.Objects;
 public class Utils {
 
     static TCPclient tcpClient = TCPclient.getInstance();
+
+    private static VideoStreamPlayer streamPlayer;
+    private static final String rtspUrl = "rtsp://192.168.88.50:554/avstream/channel=1/stream=1.sdp";
 
     private static int temperature = 20;
 
@@ -74,7 +83,7 @@ public class Utils {
 
                     lampNameTextView.setText(devicesList.get(i));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            MATCH_PARENT, WRAP_CONTENT));
 
                     lampControlToggleButton.setTag(designator);
 
@@ -87,9 +96,7 @@ public class Utils {
                             if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
                             else tcpClient.sendMessage("SET-" + designator + "_OFF");
                         });
-                    }
-
-                    else if (context instanceof ConfigurationActivity) {
+                    } else if (context instanceof ConfigurationActivity) {
                         lampControlToggleButton.setVisibility(View.INVISIBLE);
                         lampConfigImageButton.setVisibility(View.VISIBLE);
                         lampDeleteImageButton.setVisibility(View.VISIBLE);
@@ -116,7 +123,7 @@ public class Utils {
 
                     socketNameTextView.setText(devicesList.get(i));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            MATCH_PARENT, WRAP_CONTENT));
 
                     socketControlToggleButton.setTag(designator);
 
@@ -129,9 +136,7 @@ public class Utils {
                             if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
                             else tcpClient.sendMessage("SET-" + designator + "_OFF");
                         });
-                    }
-
-                    else if (context instanceof ConfigurationActivity) {
+                    } else if (context instanceof ConfigurationActivity) {
                         socketControlToggleButton.setVisibility(View.INVISIBLE);
                         socketConfigImageButton.setVisibility(View.VISIBLE);
                         socketDeleteImageButton.setVisibility(View.VISIBLE);
@@ -158,7 +163,7 @@ public class Utils {
 
                     doorNameTextView.setText(devicesList.get(i));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            MATCH_PARENT, WRAP_CONTENT));
 
                     doorControlToggleButton.setTag(designator);
 
@@ -171,9 +176,7 @@ public class Utils {
                             if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
                             else tcpClient.sendMessage("SET-" + designator + "_OFF");
                         });
-                    }
-
-                    else if (context instanceof ConfigurationActivity) {
+                    } else if (context instanceof ConfigurationActivity) {
                         doorControlToggleButton.setVisibility(View.INVISIBLE);
                         doorConfigImageButton.setVisibility(View.VISIBLE);
                         doorDeleteImageButton.setVisibility(View.VISIBLE);
@@ -191,6 +194,58 @@ public class Utils {
 
                     break;
 
+                case "Câmera":
+                    vi = inflater.inflate(R.layout.device_camera, null);
+                    TextView cameraNameTextView = vi.findViewById(R.id.cameraNameTextView);
+                    ToggleButton cameraControlToggleButton = vi.findViewById(R.id.cameraControlToggleButton);
+                    ImageButton cameraConfigImageButton = vi.findViewById(R.id.cameraConfigImageButton);
+                    ImageButton cameraDeleteImageButton = vi.findViewById(R.id.cameraDeleteImageButton);
+                    FrameLayout videoLayout = vi.findViewById(R.id.videoLayout);
+                    VLCVideoLayout cameraVideoLayout = vi.findViewById(R.id.cameraVideoLayout);
+
+                    streamPlayer = new VideoStreamPlayer(context, cameraVideoLayout);
+
+                    cameraNameTextView.setText(devicesList.get(i));
+                    roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                            MATCH_PARENT, WRAP_CONTENT));
+
+                    cameraControlToggleButton.setTag(designator);
+
+                    if (context instanceof MainActivity) {
+                        cameraControlToggleButton.setVisibility(View.VISIBLE);
+                        cameraConfigImageButton.setVisibility(View.INVISIBLE);
+                        cameraDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                        cameraControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                            if (isChecked) {
+                                videoLayout.setVisibility(View.VISIBLE);
+                                streamPlayer.startVideo(rtspUrl);
+                            }
+                            else {
+                                videoLayout.setVisibility(View.GONE);
+                                streamPlayer.stopVideo();
+                            }
+                        });
+
+
+                    } else if (context instanceof ConfigurationActivity) {
+                        cameraControlToggleButton.setVisibility(View.INVISIBLE);
+                        cameraConfigImageButton.setVisibility(View.VISIBLE);
+                        cameraDeleteImageButton.setVisibility(View.VISIBLE);
+
+                        cameraConfigImageButton.setOnClickListener(v -> {
+                            String name = (String) cameraNameTextView.getText();
+                            openDialog(context, database, "dialog_device_config", name);
+                        });
+
+                        cameraDeleteImageButton.setOnClickListener(v -> {
+                            String name = (String) cameraNameTextView.getText();
+                            openDialog(context, database, "dialog_delete", name);
+                        });
+                    }
+
+                    break;
+
                 case "Ar condicionado":
                     vi = inflater.inflate(R.layout.device_air_conditioner, null);
                     TextView airNameTextView = vi.findViewById(R.id.airNameTextView);
@@ -201,7 +256,7 @@ public class Utils {
                     airNameTextView.setText(devicesList.get(i));
                     temperatureEditText.setText(String.valueOf(temperature));
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            MATCH_PARENT, WRAP_CONTENT));
 
                     airControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
                         if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
@@ -223,8 +278,12 @@ public class Utils {
                             temperature = Integer.parseInt(s.toString());
                             tcpClient.sendMessage("SET-" + designator + "_T" + temperature);
                         }
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
                     });
 
                     break;
@@ -256,7 +315,7 @@ public class Utils {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        Objects.requireNonNull(window).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Objects.requireNonNull(window).setLayout(1000, WRAP_CONTENT);
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
         Button confirmButton = dialog.findViewById(R.id.yesButton);
@@ -463,4 +522,5 @@ public class Utils {
     public static View findViewByTag(String tag, LinearLayout roomDevicesLayout) {
         return findViewByTag(roomDevicesLayout, tag);
     }
+
 }

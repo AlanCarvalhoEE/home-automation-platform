@@ -34,6 +34,7 @@
     <string name="socket_control_description">Ligar/Desligar tomada</string>
     <string name="door_control_description">Abrir/Fechar porta</string>
     <string name="air_control_description">Ligar/Desligar ar condicionado</string>
+    <string name="camera_control_description">Ver streaming</string>
     <string name="temperature_up_button_description">Aumentar a temperatura</string>
     <string name="temperature_down_button_description">Diminuir a temperatura</string>
     <string name="device_config_description">Configurar dispositivo</string>
