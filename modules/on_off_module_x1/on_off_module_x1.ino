@@ -1,12 +1,13 @@
 // Project - HAP - Home Automation Platform 
 // Code - ON-OFF module
 // Author - Alan Carvalho
-// Date - 08/05/2024
+// Date - 17/05/2024
 
 
 // Libraries
 #include <ESP8266WiFi.h>
 #include <Arduino.h>
+#include <ButtonDebounce.h>
 
 // Pins definition
 #define RELAY_PIN 13       
@@ -24,16 +25,16 @@ IPAddress gateway (192,168,88,1);
 IPAddress subnet (255,255,255,0);
 const uint16_t serverPort = 5560;
 
-// TCP client instance
-WiFiClient tcpClient;   
+WiFiClient tcpClient;                       // TCP client instance
 
 // Variables
 bool loadOn = false;                        // Load state (ON = true, OFF = false)
-bool switchState = false;                   // Switch state (OPEN = true, CLOSED = false)
-unsigned long lastSwitchCheck = 0;          // Last time the switch state was checked (ms)  
-const long switchCheckInterval = 200;       // Interval to check the switch state (ms)
+bool oldSwitchState = false;                // Switch state (OPEN = true, CLOSED = false)
 unsigned long lastConnectionCheck = 0;      // Last tiime the server connection was checked (ms)
 const long connectionCheckInterval = 1000;  // Interval to check the server connection (ms)
+
+// ButtonDebounce instance for the switch pin
+ButtonDebounce switchPin(SWITCH_PIN, 100);
 
 
 // Initial setup function
@@ -41,7 +42,6 @@ void setup()
 {
   // Configure the GPIO
   pinMode(RELAY_PIN, OUTPUT);
-  pinMode(SWITCH_PIN, INPUT_PULLUP);
 
   // Start the serial port
   Serial.begin(115200);             
@@ -56,8 +56,8 @@ void setup()
   // Wait until the WiFi interface is ready
   while (WiFi.status() != WL_CONNECTED) delay(100);     
 
-  // Read the actual switch state
-  switchState = !digitalRead(SWITCH_PIN);
+  switchPin.setCallback(switchChanged);
+
   delay(500);
 }
 
@@ -73,26 +73,8 @@ void loop()
     lastConnectionCheck = millis();
   }
 
-  // Check the switch status
-  if ((millis() - lastSwitchCheck) > switchCheckInterval)
-  {
-    // If the switch state has changed, change the load state
-    if (digitalRead(SWITCH_PIN) == switchState)
-    {
-      switchState = !digitalRead(SWITCH_PIN);
-      loadOn = switchState;
-      digitalWrite(RELAY_PIN, loadOn);
-
-      // Report the manual action to the server
-      String message = "MANUAL-";
-      message += DESIGNATOR;
-      if (loadOn) message += "_ON";
-      else message += "_OFF";
-      tcpClient.print(message);
-
-      lastSwitchCheck = millis();
-    }
-  }
+  // Update the state of the switch
+  switchPin.update();
 
   // If a message from the server has been received...
   if (tcpClient.available())
@@ -112,5 +94,24 @@ void loop()
       digitalWrite(RELAY_PIN, LOW);
       loadOn = false;
     }
+  }
+}
+
+
+// Callback function to handle switch state changes
+void switchChanged(const int switchState) {
+
+  // If the switch state has changed
+  if (switchState != oldSwitchState) {
+    oldSwitchState = switchState;
+    loadOn = switchState;
+    digitalWrite(RELAY_PIN, loadOn);
+
+    // Report the manual action to the server
+    String message = "MANUAL-";
+    message += DESIGNATOR;
+    if (loadOn) message += "_ON";
+    else message += "_OFF";
+    tcpClient.print(message);
   }
 }
