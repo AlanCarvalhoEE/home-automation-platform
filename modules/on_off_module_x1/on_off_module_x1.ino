@@ -9,7 +9,7 @@
 #include <Arduino.h>
 
 // Pins definition
-#define RELAY_PIN 13       
+#define RELAY_PIN 14      
 #define SWITCH_PIN 12
 
 // Device designator
