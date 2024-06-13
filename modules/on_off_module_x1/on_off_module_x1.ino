@@ -1,7 +1,7 @@
 // Project - HAP - Home Automation Platform 
 // Code - ON-OFF module
 // Author - Alan Carvalho
-// Date - 08/05/2024
+// Date - 17/05/2024
 
 
 // Libraries
@@ -9,8 +9,8 @@
 #include <Arduino.h>
 
 // Pins definition
-#define RELAY_PIN 13       
 #define SWITCH_PIN 12
+#define RELAY_PIN 14       
 
 // Device designator
 #define DESIGNATOR "LAMP1"
@@ -24,40 +24,34 @@ IPAddress gateway (192,168,88,1);
 IPAddress subnet (255,255,255,0);
 const uint16_t serverPort = 5560;
 
-// TCP client instance
-WiFiClient tcpClient;   
+WiFiClient tcpClient;                       // TCP client instance
 
 // Variables
 bool loadOn = false;                        // Load state (ON = true, OFF = false)
-bool switchState = false;                   // Switch state (OPEN = true, CLOSED = false)
-unsigned long lastSwitchCheck = 0;          // Last time the switch state was checked (ms)  
-const long switchCheckInterval = 200;       // Interval to check the switch state (ms)
-unsigned long lastConnectionCheck = 0;      // Last tiime the server connection was checked (ms)
+unsigned long lastConnectionCheck = 0;      // Last time the server connection was checked (ms)
 const long connectionCheckInterval = 1000;  // Interval to check the server connection (ms)
+unsigned long lastSwitchChange = 0;         // Last time the switch state has changed (ms)
+const long debounceInterval = 500;          // Interval to debounce the switch state changing (ms)
 
 
 // Initial setup function
 void setup() 
 {
   // Configure the GPIO
+  pinMode(SWITCH_PIN,INPUT_PULLUP);
   pinMode(RELAY_PIN, OUTPUT);
-  pinMode(SWITCH_PIN, INPUT_PULLUP);
 
   // Start the serial port
-  Serial.begin(115200);             
-  while (!Serial) delay(50);          
+  Serial.begin(115200);                 
 
   // Configure and start the WiFi client
   WiFi.mode(WIFI_STA);                        // Set the WiFi mode as station
   WiFi.config(moduleIP, gateway, subnet);     // Configure the client network parameters
   WiFi.begin(ssid, password);                 // Configure the WiFi network credentials
-  tcpClient.setTimeout(50);                   // Set the WiFi client timeout
+  tcpClient.setTimeout(50);                   // Set the WiFi client timeout    
 
-  // Wait until the WiFi interface is ready
-  while (WiFi.status() != WL_CONNECTED) delay(100);     
+  digitalWrite(RELAY_PIN, loadOn);            // Starts with the load OFF
 
-  // Read the actual switch state
-  switchState = !digitalRead(SWITCH_PIN);
   delay(500);
 }
 
@@ -71,27 +65,6 @@ void loop()
     // If the client is not connected to the server, try to connect
     if (!tcpClient.connected()) tcpClient.connect(serverIP, serverPort);
     lastConnectionCheck = millis();
-  }
-
-  // Check the switch status
-  if ((millis() - lastSwitchCheck) > switchCheckInterval)
-  {
-    // If the switch state has changed, change the load state
-    if (digitalRead(SWITCH_PIN) == switchState)
-    {
-      switchState = !digitalRead(SWITCH_PIN);
-      loadOn = switchState;
-      digitalWrite(RELAY_PIN, loadOn);
-
-      // Report the manual action to the server
-      String message = "MANUAL-";
-      message += DESIGNATOR;
-      if (loadOn) message += "_ON";
-      else message += "_OFF";
-      tcpClient.print(message);
-
-      lastSwitchCheck = millis();
-    }
   }
 
   // If a message from the server has been received...
@@ -112,5 +85,22 @@ void loop()
       digitalWrite(RELAY_PIN, LOW);
       loadOn = false;
     }
+  }
+
+  // If the switch has been pressed...
+  if (digitalRead(SWITCH_PIN) == LOW && ((millis() - lastSwitchChange) > debounceInterval))
+  {
+    // Change the load state
+    loadOn = !loadOn;
+    digitalWrite(RELAY_PIN, loadOn);
+
+    // Report the manual action to the server
+    String message = "MANUAL-";
+    message += DESIGNATOR;
+    if (loadOn) message += "_ON";
+    else message += "_OFF";
+    tcpClient.print(message);
+
+    lastSwitchChange = millis();
   }
 }
