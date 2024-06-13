@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void receiveMessage(String changeMessage) {
+        Log.d("DEBUG_MESSAGE", changeMessage);
         if (changeMessage.contains("DATABASE"))
             dbHandler.updateDatabase(changeMessage);
 
