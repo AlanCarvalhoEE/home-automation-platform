@@ -7,7 +7,6 @@
 // Libraries
 #include <ESP8266WiFi.h>
 #include <Arduino.h>
-#include <ButtonDebounce.h>
 
 // Pins definition
 #define SWITCH_PIN 12
@@ -29,18 +28,17 @@ WiFiClient tcpClient;                       // TCP client instance
 
 // Variables
 bool loadOn = false;                        // Load state (ON = true, OFF = false)
-bool oldSwitchState = false;                // Switch state (OPEN = true, CLOSED = false)
-unsigned long lastConnectionCheck = 0;      // Last tiime the server connection was checked (ms)
+unsigned long lastConnectionCheck = 0;      // Last time the server connection was checked (ms)
 const long connectionCheckInterval = 1000;  // Interval to check the server connection (ms)
-
-// ButtonDebounce instance for the switch pin
-ButtonDebounce switchPin(SWITCH_PIN, 100);
+unsigned long lastSwitchChange = 0;         // Last time the switch state has changed (ms)
+const long debounceInterval = 500;          // Interval to debounce the switch state changing (ms)
 
 
 // Initial setup function
 void setup() 
 {
   // Configure the GPIO
+  pinMode(SWITCH_PIN,INPUT_PULLUP);
   pinMode(RELAY_PIN, OUTPUT);
 
   // Start the serial port
@@ -52,7 +50,7 @@ void setup()
   WiFi.begin(ssid, password);                 // Configure the WiFi network credentials
   tcpClient.setTimeout(50);                   // Set the WiFi client timeout    
 
-  switchPin.setCallback(switchChanged);
+  digitalWrite(RELAY_PIN, loadOn);            // Starts with the load OFF
 
   delay(500);
 }
@@ -68,9 +66,6 @@ void loop()
     if (!tcpClient.connected()) tcpClient.connect(serverIP, serverPort);
     lastConnectionCheck = millis();
   }
-
-  // Update the state of the switch
-  switchPin.update();
 
   // If a message from the server has been received...
   if (tcpClient.available())
@@ -91,16 +86,12 @@ void loop()
       loadOn = false;
     }
   }
-}
 
-
-// Callback function to handle switch state changes
-void switchChanged(const int switchState) {
-
-  // If the switch state has changed
-  if (switchState != oldSwitchState) {
-    oldSwitchState = switchState;
-    loadOn = !switchState;
+  // If the switch has been pressed...
+  if (digitalRead(SWITCH_PIN) == LOW && ((millis() - lastSwitchChange) > debounceInterval))
+  {
+    // Change the load state
+    loadOn = !loadOn;
     digitalWrite(RELAY_PIN, loadOn);
 
     // Report the manual action to the server
@@ -108,6 +99,8 @@ void switchChanged(const int switchState) {
     message += DESIGNATOR;
     if (loadOn) message += "_ON";
     else message += "_OFF";
-    tcpClient.println(message);
+    tcpClient.print(message);
+
+    lastSwitchChange = millis();
   }
 }
