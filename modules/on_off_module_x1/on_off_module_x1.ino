@@ -44,17 +44,13 @@ void setup()
   pinMode(RELAY_PIN, OUTPUT);
 
   // Start the serial port
-  Serial.begin(115200);             
-  while (!Serial) delay(50);          
+  Serial.begin(115200);                 
 
   // Configure and start the WiFi client
   WiFi.mode(WIFI_STA);                        // Set the WiFi mode as station
   WiFi.config(moduleIP, gateway, subnet);     // Configure the client network parameters
   WiFi.begin(ssid, password);                 // Configure the WiFi network credentials
-  tcpClient.setTimeout(50);                   // Set the WiFi client timeout
-
-  // Wait until the WiFi interface is ready
-  while (WiFi.status() != WL_CONNECTED) delay(100);     
+  tcpClient.setTimeout(50);                   // Set the WiFi client timeout    
 
   switchPin.setCallback(switchChanged);
 
@@ -104,7 +100,7 @@ void switchChanged(const int switchState) {
   // If the switch state has changed
   if (switchState != oldSwitchState) {
     oldSwitchState = switchState;
-    loadOn = switchState;
+    loadOn = !switchState;
     digitalWrite(RELAY_PIN, loadOn);
 
     // Report the manual action to the server
@@ -112,6 +108,6 @@ void switchChanged(const int switchState) {
     message += DESIGNATOR;
     if (loadOn) message += "_ON";
     else message += "_OFF";
-    tcpClient.print(message);
+    tcpClient.println(message);
   }
 }
