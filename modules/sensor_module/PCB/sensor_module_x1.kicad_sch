@@ -5,8 +5,8 @@
   (paper "A3")
 
   (title_block
-    (title "ON-OFF Module X1")
-    (date "2024-05-02")
+    (title "Sensor Module")
+    (date "2024-06-20")
     (rev "1.0")
     (company "Alan Carvalho")
   )
@@ -2089,6 +2089,7 @@
   (no_connect (at 193.04 100.33) (uuid 53b56eed-0e83-4f14-a825-2d4538c1f095))
   (no_connect (at 200.66 100.33) (uuid 5b302c24-21f2-4a1d-b549-9a83c5a5fbb5))
   (no_connect (at 203.2 100.33) (uuid 7b9afe47-c2b1-4206-ae5b-91332ad830a2))
+  (no_connect (at 40.64 57.15) (uuid bc15ccf7-007e-4fd4-9fef-e3157075fa9a))
   (no_connect (at 222.25 82.55) (uuid d4455ab8-ab13-4895-9960-448424003a29))
   (no_connect (at 195.58 100.33) (uuid f0904551-d646-493c-9274-389a6ab946f3))
   (no_connect (at 176.53 72.39) (uuid fefdf162-0285-4df3-97be-d0535e77d068))
@@ -3521,7 +3522,7 @@
     (property "Value" "10nF" (at 345.44 187.96 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 343.8652 190.5 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 343.8652 190.5 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 342.9 186.69 0)
@@ -3544,13 +3545,13 @@
   (symbol (lib_id "Device:C_Polarized") (at 238.76 194.31 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 126f7928-56e4-4b5b-ba8a-1401cf5ee120)
-    (property "Reference" "C10" (at 238.76 188.595 90)
+    (property "Reference" "C13" (at 238.76 188.595 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "10uF" (at 238.76 190.5 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "" (at 242.57 193.3448 0)
+    (property "Footprint" "Capacitor_SMD:CP_Elec_5x5.4" (at 242.57 193.3448 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 238.76 194.31 0)
@@ -3561,7 +3562,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C10") (unit 1)
+          (reference "C13") (unit 1)
         )
       )
     )
@@ -3620,7 +3621,7 @@
   (symbol (lib_id "Device:R") (at 208.28 151.13 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 151270b6-840d-4833-9283-124f4120e661)
-    (property "Reference" "R8" (at 205.105 149.86 0)
+    (property "Reference" "R11" (at 205.105 149.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "10k" (at 206.375 152.4 0)
@@ -3643,7 +3644,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R8") (unit 1)
+          (reference "R11") (unit 1)
         )
       )
     )
@@ -3702,7 +3703,7 @@
   (symbol (lib_id "Device:C_Polarized") (at 172.72 92.71 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 22573c6d-78e1-434c-85ae-6964a2e60667)
-    (property "Reference" "C9" (at 170.18 91.44 0)
+    (property "Reference" "C7" (at 170.18 91.44 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "0.1uF" (at 170.18 93.98 0)
@@ -3722,7 +3723,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C9") (unit 1)
+          (reference "C7") (unit 1)
         )
       )
     )
@@ -3764,7 +3765,7 @@
   (symbol (lib_id "Device:R") (at 257.81 176.53 180) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 26d60f66-4175-44c2-b31e-93a52ccea47d)
-    (property "Reference" "R11" (at 263.144 175.26 0)
+    (property "Reference" "R13" (at 263.144 175.26 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1M" (at 262.128 177.8 0)
@@ -3787,39 +3788,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R11") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Comparator:LM393") (at 53.34 158.115 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 270f9eb6-9c4c-4f68-a962-5e13dfcedc21)
-    (property "Reference" "U1" (at 55.245 165.1 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "LM393" (at 55.245 162.56 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 53.34 158.115 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 53.34 158.115 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid e76bf7fa-fcc7-4cea-9fc6-aecde636db31))
-    (pin "2" (uuid b2716d98-fe0f-40f0-af33-82901b1b39bc))
-    (pin "3" (uuid 0e46f3d0-fa78-4534-92fe-73fd2096a176))
-    (pin "5" (uuid ad2206fe-9fcf-431d-ad99-c7637f2b5295))
-    (pin "6" (uuid cf63de29-148b-4760-9e9c-dd64c6038668))
-    (pin "7" (uuid c7330543-fff6-462c-9af6-a88159a44c5d))
-    (pin "4" (uuid b41ed4d2-e2ef-45ae-8a1a-97edcd7e358e))
-    (pin "8" (uuid f9b49915-140e-4663-930d-0dc31abb0b7f))
-    (instances
-      (project "sensor_module_x1"
-        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U1") (unit 1)
+          (reference "R13") (unit 1)
         )
       )
     )
@@ -3904,7 +3873,7 @@
   (symbol (lib_id "Device:R") (at 257.81 189.23 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2d6a3a13-d4dc-43af-8e5c-73ddc67ba986)
-    (property "Reference" "R12" (at 263.144 187.96 0)
+    (property "Reference" "R14" (at 263.144 187.96 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "2M" (at 262.255 190.5 0)
@@ -3927,7 +3896,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R12") (unit 1)
+          (reference "R14") (unit 1)
         )
       )
     )
@@ -3936,7 +3905,7 @@
   (symbol (lib_id "Device:R") (at 377.19 60.96 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 305f70a1-7501-4564-b60b-43a0f3bd54b9)
-    (property "Reference" "R17" (at 377.19 55.88 90)
+    (property "Reference" "R5" (at 377.19 55.88 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "3k9" (at 377.19 58.42 90)
@@ -3959,7 +3928,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R17") (unit 1)
+          (reference "R5") (unit 1)
         )
       )
     )
@@ -3968,7 +3937,7 @@
   (symbol (lib_id "Sensor_Gas:MQ-6") (at 91.44 160.02 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 317c4953-8863-44ff-aa7c-329aecc04552)
-    (property "Reference" "U2" (at 93.345 148.59 0)
+    (property "Reference" "U5" (at 93.345 148.59 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MQ-5" (at 93.345 151.13 0)
@@ -3989,7 +3958,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U2") (unit 1)
+          (reference "U5") (unit 1)
         )
       )
     )
@@ -4028,7 +3997,7 @@
   (symbol (lib_id "Device:C") (at 111.76 93.98 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 33d7054f-7c11-4750-9ce2-6a1a70311ec2)
-    (property "Reference" "C4" (at 114.3 92.71 0)
+    (property "Reference" "C5" (at 114.3 92.71 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10uF" (at 114.3 95.25 0)
@@ -4048,7 +4017,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C4") (unit 1)
+          (reference "C5") (unit 1)
         )
       )
     )
@@ -4063,7 +4032,7 @@
     (property "Value" "BISS0001" (at 300.99 151.13 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "BISS0001:SOIC127P600X180-16N" (at 300.99 196.85 0)
+    (property "Footprint" "MyLibrary:SOIC127P600X180-16N" (at 300.99 196.85 0)
       (effects (font (size 1.27 1.27)) (justify bottom) hide)
     )
     (property "Datasheet" "" (at 300.99 196.85 0)
@@ -4241,13 +4210,13 @@
   (symbol (lib_id "Device:C") (at 247.65 176.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 38910593-fbfa-4bba-b1f7-82cb572ac731)
-    (property "Reference" "C12" (at 250.19 175.26 0)
+    (property "Reference" "C11" (at 250.19 175.26 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10nF" (at 250.19 177.8 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 248.6152 180.34 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 248.6152 180.34 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 247.65 176.53 0)
@@ -4261,7 +4230,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C12") (unit 1)
+          (reference "C11") (unit 1)
         )
       )
     )
@@ -4351,7 +4320,7 @@
     (property "Value" "47uF" (at 275.59 195.58 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 272.0848 198.12 0)
+    (property "Footprint" "Capacitor_SMD:CP_Elec_5x5.4" (at 272.0848 198.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 273.05 194.31 0)
@@ -4422,38 +4391,6 @@
     )
   )
 
-  (symbol (lib_id "Comparator:LM393") (at 137.16 165.1 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 4404ea92-cc2d-4478-8bbe-44d5d32d54b7)
-    (property "Reference" "U5" (at 135.89 163.83 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Value" "LM393" (at 135.89 166.37 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Footprint" "" (at 137.16 165.1 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 137.16 165.1 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 9e269e82-6c8d-466d-847c-56f28eec4d30))
-    (pin "2" (uuid 53872ca2-12e6-48b6-95a2-055d2cd22c3d))
-    (pin "3" (uuid ea10ea64-d3d2-4914-9b8d-701799e45dc0))
-    (pin "5" (uuid b02e8150-dced-4a40-9c02-f86588ab8992))
-    (pin "6" (uuid 3ad8b939-cc05-48f7-9017-49ca54581bff))
-    (pin "7" (uuid 7c575e98-4477-4d5d-867c-a9f473473341))
-    (pin "4" (uuid 405f3dfb-a591-4149-b279-daa388dbb333))
-    (pin "8" (uuid eb45d5fd-f4a8-4b31-a202-3e492fbb24d9))
-    (instances
-      (project "sensor_module_x1"
-        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U5") (unit 3)
-        )
-      )
-    )
-  )
-
   (symbol (lib_id "power:GND") (at 125.73 73.66 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4670100d-2dab-482b-8433-c7d8cc44b5fb)
@@ -4507,7 +4444,7 @@
   (symbol (lib_id "Regulator_Linear:AMS1117-3.3") (at 125.73 59.69 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4b4f6d1a-fe91-4416-acf5-ca897be9c7a2)
-    (property "Reference" "U3" (at 125.73 53.975 0)
+    (property "Reference" "U1" (at 125.73 53.975 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "AMS1117-3.3" (at 125.73 56.515 0)
@@ -4528,7 +4465,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U3") (unit 1)
+          (reference "U1") (unit 1)
         )
       )
     )
@@ -4543,7 +4480,7 @@
     (property "Value" "10k" (at 121.285 168.91 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 123.19 167.64 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 123.19 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 123.19 167.64 0)
@@ -4619,7 +4556,7 @@
   (symbol (lib_id "Device:C") (at 139.7 93.98 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4ee61408-7909-49e1-b444-7263834a6e59)
-    (property "Reference" "C7" (at 137.16 92.71 0)
+    (property "Reference" "C6" (at 137.16 92.71 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "10uF" (at 137.16 95.25 0)
@@ -4639,7 +4576,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C7") (unit 1)
+          (reference "C6") (unit 1)
         )
       )
     )
@@ -4648,7 +4585,7 @@
   (symbol (lib_id "Device:R") (at 229.87 90.17 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4f48485a-c4a5-4594-8a71-d7f656564f12)
-    (property "Reference" "R9" (at 231.14 88.9 0)
+    (property "Reference" "R3" (at 231.14 88.9 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10k" (at 231.14 91.44 0)
@@ -4671,7 +4608,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R9") (unit 1)
+          (reference "R3") (unit 1)
         )
       )
     )
@@ -4680,13 +4617,13 @@
   (symbol (lib_id "Device:C") (at 113.03 175.26 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4fe16307-d975-4f7f-b2d2-244c3dcbe94e)
-    (property "Reference" "C5" (at 115.57 173.99 0)
+    (property "Reference" "C8" (at 115.57 173.99 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100nF" (at 115.57 176.53 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 113.9952 179.07 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 113.9952 179.07 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 113.03 175.26 0)
@@ -4700,7 +4637,39 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C5") (unit 1)
+          (reference "C8") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Comparator:LM393") (at 137.16 165.1 0) (unit 3)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 5346810d-da1a-456d-9b2d-a218c1035f29)
+    (property "Reference" "U6" (at 135.255 163.83 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Value" "LM393" (at 135.255 166.37 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.62x3.51mm" (at 137.16 165.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 137.16 165.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 06929dbf-3bab-406e-9caf-fbb3ff0ec68b))
+    (pin "2" (uuid 7b62de59-c576-4224-bcbc-d3b383de8133))
+    (pin "3" (uuid 1e8befee-f698-4aad-a3e6-d0c671b5e7af))
+    (pin "5" (uuid 89b69dc7-bbc2-40d2-89a8-2839f57cfc15))
+    (pin "6" (uuid 7f7cdf00-e1ed-4b66-b0bb-d71f950b333f))
+    (pin "7" (uuid 534e125e-3612-48e8-b970-887ff45d60ad))
+    (pin "4" (uuid 767b0e1f-d56e-4344-bb02-aed1bc48ae82))
+    (pin "8" (uuid a6e7adce-5a70-4cd9-be43-3749e5749fdf))
+    (instances
+      (project "sensor_module_x1"
+        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
+          (reference "U6") (unit 3)
         )
       )
     )
@@ -4709,7 +4678,7 @@
   (symbol (lib_id "Device:R") (at 260.35 156.21 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 59375068-4ac1-4c7c-925d-e90f6139fdb8)
-    (property "Reference" "R13" (at 261.62 154.94 0)
+    (property "Reference" "R12" (at 261.62 154.94 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "47k" (at 261.62 157.48 0)
@@ -4732,7 +4701,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R13") (unit 1)
+          (reference "R12") (unit 1)
         )
       )
     )
@@ -4741,7 +4710,7 @@
   (symbol (lib_id "Device:R") (at 162.56 175.26 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5b2f833e-7c01-4a61-a1c4-dd961bcc8178)
-    (property "Reference" "R5" (at 163.83 173.99 0)
+    (property "Reference" "R10" (at 163.83 173.99 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "2k2" (at 167.64 176.53 0)
@@ -4764,7 +4733,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R5") (unit 1)
+          (reference "R10") (unit 1)
         )
       )
     )
@@ -4773,7 +4742,7 @@
   (symbol (lib_id "Device:R") (at 91.44 175.26 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5d4737d7-ae8a-4e00-a310-42c7d1e9aa65)
-    (property "Reference" "R2" (at 88.265 173.99 0)
+    (property "Reference" "R7" (at 88.265 173.99 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "5k1" (at 89.535 176.53 0)
@@ -4796,7 +4765,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R2") (unit 1)
+          (reference "R7") (unit 1)
         )
       )
     )
@@ -4805,7 +4774,7 @@
   (symbol (lib_id "Device:R") (at 165.1 64.77 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5e6ce863-afea-42b5-90e9-0c534d4b7108)
-    (property "Reference" "R6" (at 166.37 63.5 0)
+    (property "Reference" "R1" (at 166.37 63.5 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10k" (at 166.37 66.04 0)
@@ -4828,7 +4797,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R6") (unit 1)
+          (reference "R1") (unit 1)
         )
       )
     )
@@ -4837,7 +4806,7 @@
   (symbol (lib_id "Device:R") (at 26.67 150.495 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5f1b0fb7-b611-48ca-bc1b-69d3d2e9c51f)
-    (property "Reference" "R1" (at 23.495 149.225 0)
+    (property "Reference" "R6" (at 23.495 149.225 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "33k" (at 24.765 151.765 0)
@@ -4860,7 +4829,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R1") (unit 1)
+          (reference "R6") (unit 1)
         )
       )
     )
@@ -4869,13 +4838,13 @@
   (symbol (lib_id "Device:C") (at 247.65 189.23 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 60f37257-dc39-4b4f-b228-293aaca0902b)
-    (property "Reference" "C13" (at 250.19 190.5 0)
+    (property "Reference" "C12" (at 250.19 187.96 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "10nF" (at 250.19 187.96 0)
+    (property "Value" "10nF" (at 250.19 190.5 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 248.6152 185.42 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 248.6152 185.42 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 247.65 189.23 0)
@@ -4889,7 +4858,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C13") (unit 1)
+          (reference "C12") (unit 1)
         )
       )
     )
@@ -4929,7 +4898,7 @@
     (property "Value" "PIR" (at 237.49 147.32 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "ZRE200GE:TO5" (at 238.76 148.59 0)
+    (property "Footprint" "MyLibrary:TO5" (at 238.76 148.59 0)
       (effects (font (size 1.27 1.27)) (justify bottom) hide)
     )
     (property "Datasheet" "" (at 238.76 148.59 0)
@@ -5031,7 +5000,7 @@
   (symbol (lib_id "Device:R") (at 162.56 151.13 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 70bc22be-bb3e-4ddf-af11-e01b5b0d556d)
-    (property "Reference" "R4" (at 159.385 149.86 0)
+    (property "Reference" "R9" (at 159.385 149.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "1k2" (at 160.655 152.4 0)
@@ -5054,7 +5023,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R4") (unit 1)
+          (reference "R9") (unit 1)
         )
       )
     )
@@ -5063,7 +5032,7 @@
   (symbol (lib_id "Device:R") (at 238.76 181.61 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 72bb45b2-057c-439c-88b1-cb94b9bcd57a)
-    (property "Reference" "R10" (at 238.76 177.165 90)
+    (property "Reference" "R15" (at 238.76 177.165 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "10k" (at 238.76 179.07 90)
@@ -5086,7 +5055,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R10") (unit 1)
+          (reference "R15") (unit 1)
         )
       )
     )
@@ -5095,7 +5064,7 @@
   (symbol (lib_id "Device:R") (at 283.21 194.31 180) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 73b4e3ad-3ee6-40da-b083-4d0bd3718c42)
-    (property "Reference" "R16" (at 287.02 193.04 0)
+    (property "Reference" "R17" (at 287.02 193.04 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "1M" (at 285.115 195.58 0)
@@ -5118,7 +5087,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R16") (unit 1)
+          (reference "R17") (unit 1)
         )
       )
     )
@@ -5127,7 +5096,7 @@
   (symbol (lib_id "Device:R") (at 104.14 175.26 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 7494418d-2144-4530-a129-44b88c15d9d3)
-    (property "Reference" "R3" (at 100.965 173.99 0)
+    (property "Reference" "R8" (at 100.965 173.99 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "47k" (at 102.235 176.53 0)
@@ -5150,7 +5119,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R3") (unit 1)
+          (reference "R8") (unit 1)
         )
       )
     )
@@ -5182,38 +5151,6 @@
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "PS1") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Comparator:LM393") (at 137.16 165.1 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 762928e6-5669-4d0c-b761-49b4b61d6ad1)
-    (property "Reference" "U5" (at 138.43 172.72 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "LM393" (at 138.43 170.18 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 137.16 165.1 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 137.16 165.1 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 24cef34c-6e14-49e6-ad05-873c74c00d77))
-    (pin "2" (uuid addf7b0f-67fb-4ef1-bcef-212134216b93))
-    (pin "3" (uuid 48b0dfff-af88-45f5-96c2-33497be8a2f9))
-    (pin "5" (uuid 250c0808-7f63-4fff-b8d8-1cf54728b4e5))
-    (pin "6" (uuid c9f7a5ef-f562-4731-a235-ec0b20ee63a5))
-    (pin "7" (uuid bb130326-269c-4403-b6de-698f86951faa))
-    (pin "4" (uuid 21e47d77-b177-4a5e-9836-e13dce3ad12e))
-    (pin "8" (uuid fcc8bf1f-3723-4a5f-b46f-7243bea73e06))
-    (instances
-      (project "sensor_module_x1"
-        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U5") (unit 1)
         )
       )
     )
@@ -5257,7 +5194,7 @@
     (property "Value" "10nF" (at 335.28 187.96 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 333.7052 190.5 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 333.7052 190.5 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 332.74 186.69 0)
@@ -5409,7 +5346,7 @@
   (symbol (lib_id "ESP8266:ESP-12E") (at 199.39 77.47 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 871b894d-ab79-4864-ba40-2beef8482855)
-    (property "Reference" "U7" (at 199.39 58.42 0)
+    (property "Reference" "U3" (at 199.39 58.42 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "ESP-12E" (at 199.39 60.96 0)
@@ -5446,7 +5383,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U7") (unit 1)
+          (reference "U3") (unit 1)
         )
       )
     )
@@ -5455,7 +5392,7 @@
   (symbol (lib_id "Device:C") (at 139.7 66.04 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8801da9f-94c6-46f3-80e9-aa04f766e036)
-    (property "Reference" "C6" (at 137.16 64.77 0)
+    (property "Reference" "C4" (at 137.16 64.77 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "10uF" (at 137.16 67.31 0)
@@ -5475,7 +5412,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C6") (unit 1)
+          (reference "C4") (unit 1)
         )
       )
     )
@@ -5484,7 +5421,7 @@
   (symbol (lib_id "Device:R") (at 273.05 60.96 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 894fdd88-0ba5-45f2-b842-b30cd441b03c)
-    (property "Reference" "R14" (at 273.05 55.88 90)
+    (property "Reference" "R4" (at 273.05 55.88 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "3k9" (at 273.05 58.42 90)
@@ -5507,7 +5444,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R14") (unit 1)
+          (reference "R4") (unit 1)
         )
       )
     )
@@ -5516,13 +5453,13 @@
   (symbol (lib_id "Sensor:DHT11") (at 196.85 156.21 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8a9a171e-4def-45cc-acb7-f119080781b5)
-    (property "Reference" "U6" (at 190.5 154.94 0)
+    (property "Reference" "U7" (at 190.5 154.94 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "DHT11" (at 190.5 157.48 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Sensor:Aosong_DHT11_5.5x12.0_P2.54mm" (at 196.85 166.37 0)
+    (property "Footprint" "MyLibrary:SNR4-2.54-15.5X12.0X5.5MM" (at 196.85 166.37 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "http://akizukidenshi.com/download/ds/aosong/DHT11.pdf" (at 200.66 149.86 0)
@@ -5535,7 +5472,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U6") (unit 1)
+          (reference "U7") (unit 1)
         )
       )
     )
@@ -5569,7 +5506,7 @@
   (symbol (lib_id "Device:R") (at 173.99 64.77 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 91b8a574-eb7c-4814-9992-761fa406dfab)
-    (property "Reference" "R7" (at 175.26 63.5 0)
+    (property "Reference" "R2" (at 175.26 63.5 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10k" (at 175.26 66.04 0)
@@ -5592,7 +5529,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R7") (unit 1)
+          (reference "R2") (unit 1)
         )
       )
     )
@@ -5601,7 +5538,7 @@
   (symbol (lib_id "Regulator_Linear:AMS1117-3.3") (at 125.73 87.63 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 97b6fcac-fc1f-40d4-95b4-5ea13c3040b6)
-    (property "Reference" "U4" (at 125.73 81.915 0)
+    (property "Reference" "U2" (at 125.73 81.915 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "AMS1117-5" (at 125.73 84.455 0)
@@ -5622,7 +5559,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U4") (unit 1)
+          (reference "U2") (unit 1)
         )
       )
     )
@@ -5637,7 +5574,7 @@
     (property "Value" "10k" (at 37.465 161.925 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 39.37 160.655 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 39.37 160.655 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 39.37 160.655 0)
@@ -5683,13 +5620,13 @@
   (symbol (lib_id "Device:C") (at 247.65 156.21 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9fb6298c-aa73-46d2-8c72-92cb3b8add3f)
-    (property "Reference" "C11" (at 250.19 154.94 0)
+    (property "Reference" "C10" (at 250.19 154.94 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10nF" (at 250.19 157.48 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 248.6152 160.02 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 248.6152 160.02 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 247.65 156.21 0)
@@ -5703,7 +5640,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C11") (unit 1)
+          (reference "C10") (unit 1)
         )
       )
     )
@@ -5768,7 +5705,7 @@
     (property "Value" "10k" (at 318.008 185.928 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 323.85 181.61 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 323.85 181.61 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 323.85 181.61 0)
@@ -5896,7 +5833,7 @@
   (symbol (lib_id "Device:R") (at 273.05 185.42 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid cf434fbf-7740-4a1f-a8cd-f22d3dd41e00)
-    (property "Reference" "R15" (at 276.86 184.15 0)
+    (property "Reference" "R16" (at 276.86 184.15 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "47k" (at 276.86 186.69 0)
@@ -5919,7 +5856,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "R15") (unit 1)
+          (reference "R16") (unit 1)
         )
       )
     )
@@ -5945,6 +5882,70 @@
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR023") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Comparator:LM393") (at 53.34 158.115 0) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid d2be2ce9-e885-4871-a85a-87fb969cdfdb)
+    (property "Reference" "U4" (at 55.245 165.1 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "LM393" (at 55.245 162.56 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.62x3.51mm" (at 53.34 158.115 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 53.34 158.115 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid a4ac75e5-1ea1-4ddc-93a9-6df895e24274))
+    (pin "2" (uuid 2d1ef014-248a-44af-aa9c-e1eb66c04a2a))
+    (pin "3" (uuid 954c6880-262c-48e4-ad85-3ab39fb0e8d9))
+    (pin "5" (uuid 2e9b4122-b9c6-43f9-9535-6ea18bdd5013))
+    (pin "6" (uuid 2f294760-406a-439e-9151-bc45da604ae7))
+    (pin "7" (uuid 0d6ccd99-95f9-4187-bb33-e8e863e9c3e4))
+    (pin "4" (uuid d822e515-cb9a-4471-9481-5e3d83422131))
+    (pin "8" (uuid 7471a953-d8b1-42a3-8644-d2b081b75a2d))
+    (instances
+      (project "sensor_module_x1"
+        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
+          (reference "U4") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Comparator:LM393") (at 137.16 165.1 0) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid d3a808b1-d01c-4bd1-96f0-25e150d6e379)
+    (property "Reference" "U6" (at 138.43 172.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "LM393" (at 138.43 170.18 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.62x3.51mm" (at 137.16 165.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 137.16 165.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 08bc80bd-1bf2-4d77-b89c-9e9038b19697))
+    (pin "2" (uuid d188625a-ed37-401c-91bb-d8c043a2a4a0))
+    (pin "3" (uuid 433c1e07-afb9-4a65-ab6b-623ebaeceaef))
+    (pin "5" (uuid ce2b915b-b341-4f7a-abc4-38352bce31f5))
+    (pin "6" (uuid d496ce89-694d-45e4-8484-25c22ef566fd))
+    (pin "7" (uuid 1d12708e-f103-4215-8d3d-703641e9dbec))
+    (pin "4" (uuid d6d86f19-9cd4-403d-bf87-fba88f433d30))
+    (pin "8" (uuid 058d0af1-cfb7-4e09-9bb6-d0daebe36183))
+    (instances
+      (project "sensor_module_x1"
+        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
+          (reference "U6") (unit 1)
         )
       )
     )
@@ -5978,13 +5979,13 @@
   (symbol (lib_id "Device:C") (at 149.86 175.26 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid da75f6e1-b417-45d1-82bd-7fe1b17d36eb)
-    (property "Reference" "C8" (at 152.4 173.99 0)
+    (property "Reference" "C9" (at 152.4 173.99 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100nF" (at 152.4 176.53 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 150.8252 179.07 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 150.8252 179.07 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 149.86 175.26 0)
@@ -5998,7 +5999,7 @@
     (instances
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "C8") (unit 1)
+          (reference "C9") (unit 1)
         )
       )
     )
@@ -6060,38 +6061,6 @@
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C2") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "Comparator:LM393") (at 53.34 158.115 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid e0720605-b4e9-4662-9302-7291d3734aa9)
-    (property "Reference" "U1" (at 52.07 156.845 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Value" "LM393" (at 52.07 159.385 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
-    )
-    (property "Footprint" "" (at 53.34 158.115 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 53.34 158.115 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 1f175b62-d656-4405-a822-ca3e60f6a041))
-    (pin "2" (uuid d4a5917f-6e66-443b-8eb8-08e532e88527))
-    (pin "3" (uuid 9c0400c6-a7b6-4482-85a3-60485901d252))
-    (pin "5" (uuid 5c6f4999-dce5-4dcd-ba64-5fc3a054f678))
-    (pin "6" (uuid 37ab8fcc-4748-4193-942c-1a09cf626f4a))
-    (pin "7" (uuid d6fffecd-57ba-4fb3-b8c6-e90a8e608418))
-    (pin "4" (uuid 71c7861d-af10-42a0-9a0b-d4952c73f1a3))
-    (pin "8" (uuid 0c6a404a-d5b3-42b6-b7b5-1c9548bc2522))
-    (instances
-      (project "sensor_module_x1"
-        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
-          (reference "U1") (unit 3)
         )
       )
     )
@@ -6218,7 +6187,7 @@
     (property "Value" "10k" (at 316.992 170.942 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 323.85 173.99 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 323.85 173.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 323.85 173.99 0)
@@ -6310,6 +6279,38 @@
       (project "sensor_module_x1"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR012") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Comparator:LM393") (at 53.34 158.115 0) (unit 3)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid f738e88c-fbc2-4a5d-89a5-7abc57c91daf)
+    (property "Reference" "U4" (at 53.34 156.845 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Value" "LM393" (at 53.34 159.385 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Footprint" "" (at 53.34 158.115 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm393.pdf" (at 53.34 158.115 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 027b7454-82fe-46e7-b683-e33a77f32ef3))
+    (pin "2" (uuid b09fd2e5-43c6-48bd-974b-44850ce59ffc))
+    (pin "3" (uuid 657e0905-aa45-416c-a136-e066fc1f76af))
+    (pin "5" (uuid b2ebae73-3a34-4b6b-a50d-b8c59ed8a14e))
+    (pin "6" (uuid e634684c-abb5-47c6-ac4a-cf371c65fd92))
+    (pin "7" (uuid 1715ad57-ad14-4f8c-9e5a-6290580cec73))
+    (pin "4" (uuid 0ef41f07-c349-4ca7-b129-a56d8b033478))
+    (pin "8" (uuid b51a0350-9b38-4378-85c2-5281d917c71d))
+    (instances
+      (project "sensor_module_x1"
+        (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
+          (reference "U4") (unit 3)
         )
       )
     )
