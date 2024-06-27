@@ -2146,6 +2146,10 @@
     (stroke (width 0) (type default))
     (uuid 0e7d33c6-f943-4fc6-8dc7-2c839e6f9deb)
   )
+  (wire (pts (xy 222.25 74.93) (xy 224.79 74.93))
+    (stroke (width 0) (type default))
+    (uuid 0f082e13-635d-49a0-8321-b02e4cb50a0e)
+  )
   (wire (pts (xy 162.56 180.34) (xy 149.86 180.34))
     (stroke (width 0) (type default))
     (uuid 0fa7c2f8-9ef2-480e-ac95-a4425ea3f4d9)
@@ -2249,6 +2253,10 @@
   (wire (pts (xy 91.44 179.07) (xy 91.44 180.34))
     (stroke (width 0) (type default))
     (uuid 26b75350-58aa-45c9-93ee-3f760dbab5b5)
+  )
+  (wire (pts (xy 173.99 80.01) (xy 176.53 80.01))
+    (stroke (width 0) (type default))
+    (uuid 26faeabc-bdc2-445a-9b75-2868ddcfc42f)
   )
   (wire (pts (xy 341.63 72.39) (xy 341.63 69.85))
     (stroke (width 0) (type default))
@@ -2361,6 +2369,10 @@
   (wire (pts (xy 50.8 167.005) (xy 39.37 167.005))
     (stroke (width 0) (type default))
     (uuid 45e6d4ef-e5d0-4a1c-9720-84675ce187d5)
+  )
+  (wire (pts (xy 174.625 77.47) (xy 176.53 77.47))
+    (stroke (width 0) (type default))
+    (uuid 4763a01d-418e-4274-8103-b8d874c099ea)
   )
   (wire (pts (xy 245.11 146.05) (xy 245.11 144.78))
     (stroke (width 0) (type default))
@@ -2554,10 +2566,6 @@
     (stroke (width 0) (type default))
     (uuid 6ba51e6b-36f4-4df8-a689-d25c1aaa332b)
   )
-  (wire (pts (xy 173.99 77.47) (xy 176.53 77.47))
-    (stroke (width 0) (type default))
-    (uuid 6bb63494-a963-41c0-aae3-4de2c2b31dd4)
-  )
   (wire (pts (xy 397.51 157.48) (xy 397.51 167.64))
     (stroke (width 0) (type default))
     (uuid 6e8562d1-7938-448c-87f1-89166f2b7aa7)
@@ -2593,6 +2601,10 @@
   (wire (pts (xy 287.02 60.96) (xy 289.56 60.96))
     (stroke (width 0) (type default))
     (uuid 75827576-4364-44c9-8f43-024553c5f2e7)
+  )
+  (wire (pts (xy 222.25 77.47) (xy 224.79 77.47))
+    (stroke (width 0) (type default))
+    (uuid 75b87388-da48-4387-99be-c641964f50bb)
   )
   (wire (pts (xy 125.73 95.25) (xy 125.73 100.33))
     (stroke (width 0) (type default))
@@ -2737,10 +2749,6 @@
   (wire (pts (xy 247.65 152.4) (xy 247.65 151.13))
     (stroke (width 0) (type default))
     (uuid 98f87c98-99a8-41c6-af92-337a8cdec8a4)
-  )
-  (wire (pts (xy 222.25 77.47) (xy 224.79 77.47))
-    (stroke (width 0) (type default))
-    (uuid 9976f398-4c02-476d-9c36-a47e96159cb0)
   )
   (wire (pts (xy 328.93 185.42) (xy 328.93 181.61))
     (stroke (width 0) (type default))
@@ -2901,10 +2909,6 @@
   (wire (pts (xy 316.23 156.21) (xy 316.23 154.94))
     (stroke (width 0) (type default))
     (uuid c5c2c741-bdc5-4658-84cb-4c8dedaccf5a)
-  )
-  (wire (pts (xy 222.25 74.93) (xy 224.79 74.93))
-    (stroke (width 0) (type default))
-    (uuid c608a42b-2ebb-41bf-9b4d-269fceb7d8d1)
   )
   (wire (pts (xy 316.23 161.29) (xy 316.23 156.21))
     (stroke (width 0) (type default))
@@ -3077,10 +3081,6 @@
   (wire (pts (xy 374.65 77.47) (xy 374.65 76.2))
     (stroke (width 0) (type default))
     (uuid f2bfc488-a2e7-4709-965c-e76ab13bd7cc)
-  )
-  (wire (pts (xy 173.99 80.01) (xy 176.53 80.01))
-    (stroke (width 0) (type default))
-    (uuid f2e38552-bb98-4e78-809e-8f96d9e5aed0)
   )
   (wire (pts (xy 396.24 167.64) (xy 397.51 167.64))
     (stroke (width 0) (type default))
@@ -3345,11 +3345,11 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "SMOKE" (shape input) (at 173.99 80.01 180) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify right))
+  (global_label "SMOKE" (shape input) (at 224.79 77.47 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
     (uuid 12ea2edc-615c-4e0e-855c-2ec50ca4ae52)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 164.5944 80.01 0)
-      (effects (font (size 1.27 1.27)) (justify right) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 234.1856 77.47 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
   (global_label "TX" (shape input) (at 313.69 67.31 180) (fields_autoplaced)
@@ -3359,11 +3359,11 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "BEEP" (shape input) (at 224.79 77.47 0) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify left))
+  (global_label "BEEP" (shape input) (at 174.625 77.47 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
     (uuid 1e03e3db-8ca5-4fb3-8bc0-806338b9cbe9)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 232.6132 77.47 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 166.8018 77.47 0)
+      (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
   (global_label "BEEP" (shape input) (at 373.38 71.12 180) (fields_autoplaced)
@@ -3443,11 +3443,11 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "LED" (shape input) (at 224.79 74.93 0) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify left))
+  (global_label "LED" (shape input) (at 173.99 80.01 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
     (uuid bb2070a5-151f-48bf-94a7-8c26e368950e)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 231.2223 74.93 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 167.5577 80.01 0)
+      (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
   (global_label "TEMP" (shape input) (at 173.99 82.55 180) (fields_autoplaced)
@@ -3464,11 +3464,11 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "LIGHT" (shape input) (at 173.99 77.47 180) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify right))
+  (global_label "LIGHT" (shape input) (at 224.79 74.93 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
     (uuid cb9f7a66-a66e-403b-b5bd-809694ea10f7)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 165.8038 77.47 0)
-      (effects (font (size 1.27 1.27)) (justify right) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 232.9762 74.93 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
   (global_label "RX" (shape input) (at 313.69 69.85 180) (fields_autoplaced)
@@ -3505,7 +3505,7 @@
     (pin "2" (uuid 9f4dff07-58b8-414b-adda-93d6d4b736f0))
     (pin "3" (uuid d9f9c66c-eda2-4c42-9db5-953cfe198ced))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "SW1") (unit 1)
         )
@@ -3534,7 +3534,7 @@
     (pin "1" (uuid 3f0582e0-3edb-45e1-b3b1-918cb346a860))
     (pin "2" (uuid 9acda119-618f-434b-8368-0065702e9bd3))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C16") (unit 1)
         )
@@ -3560,7 +3560,7 @@
     (pin "1" (uuid f3c9a424-2b5b-4582-b4af-ed1f169eee4d))
     (pin "2" (uuid dbc106fb-125c-4275-bdcd-552b09b9e4db))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C13") (unit 1)
         )
@@ -3585,7 +3585,7 @@
     )
     (pin "1" (uuid 7e17c8ba-747b-4cb9-baf7-5132cd0e35f3))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR08") (unit 1)
         )
@@ -3610,7 +3610,7 @@
     )
     (pin "1" (uuid fe08b291-c551-4a46-b687-967c8659a974))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR01") (unit 1)
         )
@@ -3642,7 +3642,7 @@
     (pin "1" (uuid b917319e-d1d9-4422-bfa5-85ebd908b0ff))
     (pin "2" (uuid 2fd83afa-9387-449a-9dc3-fc6d0d8ebd5d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R11") (unit 1)
         )
@@ -3667,7 +3667,7 @@
     )
     (pin "1" (uuid d00dad2f-24e0-4548-949a-f78b88301cc0))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR019") (unit 1)
         )
@@ -3692,7 +3692,7 @@
     )
     (pin "1" (uuid 48aa4b83-33e1-44bc-8553-5645a42ecb72))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR033") (unit 1)
         )
@@ -3721,7 +3721,7 @@
     (pin "1" (uuid 0224bcf1-bbe4-4d6b-bc67-6d5b17b8d92e))
     (pin "2" (uuid b210c0f1-75aa-4226-ab4a-dab9804b10f1))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C7") (unit 1)
         )
@@ -3754,7 +3754,7 @@
     (pin "5" (uuid 35ff02a5-ba9e-42ee-9436-bc94e023cadd))
     (pin "6" (uuid 6f91f32c-cc97-48ea-ae6d-ebf4812d320d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "J2") (unit 1)
         )
@@ -3786,7 +3786,7 @@
     (pin "1" (uuid 5e8cbc41-bcd1-47c4-8c83-34f253e63139))
     (pin "2" (uuid ba11a720-82a8-4de8-a4b1-db32cef6c25d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R13") (unit 1)
         )
@@ -3811,7 +3811,7 @@
     )
     (pin "1" (uuid 84fc8f8b-bb94-407f-9611-c0e5d8668693))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR017") (unit 1)
         )
@@ -3836,7 +3836,7 @@
     )
     (pin "1" (uuid 99307132-a5c1-404e-9f14-d3f536e3052e))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR028") (unit 1)
         )
@@ -3862,7 +3862,7 @@
     (pin "1" (uuid 83d2b9aa-e985-4d43-9810-a7ed2b95c6be))
     (pin "2" (uuid dd767cd0-4d33-4ad3-9c66-6bef352e6664))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "LDR1") (unit 1)
         )
@@ -3894,7 +3894,7 @@
     (pin "1" (uuid 0fa9e215-7720-4ac6-add0-2664a045a124))
     (pin "2" (uuid 52f2e582-fcc2-40c5-9cd0-ce5ebdbc6d36))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R14") (unit 1)
         )
@@ -3926,7 +3926,7 @@
     (pin "1" (uuid d61f0ecf-82d1-4a35-9eeb-4448075c38bd))
     (pin "2" (uuid 183c653b-dbd7-4bf0-92fd-77ae68637a93))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R5") (unit 1)
         )
@@ -3956,7 +3956,7 @@
     (pin "5" (uuid d4aa6373-28f2-46ff-9320-86b2b0a06918))
     (pin "6" (uuid dba060fc-2374-4262-9daf-502b6834220c))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U5") (unit 1)
         )
@@ -3986,7 +3986,7 @@
     (pin "2" (uuid 5d2c8683-2d55-41e0-be92-b20e4427f777))
     (pin "3" (uuid 36abd44d-7d1a-48ed-910d-9c5a7b91cde1))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "J3") (unit 1)
         )
@@ -4015,7 +4015,7 @@
     (pin "1" (uuid 84dab4c8-b61a-41f9-8409-d4b43dcc17e6))
     (pin "2" (uuid 348cb6c0-ea59-4ee8-84ee-1390c23e933d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C5") (unit 1)
         )
@@ -4199,7 +4199,7 @@
     (pin "8" (uuid 40d05660-a073-43bb-bf4e-dc2cb0254f95))
     (pin "9" (uuid 0fe57820-0bc7-43a6-8ba7-d71688e8837c))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U9") (unit 1)
         )
@@ -4228,7 +4228,7 @@
     (pin "1" (uuid 66b246cb-2f13-4ebc-a08e-6ca301c7d8ea))
     (pin "2" (uuid d622ad08-5a31-4878-b2c5-196127314577))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C11") (unit 1)
         )
@@ -4253,7 +4253,7 @@
     )
     (pin "1" (uuid 40e77c5b-f4e6-4e91-bb77-e4e55c0f98ba))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR032") (unit 1)
         )
@@ -4278,7 +4278,7 @@
     )
     (pin "1" (uuid 260e298f-fa9c-41d5-b2e4-6d54af8fc8d9))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR03") (unit 1)
         )
@@ -4303,7 +4303,7 @@
     )
     (pin "1" (uuid fd892670-4c86-4dc4-a4fe-bdadc0e52ad5))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR031") (unit 1)
         )
@@ -4329,7 +4329,7 @@
     (pin "1" (uuid a41dad2a-a282-46fd-9b36-76dcada0dc60))
     (pin "2" (uuid d45d2282-9f9b-41a7-80fd-d2fbd72d73ff))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C14") (unit 1)
         )
@@ -4354,7 +4354,7 @@
     )
     (pin "1" (uuid 93cf61bf-39c1-47e1-87c4-9d14c73be99a))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR020") (unit 1)
         )
@@ -4383,7 +4383,7 @@
     (pin "1" (uuid 23782a0e-df7e-4794-b9a9-3abcae41ae10))
     (pin "2" (uuid 815bd831-1f28-4cdd-95bb-7152c97b69aa))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "D1") (unit 1)
         )
@@ -4408,7 +4408,7 @@
     )
     (pin "1" (uuid 8d998061-9f21-4a77-9975-40276e9017c3))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR011") (unit 1)
         )
@@ -4433,7 +4433,7 @@
     )
     (pin "1" (uuid 33290084-edca-45f4-81cb-347b8fad3b4f))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR016") (unit 1)
         )
@@ -4463,7 +4463,7 @@
     (pin "2" (uuid ef3ec15e-5fc1-4632-9285-a4ed21c353c2))
     (pin "3" (uuid 5d7bda2e-d17e-430b-b1da-129343efd672))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U1") (unit 1)
         )
@@ -4480,7 +4480,7 @@
     (property "Value" "10k" (at 121.285 168.91 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 123.19 167.64 0)
+    (property "Footprint" "MyLibrary:TRIM_3362P-1-103" (at 123.19 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 123.19 167.64 0)
@@ -4490,7 +4490,7 @@
     (pin "2" (uuid 0a5c0687-a6f1-42cb-8ab0-632b933439e2))
     (pin "3" (uuid 9e6103ac-819a-46d6-84f5-b67fd23a0d72))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "POT2") (unit 1)
         )
@@ -4507,19 +4507,19 @@
     (property "Value" "RED" (at 387.35 57.15 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "LED_SMD:LED_0603_1608Metric" (at 386.08 60.96 0)
+    (property "Footprint" "LED_THT:LED_D3.0mm" (at 386.08 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 386.08 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Color" "Green" (at 386.08 60.96 0)
+    (property "Color" "Red" (at 386.08 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 119921be-489f-41a1-a135-c495ccbc3664))
     (pin "2" (uuid 65636647-2f75-4b5f-bb9d-2fae010c5345))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "D2") (unit 1)
         )
@@ -4545,7 +4545,7 @@
     (pin "1" (uuid a4a13b8c-1678-4d14-8a9e-8f94346639d2))
     (pin "2" (uuid 9f4aea15-8dae-4695-8d93-184604e7d47e))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "BZ1") (unit 1)
         )
@@ -4574,7 +4574,7 @@
     (pin "1" (uuid 6a84fa60-6540-4ea1-8919-8e17e928b1a8))
     (pin "2" (uuid 7fd8cd15-e715-41a0-ad61-3bfeffb2d1e4))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C6") (unit 1)
         )
@@ -4606,7 +4606,7 @@
     (pin "1" (uuid 09bd4ab5-03bd-4b43-9369-fe7745a664d9))
     (pin "2" (uuid fc281ea3-389c-46ee-83eb-41c4f5140f70))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R3") (unit 1)
         )
@@ -4635,7 +4635,7 @@
     (pin "1" (uuid 6b99c80d-f55d-45a2-af9e-4261f5f47201))
     (pin "2" (uuid 47d65515-119f-40ae-a164-4019f87cda4d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C8") (unit 1)
         )
@@ -4667,7 +4667,7 @@
     (pin "4" (uuid 767b0e1f-d56e-4344-bb02-aed1bc48ae82))
     (pin "8" (uuid a6e7adce-5a70-4cd9-be43-3749e5749fdf))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U6") (unit 3)
         )
@@ -4699,7 +4699,7 @@
     (pin "1" (uuid 6c83af0e-6955-4e5d-ae16-80f903193ed2))
     (pin "2" (uuid 9ef2d079-7069-4967-96b2-c5b9055de5da))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R12") (unit 1)
         )
@@ -4731,7 +4731,7 @@
     (pin "1" (uuid e7c1b624-b621-4f31-bfbc-4da393e21931))
     (pin "2" (uuid c4e71e72-e5b3-449b-930a-babc7385ffbe))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R10") (unit 1)
         )
@@ -4763,7 +4763,7 @@
     (pin "1" (uuid a0105898-3da3-4551-954a-c5a62e3420ee))
     (pin "2" (uuid a78ee5bf-2fd5-4014-8ad7-6d8b9e85cbd0))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R7") (unit 1)
         )
@@ -4795,7 +4795,7 @@
     (pin "1" (uuid 7b6b1b6f-5939-498d-bc93-c217ee50e7f6))
     (pin "2" (uuid e8782d7b-19e0-46f0-b416-c1eb020536d2))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R1") (unit 1)
         )
@@ -4827,7 +4827,7 @@
     (pin "1" (uuid c7ae3bd3-0407-4099-baa3-b350b47029c8))
     (pin "2" (uuid 03c566db-7dc3-4497-8e80-94a7df81448b))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R6") (unit 1)
         )
@@ -4856,7 +4856,7 @@
     (pin "1" (uuid 24a61305-186f-4b5b-9df1-adc625b2416c))
     (pin "2" (uuid 05910ebd-04c8-447d-8a20-222a725cb9aa))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C12") (unit 1)
         )
@@ -4881,7 +4881,7 @@
     )
     (pin "1" (uuid 6b92f3b0-45a4-45e3-8c71-529cbaefcde5))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR06") (unit 1)
         )
@@ -4932,7 +4932,7 @@
     (pin "2" (uuid fbdb02e0-016f-4302-820a-c743bcd56c9b))
     (pin "3" (uuid 3c8cb08c-7d98-4bcf-a2c7-460a59002fb5))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U8") (unit 1)
         )
@@ -4957,7 +4957,7 @@
     )
     (pin "1" (uuid 20edb5ec-52dc-4ee1-867d-256c63650611))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR029") (unit 1)
         )
@@ -4989,7 +4989,7 @@
     (pin "1" (uuid a0503a1f-449c-4361-92bd-25a69191a296))
     (pin "2" (uuid 2ef6b6d9-8edc-47d0-abb9-4d3be4f2de1b))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R20") (unit 1)
         )
@@ -5021,7 +5021,7 @@
     (pin "1" (uuid b07badb8-8e80-48cc-a497-ca40465989e4))
     (pin "2" (uuid 21124955-dc14-4aae-96c7-2172578c965b))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R9") (unit 1)
         )
@@ -5053,7 +5053,7 @@
     (pin "1" (uuid 98c4cee4-aa0f-434a-8846-6de3966c5fdf))
     (pin "2" (uuid 8a20554c-3035-4b45-8168-817e94129d94))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R15") (unit 1)
         )
@@ -5085,7 +5085,7 @@
     (pin "1" (uuid 1714e763-a299-47d1-852a-22ca13a58eea))
     (pin "2" (uuid 64927ac0-eefe-464a-8e70-0b8581c72fe5))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R17") (unit 1)
         )
@@ -5117,7 +5117,7 @@
     (pin "1" (uuid 239982ea-462d-4eb6-abb7-124812115f55))
     (pin "2" (uuid 5e775ce3-3edc-4d32-bd7d-a7280e0678ff))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R8") (unit 1)
         )
@@ -5148,7 +5148,7 @@
     (pin "3" (uuid 70dbed55-6648-4517-808a-313779a3ee52))
     (pin "4" (uuid a071b6d9-98c0-453d-a889-5515bc461da1))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "PS1") (unit 1)
         )
@@ -5177,7 +5177,7 @@
     (pin "1" (uuid c32c9b85-43c3-463e-8ffe-cd820b45083d))
     (pin "2" (uuid 77195d78-47fa-4d90-868d-42a577379bc7))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C1") (unit 1)
         )
@@ -5206,7 +5206,7 @@
     (pin "1" (uuid 86221e92-f4e7-4ecf-a10e-5981cbc4c213))
     (pin "2" (uuid 574102a2-7845-4a37-aede-40e569b26458))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C15") (unit 1)
         )
@@ -5231,7 +5231,7 @@
     )
     (pin "1" (uuid deffaf1f-8504-4376-9f8e-74c362c23ded))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR010") (unit 1)
         )
@@ -5256,7 +5256,7 @@
     )
     (pin "1" (uuid ca6351c5-89bb-4b31-9932-f0641ed02d20))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR04") (unit 1)
         )
@@ -5285,7 +5285,7 @@
     (pin "1" (uuid 84a7de14-2d17-48a2-8797-c90a832f24f7))
     (pin "2" (uuid 0e3e4147-4b97-40db-89db-3efd7b167869))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C3") (unit 1)
         )
@@ -5310,7 +5310,7 @@
     )
     (pin "1" (uuid f405b793-24c4-4de0-9d84-565c17c27f9d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR034") (unit 1)
         )
@@ -5335,7 +5335,7 @@
     )
     (pin "1" (uuid ca507b88-e75f-4cf9-88dd-5fde109f771b))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR026") (unit 1)
         )
@@ -5381,7 +5381,7 @@
     (pin "8" (uuid 2c4cd3aa-c5d7-4a5f-8dd5-daf3ba976d30))
     (pin "9" (uuid 43345040-3b8a-4e6e-93ed-d65dc8a45003))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U3") (unit 1)
         )
@@ -5410,7 +5410,7 @@
     (pin "1" (uuid 6208999f-019b-417f-aeda-a3f738b48799))
     (pin "2" (uuid d34bf756-9d76-4b39-893b-915cda6f5158))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C4") (unit 1)
         )
@@ -5442,7 +5442,7 @@
     (pin "1" (uuid d36ddeb2-c7c5-48d2-97b4-cc9e3447ab9a))
     (pin "2" (uuid b0169a6e-8969-4e46-aaca-27912b61a423))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R4") (unit 1)
         )
@@ -5470,7 +5470,7 @@
     (pin "3" (uuid 593f77d4-16bf-42c6-b623-3074c915ab33))
     (pin "4" (uuid 2e197bc7-bfc8-4b96-8f4a-3a6905ce6a68))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U7") (unit 1)
         )
@@ -5495,7 +5495,7 @@
     )
     (pin "1" (uuid 42509573-d712-40f8-b95e-6004bc228a83))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR07") (unit 1)
         )
@@ -5527,7 +5527,7 @@
     (pin "1" (uuid d5a56f58-2eab-4680-92db-4ebb6cbd9d54))
     (pin "2" (uuid 0173461a-d126-4012-b112-e5510961f821))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R2") (unit 1)
         )
@@ -5557,7 +5557,7 @@
     (pin "2" (uuid 04f7a19d-39b0-487d-8fe5-bf8b9ce90e4f))
     (pin "3" (uuid 584db06d-7348-41db-8e59-2eb0252332b4))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U2") (unit 1)
         )
@@ -5574,7 +5574,7 @@
     (property "Value" "10k" (at 37.465 161.925 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 39.37 160.655 0)
+    (property "Footprint" "MyLibrary:TRIM_3362P-1-103" (at 39.37 160.655 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 39.37 160.655 0)
@@ -5584,7 +5584,7 @@
     (pin "2" (uuid 55c11df4-7c60-4fcd-8892-610d24df514e))
     (pin "3" (uuid 8997d03c-2e3a-450c-9e2a-9708be29e27b))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "POT1") (unit 1)
         )
@@ -5609,7 +5609,7 @@
     )
     (pin "1" (uuid cd8a902f-c3bd-4948-a95d-4b8f30cc3966))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR027") (unit 1)
         )
@@ -5638,7 +5638,7 @@
     (pin "1" (uuid 23c2076b-7d5b-4f28-bede-34cd38f5fbaf))
     (pin "2" (uuid cce0e531-d3bf-4c6c-a737-e77adca5e7e2))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C10") (unit 1)
         )
@@ -5663,7 +5663,7 @@
     )
     (pin "1" (uuid 4cb8a26d-f3c6-4ecc-bec3-b05dd41cdc76))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR021") (unit 1)
         )
@@ -5688,7 +5688,7 @@
     )
     (pin "1" (uuid 707ae11a-05f0-4865-8afa-fd8a26f7196e))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR02") (unit 1)
         )
@@ -5705,7 +5705,7 @@
     (property "Value" "10k" (at 318.008 185.928 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 323.85 181.61 0)
+    (property "Footprint" "MyLibrary:TRIM_3362P-1-103" (at 323.85 181.61 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 323.85 181.61 0)
@@ -5715,7 +5715,7 @@
     (pin "2" (uuid 3f91ea84-48c3-4b40-a9ac-d6e968e5086a))
     (pin "3" (uuid 1b2c051c-5ad2-4bde-bf12-227b2fa3d922))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "POT4") (unit 1)
         )
@@ -5740,7 +5740,7 @@
     )
     (pin "1" (uuid ee2fd3ca-cdf8-49ab-a556-9b8b150b3401))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR022") (unit 1)
         )
@@ -5765,7 +5765,7 @@
     )
     (pin "1" (uuid f206f405-3983-494d-88aa-703795eaeaa4))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR09") (unit 1)
         )
@@ -5790,7 +5790,7 @@
     )
     (pin "1" (uuid 1c1d6ca5-c677-4676-8bbd-8229201904bb))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR013") (unit 1)
         )
@@ -5822,7 +5822,7 @@
     (pin "1" (uuid e321e144-a5c5-4818-9302-7dca326e1f15))
     (pin "2" (uuid 7924d04f-8898-4330-b418-a382d41f03e8))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R19") (unit 1)
         )
@@ -5854,7 +5854,7 @@
     (pin "1" (uuid 7413b522-37bd-4e87-af1e-1ac4d1e61120))
     (pin "2" (uuid d44eef24-8ccf-4d96-ab5c-64813827ab1a))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R16") (unit 1)
         )
@@ -5879,7 +5879,7 @@
     )
     (pin "1" (uuid fcadbdc9-3302-4969-85a2-4ac1d8347397))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR023") (unit 1)
         )
@@ -5911,7 +5911,7 @@
     (pin "4" (uuid d822e515-cb9a-4471-9481-5e3d83422131))
     (pin "8" (uuid 7471a953-d8b1-42a3-8644-d2b081b75a2d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U4") (unit 1)
         )
@@ -5943,7 +5943,7 @@
     (pin "4" (uuid d6d86f19-9cd4-403d-bf87-fba88f433d30))
     (pin "8" (uuid 058d0af1-cfb7-4e09-9bb6-d0daebe36183))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U6") (unit 1)
         )
@@ -5968,7 +5968,7 @@
     )
     (pin "1" (uuid 76d228da-931a-4a79-a81e-c59db413188d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR025") (unit 1)
         )
@@ -5997,7 +5997,7 @@
     (pin "1" (uuid 9b50cda4-9750-4553-abc7-685f13f6d0cb))
     (pin "2" (uuid e16180ce-ad34-4782-9c38-0340928e0cf3))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C9") (unit 1)
         )
@@ -6029,7 +6029,7 @@
     (pin "1" (uuid 414d5300-9ea8-4069-962e-b03de92377c5))
     (pin "2" (uuid 39b94784-6d35-45d1-8cec-4cd142b7ecb2))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "R18") (unit 1)
         )
@@ -6058,7 +6058,7 @@
     (pin "1" (uuid 0e9e3bdd-78f1-4499-a8ee-cdd1ac32a29c))
     (pin "2" (uuid b5961b08-54a7-4556-b9dd-f3c20f404f0b))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "C2") (unit 1)
         )
@@ -6087,7 +6087,7 @@
     (pin "1" (uuid c3f27b89-a42f-430b-843e-5b3871f13d7a))
     (pin "2" (uuid 5a011a78-2779-4674-b22c-486ea87d2624))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "J1") (unit 1)
         )
@@ -6110,13 +6110,13 @@
     (property "Datasheet" "~" (at 392.43 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Color" "Green" (at 392.43 147.32 0)
+    (property "Color" "Blue" (at 392.43 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 351a4183-5c5c-454d-863d-f52f891e1f3d))
     (pin "2" (uuid a4afe60e-19dd-4f0e-bc2d-5bd8cc5da7c0))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "D3") (unit 1)
         )
@@ -6139,13 +6139,13 @@
     (property "Datasheet" "~" (at 392.43 157.48 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Color" "Green" (at 392.43 157.48 0)
+    (property "Color" "Blue" (at 392.43 157.48 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid edd84262-66d8-436c-865c-a080ecfae1df))
     (pin "2" (uuid 67c2406b-8227-4ee1-ac13-49980c63444f))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "D4") (unit 1)
         )
@@ -6170,7 +6170,7 @@
     )
     (pin "1" (uuid 1a705491-ec39-4af0-951a-400ed6db3aed))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR015") (unit 1)
         )
@@ -6187,7 +6187,7 @@
     (property "Value" "10k" (at 316.992 170.942 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" (at 323.85 173.99 0)
+    (property "Footprint" "MyLibrary:TRIM_3362P-1-103" (at 323.85 173.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 323.85 173.99 0)
@@ -6197,7 +6197,7 @@
     (pin "2" (uuid 0432868a-499b-47b2-b590-6773da13a8c7))
     (pin "3" (uuid b3f1f562-5bba-4cdc-9aa2-8aa1fbd777f8))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "POT3") (unit 1)
         )
@@ -6222,7 +6222,7 @@
     )
     (pin "1" (uuid 8e759da8-1e0b-470c-b2fb-b745070395bf))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR05") (unit 1)
         )
@@ -6245,13 +6245,13 @@
     (property "Datasheet" "~" (at 392.43 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Color" "Green" (at 392.43 167.64 0)
+    (property "Color" "Blue" (at 392.43 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid d04a975a-56d6-47b8-9c39-84b390c51836))
     (pin "2" (uuid 615e5364-e195-42f8-a84d-a98ba99ae181))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "D5") (unit 1)
         )
@@ -6276,7 +6276,7 @@
     )
     (pin "1" (uuid 4e20263f-cf2a-4ba8-be85-79f0aa1eb4e6))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR012") (unit 1)
         )
@@ -6308,7 +6308,7 @@
     (pin "4" (uuid 0ef41f07-c349-4ca7-b129-a56d8b033478))
     (pin "8" (uuid b51a0350-9b38-4378-85c2-5281d917c71d))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "U4") (unit 3)
         )
@@ -6333,7 +6333,7 @@
     )
     (pin "1" (uuid dc11a62a-2835-4276-a478-d4d457b460ab))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR030") (unit 1)
         )
@@ -6358,7 +6358,7 @@
     )
     (pin "1" (uuid 4f4ce72c-c359-431b-97e7-d474aa5380ae))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR024") (unit 1)
         )
@@ -6383,7 +6383,7 @@
     )
     (pin "1" (uuid 9d2ab408-fbaa-4be1-b5a1-ea36663a5596))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR014") (unit 1)
         )
@@ -6408,7 +6408,7 @@
     )
     (pin "1" (uuid e0a6c10b-f921-4309-afa0-9e350a76bfd0))
     (instances
-      (project "sensor_module_x1"
+      (project "sensor_module"
         (path "/a46ec17d-39da-44ac-b00f-2365e1778e8f"
           (reference "#PWR018") (unit 1)
         )
