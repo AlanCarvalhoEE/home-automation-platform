@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b37d05e8-96fc-4147-b752-a16ac663ed1e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/android/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/ConfigurationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/ConfigurationActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/DBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/DBhandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/IntroActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/IntroActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/alan/homeautomationapp/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/on_off_module_x1/PCB/fp-info-cache" beforeDir="false" afterPath="$PROJECT_DIR$/modules/on_off_module_x1/PCB/fp-info-cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/sensor_module/PCB/sensor_module.kicad_pcb" beforeDir="false" afterPath="$PROJECT_DIR$/modules/sensor_module/PCB/sensor_module.kicad_pcb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/sensor_module/PCB/sensor_module.kicad_prl" beforeDir="false" afterPath="$PROJECT_DIR$/modules/sensor_module/PCB/sensor_module.kicad_prl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/sensor_module/PCB/sensor_module.kicad_pro" beforeDir="false" afterPath="$PROJECT_DIR$/modules/sensor_module/PCB/sensor_module.kicad_pro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,10 +32,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2hYmxyrEnRYykQnZuSKq0sZHmr6" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
@@ -38,7 +49,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Projetos/HomeAutomationPlatform"
+    "last_opened_file_path": "D:/Projetos/HomeAutomationPlatform/android/app"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

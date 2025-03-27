@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class IntroActivity extends AppCompatActivity {
 
-    private DBHandler dbHandler;                          // Database handler instance
+    private DBhandler dbHandler;                          // Database handler instance
     private TCPclient tcpClient;                          // TCP client instance
     private final Handler introHandler = new Handler();   // IntroActivity finish handler
 
@@ -33,7 +33,7 @@ public class IntroActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = DBHandler.getInstance(this);
+        dbHandler = DBhandler.getInstance(this);
 
         // Initialize TCP client instance
         tcpClient = TCPclient.getInstance();

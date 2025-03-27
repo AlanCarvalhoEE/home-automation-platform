@@ -50,20 +50,7 @@
       },
       "diff_pair_dimensions": [],
       "drc_exclusions": [
-        "lib_footprint_issues|153647802|74648013|d7e0426f-e992-40d0-8124-176142390fa4|00000000-0000-0000-0000-000000000000",
-        "silk_edge_clearance|138925300|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|2ad6e87a-335a-4a8d-9ea8-7c1e85f7de61",
-        "silk_edge_clearance|141947900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|1efc4a5e-404a-4bd3-a930-6e0310f958b6",
-        "silk_edge_clearance|141947900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|b23ddcbc-dfdd-4b05-ac50-adba7a81c687",
-        "silk_edge_clearance|145669000|51009300|0a39953e-d282-4bd9-a103-b50c9558d0cb|d612da1c-5ab8-4128-acd4-9bdb4d4b3a3f",
-        "silk_edge_clearance|145669000|51009300|0a39953e-d282-4bd9-a103-b50c9558d0cb|de23a23c-6058-46ab-95f2-59166312c191",
-        "silk_edge_clearance|149943900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|dbfe92b8-e987-4c12-9229-0eb122038f64",
-        "silk_edge_clearance|153372900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|092140d7-da0d-4381-9f61-8d2943c48f90",
-        "silk_edge_clearance|153372900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|63650d32-320d-4637-89db-c21881cbd938",
-        "silk_edge_clearance|162085100|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|3eae998b-44be-4912-8ac0-df84b390fc0a",
-        "silk_edge_clearance|164802900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|623c6a9b-d2f0-45b2-a003-0c463300b8f7",
-        "silk_edge_clearance|164802900|50918154|0a39953e-d282-4bd9-a103-b50c9558d0cb|d1d28c46-b638-4d17-9461-b7b57543a741",
-        "silk_edge_clearance|176554000|96983300|d7929fc1-0b4a-42ed-a39e-d32dbb388505|8d0b80dd-0cdb-40ef-ab02-3d67c868da29",
-        "silk_edge_clearance|176554000|96983300|d7929fc1-0b4a-42ed-a39e-d32dbb388505|f05bf157-2f66-43f0-8612-b2a8890bd449"
+        "lib_footprint_issues|120627802|92218713|d7e0426f-e992-40d0-8124-176142390fa4|00000000-0000-0000-0000-000000000000"
       ],
       "meta": {
         "version": 2
@@ -90,7 +77,7 @@
         "items_not_allowed": "error",
         "length_out_of_range": "error",
         "lib_footprint_issues": "warning",
-        "lib_footprint_mismatch": "warning",
+        "lib_footprint_mismatch": "ignore",
         "malformed_courtyard": "ignore",
         "microvia_drill_out_of_range": "error",
         "missing_courtyard": "ignore",
@@ -100,7 +87,7 @@
         "padstack": "warning",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
-        "silk_edge_clearance": "warning",
+        "silk_edge_clearance": "ignore",
         "silk_over_copper": "ignore",
         "silk_overlap": "ignore",
         "skew_out_of_range": "error",
@@ -407,7 +394,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "sensor_module_x1.kicad_pro",
+    "filename": "sensor_module.kicad_pro",
     "version": 1
   },
   "net_settings": {
