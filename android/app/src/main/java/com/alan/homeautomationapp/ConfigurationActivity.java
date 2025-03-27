@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
 
-    private DBHandler dbHandler;    // Database handler instance
+    private DBhandler dbHandler;    // Database handler instance
     private TCPclient tcpClient;    // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
@@ -33,7 +33,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = DBHandler.getInstance(this);
+        dbHandler = DBhandler.getInstance(this);
 
         // Initialize TCP client instance
         tcpClient = TCPclient.getInstance();
@@ -84,6 +84,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         mainLayout.setAlpha(1f);
     }

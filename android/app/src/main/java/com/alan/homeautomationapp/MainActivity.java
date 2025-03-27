@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DBHandler dbHandler;        // Database handler instance
+    private DBhandler dbHandler;        // Database handler instance
     private TCPclient tcpClient;        // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Initialize database instance
-        dbHandler = DBHandler.getInstance(this);
+        dbHandler = DBhandler.getInstance(this);
 
         // Initialize TCP client instance
         tcpClient = TCPclient.getInstance();
@@ -118,9 +118,7 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
             View view = Utils.findViewByTag(designator, roomDevicesLayout);
 
-            if (view instanceof ToggleButton) {
-                ToggleButton toggleButton = (ToggleButton) view;
-
+            if (view instanceof ToggleButton toggleButton) {
                 toggleButton.setOnCheckedChangeListener(null);
                 toggleButton.setChecked(!toggleButton.isChecked());
                 toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {

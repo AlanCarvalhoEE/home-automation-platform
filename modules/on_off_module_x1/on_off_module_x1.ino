@@ -1,7 +1,7 @@
 // Project - HAP - Home Automation Platform 
-// Code - ON-OFF module
+// Code - ON-OFF module X1
 // Author - Alan Carvalho
-// Date - 17/05/2024
+// Date - 07/03/2025
 
 
 // Libraries
@@ -13,13 +13,13 @@
 #define RELAY_PIN 14       
 
 // Device designator
-#define DESIGNATOR "LAMP1"
+#define DESIGNATOR "LAMP4"
 
 // Network parameters
-const char* ssid = "Mhnet - Luana_2.4G";
+const char* ssid = "WIFI_AL_5G";
 const char* password = "dracarys";
 IPAddress serverIP (192,168,88,11); 
-IPAddress moduleIP (192,168,88,20); 
+IPAddress moduleIP (192,168,88,23); 
 IPAddress gateway (192,168,88,1); 
 IPAddress subnet (255,255,255,0);
 const uint16_t serverPort = 5560;

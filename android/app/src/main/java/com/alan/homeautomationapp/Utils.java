@@ -45,7 +45,7 @@ public class Utils {
     private static int temperature = 20;
 
     // Function to update rooms from database
-    public static void updateRooms(Context context, DBHandler database) {
+    public static void updateRooms(Context context, DBhandler database) {
         Activity activity = (Activity) context;
         Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
         ArrayAdapter<String> adapter;
@@ -57,7 +57,7 @@ public class Utils {
 
     // Function to update devices from database
     @SuppressLint({"InflateParams", "SetTextI18n"})
-    public static void updateDevices(Context context, DBHandler database) {
+    public static void updateDevices(Context context, DBhandler database) {
         Activity activity = (Activity) context;
         Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
@@ -292,7 +292,7 @@ public class Utils {
     }
 
     @SuppressLint("InflateParams")
-    public static void openDialog(Context context, DBHandler dbHandler, String dialogType, String deviceName) {
+    public static void openDialog(Context context, DBhandler dbHandler, String dialogType, String deviceName) {
         Activity activity = (Activity) context;
         ConstraintLayout backgroundLayout = activity.findViewById(R.id.mainLayout);
         backgroundLayout.setAlpha(0.25f);
