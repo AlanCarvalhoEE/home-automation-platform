@@ -428,7 +428,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "ON-OFF Module X1 PCB.step",
+      "step": "Outputs/3D/on_off_module_x1.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
