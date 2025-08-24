@@ -2,27 +2,20 @@ package com.alan.homeautomationapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.ToggleButton;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private DBhandler dbHandler;        // Database handler instance
-    private TCPclient tcpClient;        // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -38,15 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize database instance
         dbHandler = DBhandler.getInstance(this);
-
-        // Initialize TCP client instance
-        tcpClient = TCPclient.getInstance();
-        tcpClient.setMessageListener(this::receiveMessage);
-
-        // Start the TCP client
-        AsyncTask.execute(() -> tcpClient.run());
-
-        // Open the database
         dbHandler.getWritableDatabase();
 
         // Configure the action bar
@@ -105,27 +89,8 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    public void receiveMessage(String changeMessage) {
-        Log.d("DEBUG_MESSAGE", changeMessage);
-        if (changeMessage.contains("DATABASE"))
-            dbHandler.updateDatabase(changeMessage);
-
-        else if (changeMessage.contains("MANUAL")) {
-            int startIndex = changeMessage.indexOf("-") + 1;
-            int endIndex = changeMessage.indexOf("_");
-            String designator = changeMessage.substring(startIndex, endIndex);
-
-            LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
-            View view = Utils.findViewByTag(designator, roomDevicesLayout);
-
-            if (view instanceof ToggleButton toggleButton) {
-                toggleButton.setOnCheckedChangeListener(null);
-                toggleButton.setChecked(!toggleButton.isChecked());
-                toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                    else tcpClient.sendMessage("SET-" + designator + "_OFF");
-                });
-            }
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

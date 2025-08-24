@@ -60,7 +60,7 @@
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/roomSpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_margin="5dp"
                     android:paddingEnd="35dp"
                     android:background="@drawable/spinner_main"
@@ -81,7 +81,20 @@
                 app:layout_constraintStart_toEndOf="@id/spinnerCardView"
                 app:layout_constraintTop_toTopOf="@id/spinnerCardView"
                 app:layout_constraintBottom_toBottomOf="@id/spinnerCardView"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toStartOf="@id/roomDeleteImageButton" />
+
+            <ImageButton
+                android:id="@+id/roomDeleteImageButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_delete_states"
+                android:cropToPadding="false"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/device_delete_description"
+                app:layout_constraintBottom_toBottomOf="@id/spinnerCardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/spinnerCardView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
