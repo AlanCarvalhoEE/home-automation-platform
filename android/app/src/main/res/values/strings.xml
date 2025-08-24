@@ -9,8 +9,8 @@
     <string name="devices_label">Dispositivos</string>
     <string name="name_label">Nome:</string>
     <string name="type_label">Tipo:</string>
-    <string name="designator_label">Designador:</string>
-    <string name="ip_label">IP:</string>
+    <string name="topic_label">Tópico:</string>
+    <string name="id_label">ID:</string>
 
     // Buttons
     <string name="confirm_button">Confirmar</string>
@@ -22,8 +22,10 @@
     <string name="logo_hint">HAP icon</string>
     <string name="location_name_hint">Nome do local</string>
     <string name="device_name_hint">Nome do dispositivo</string>
-    <string name="device_designator_hint">ID do dispositivo</string>
-    <string name="device_ip_hint">IP do dispositivo</string>
+    <string name="device_designator_hint">Designador do dispositivo</string>
+    <string name="device_id_hint">ID do dispositivo</string>
+    <string name="room_topic_hint">Tópico do cômodo</string>
+    <string name="device_topic_hint">Tópico do dispositivo</string>
 
     // Descriptions
     <string name="location_add_description">Adicionar um novo local</string>
@@ -45,7 +47,8 @@
     <string name="loading_message">Carregando dados</string>
     <string name="connection_failed_message">Falha na conexão.\nDeseja tentar novamente?</string>
     <string name="database_failed_message">Falha na atualização dos dados.\nDeseja tentar novamente?</string>
-    <string name="confirm_delete_message">Deseja realmente apagar esse dispositivo?</string>
+    <string name="confirm_device_delete_message">Deseja realmente apagar esse dispositivo?</string>
+    <string name="confirm_room_delete_message">Deseja realmente apagar esse cômodo?</string>
 
     // Units
     <string name="temperature_unit">°C</string>

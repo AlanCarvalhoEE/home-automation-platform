@@ -37,12 +37,11 @@ import java.util.Objects;
 
 public class Utils {
 
-    static TCPclient tcpClient = TCPclient.getInstance();
-
     private static VideoStreamPlayer streamPlayer;
     private static final String rtspUrl = "rtsp://192.168.88.50:554/avstream/channel=1/stream=1.sdp";
 
     private static int temperature = 20;
+    static MQTTclient mqttClient = MQTTclient.getInstance();
 
     // Function to update rooms from database
     public static void updateRooms(Context context, DBhandler database) {
@@ -69,12 +68,15 @@ public class Utils {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View vi;
+
+            String roomTopic = database.getRoomTopic(roomSpinner.getSelectedItem().toString());
             String deviceType = database.getType(devicesList.get(i));
-            String designator = database.getDesignator(devicesList.get(i));
+            String deviceID = database.getID(devicesList.get(i));
+            String deviceTopic = database.getDeviceTopic(deviceID);
 
             switch (deviceType) {
 
-                case "Lâmpada":
+                case "Lamp":
                     vi = inflater.inflate(R.layout.device_lamp, null);
                     TextView lampNameTextView = vi.findViewById(R.id.lampNameTextView);
                     ToggleButton lampControlToggleButton = vi.findViewById(R.id.lampControlToggleButton);
@@ -85,7 +87,17 @@ public class Utils {
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                             MATCH_PARENT, WRAP_CONTENT));
 
-                    lampControlToggleButton.setTag(designator);
+                    lampControlToggleButton.setTag(deviceID);
+
+                    String topic = "hap/";
+                    topic += roomTopic + "/";
+                    topic += deviceTopic + "/";
+                    topic += "get_state";
+
+                    mqttClient.subscribe(topic, (topic1, message) -> {
+                        if (message.equals("ON")) {lampControlToggleButton.setChecked(true);}
+                        else if (message.equals("OFF")) {lampControlToggleButton.setChecked(false);}
+                    });
 
                     if (context instanceof MainActivity) {
                         lampControlToggleButton.setVisibility(View.VISIBLE);
@@ -93,8 +105,8 @@ public class Utils {
                         lampDeleteImageButton.setVisibility(View.INVISIBLE);
 
                         lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                            else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                            if (isChecked) mqttClient.publish("hap/office/lamp/set_state", "ON");
+                            else mqttClient.publish("hap/office/lamp/set_state", "OFF");
                         });
                     } else if (context instanceof ConfigurationActivity) {
                         lampControlToggleButton.setVisibility(View.INVISIBLE);
@@ -103,18 +115,18 @@ public class Utils {
 
                         lampConfigImageButton.setOnClickListener(v -> {
                             String name = (String) lampNameTextView.getText();
-                            openDialog(context, database, "dialog_device_config", name);
+                            openDialog(context, database, "dialog_config_device", name);
                         });
 
                         lampDeleteImageButton.setOnClickListener(v -> {
                             String name = (String) lampNameTextView.getText();
-                            openDialog(context, database, "dialog_delete", name);
+                            openDialog(context, database, "dialog_delete_device", name);
                         });
                     }
 
                     break;
 
-                case "Tomada":
+                case "Wall socket":
                     vi = inflater.inflate(R.layout.device_socket, null);
                     TextView socketNameTextView = vi.findViewById(R.id.socketNameTextView);
                     ToggleButton socketControlToggleButton = vi.findViewById(R.id.socketControlToggleButton);
@@ -125,7 +137,7 @@ public class Utils {
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                             MATCH_PARENT, WRAP_CONTENT));
 
-                    socketControlToggleButton.setTag(designator);
+                    socketControlToggleButton.setTag(deviceID);
 
                     if (context instanceof MainActivity) {
                         socketControlToggleButton.setVisibility(View.VISIBLE);
@@ -133,8 +145,8 @@ public class Utils {
                         socketDeleteImageButton.setVisibility(View.INVISIBLE);
 
                         socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                            else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                            //if (isChecked) mqttClient.publish("SET-" + designator + "_ON");
+                            //else mqttClient.publish("SET-" + designator + "_OFF");
                         });
                     } else if (context instanceof ConfigurationActivity) {
                         socketControlToggleButton.setVisibility(View.INVISIBLE);
@@ -143,18 +155,18 @@ public class Utils {
 
                         socketConfigImageButton.setOnClickListener(v -> {
                             String name = (String) socketNameTextView.getText();
-                            openDialog(context, database, "dialog_device_config", name);
+                            openDialog(context, database, "dialog_config_device", name);
                         });
 
                         socketDeleteImageButton.setOnClickListener(v -> {
                             String name = (String) socketNameTextView.getText();
-                            openDialog(context, database, "dialog_delete", name);
+                            openDialog(context, database, "dialog_delete_device", name);
                         });
                     }
 
                     break;
 
-                case "Porta":
+                case "Door":
                     vi = inflater.inflate(R.layout.device_door, null);
                     TextView doorNameTextView = vi.findViewById(R.id.doorNameTextView);
                     ToggleButton doorControlToggleButton = vi.findViewById(R.id.doorControlToggleButton);
@@ -165,7 +177,7 @@ public class Utils {
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                             MATCH_PARENT, WRAP_CONTENT));
 
-                    doorControlToggleButton.setTag(designator);
+                    doorControlToggleButton.setTag(deviceID);
 
                     if (context instanceof MainActivity) {
                         doorControlToggleButton.setVisibility(View.VISIBLE);
@@ -173,8 +185,8 @@ public class Utils {
                         doorDeleteImageButton.setVisibility(View.INVISIBLE);
 
                         doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                            else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                            //if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                            //else tcpClient.sendMessage("SET-" + designator + "_OFF");
                         });
                     } else if (context instanceof ConfigurationActivity) {
                         doorControlToggleButton.setVisibility(View.INVISIBLE);
@@ -183,18 +195,18 @@ public class Utils {
 
                         doorConfigImageButton.setOnClickListener(v -> {
                             String name = (String) doorNameTextView.getText();
-                            openDialog(context, database, "dialog_device_config", name);
+                            openDialog(context, database, "dialog_config_device", name);
                         });
 
                         doorDeleteImageButton.setOnClickListener(v -> {
                             String name = (String) doorNameTextView.getText();
-                            openDialog(context, database, "dialog_delete", name);
+                            openDialog(context, database, "dialog_delete_device", name);
                         });
                     }
 
                     break;
 
-                case "Câmera":
+                case "Camera":
                     vi = inflater.inflate(R.layout.device_camera, null);
                     TextView cameraNameTextView = vi.findViewById(R.id.cameraNameTextView);
                     ToggleButton cameraControlToggleButton = vi.findViewById(R.id.cameraControlToggleButton);
@@ -209,7 +221,7 @@ public class Utils {
                     roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
                             MATCH_PARENT, WRAP_CONTENT));
 
-                    cameraControlToggleButton.setTag(designator);
+                    cameraControlToggleButton.setTag(deviceID);
 
                     if (context instanceof MainActivity) {
                         cameraControlToggleButton.setVisibility(View.VISIBLE);
@@ -235,18 +247,18 @@ public class Utils {
 
                         cameraConfigImageButton.setOnClickListener(v -> {
                             String name = (String) cameraNameTextView.getText();
-                            openDialog(context, database, "dialog_device_config", name);
+                            openDialog(context, database, "dialog_config_device", name);
                         });
 
                         cameraDeleteImageButton.setOnClickListener(v -> {
                             String name = (String) cameraNameTextView.getText();
-                            openDialog(context, database, "dialog_delete", name);
+                            openDialog(context, database, "dialog_delete_device", name);
                         });
                     }
 
                     break;
 
-                case "Ar condicionado":
+                case "Air conditioner":
                     vi = inflater.inflate(R.layout.device_air_conditioner, null);
                     TextView airNameTextView = vi.findViewById(R.id.airNameTextView);
                     ToggleButton airControlToggleButton = vi.findViewById(R.id.airControlToggleButton);
@@ -259,8 +271,8 @@ public class Utils {
                             MATCH_PARENT, WRAP_CONTENT));
 
                     airControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                        else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                        //if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                        //else tcpClient.sendMessage("SET-" + designator + "_OFF");
                     });
 
                     upImageButton.setOnClickListener(view -> {
@@ -276,7 +288,7 @@ public class Utils {
                     temperatureEditText.addTextChangedListener(new TextWatcher() {
                         public void afterTextChanged(Editable s) {
                             temperature = Integer.parseInt(s.toString());
-                            tcpClient.sendMessage("SET-" + designator + "_T" + temperature);
+                            //tcpClient.sendMessage("SET-" + designator + "_T" + temperature);
                         }
 
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,14 +311,17 @@ public class Utils {
 
         View dialogView = null;
 
-        if (dialogType.equals("dialog_room_add")) {
-            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_room_add, null);
+        if (dialogType.equals("dialog_add_room")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_add_room, null);
         }
-        else if (dialogType.contains("dialog_device")) {
-            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_device_add, null);
+        else if (dialogType.equals("dialog_delete_room")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_room, null);
         }
-        else if (dialogType.contains("dialog_delete")) {
-            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_delete, null);
+        else if (dialogType.contains("dialog_add_device")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_add_device, null);
+        }
+        else if (dialogType.contains("dialog_delete_device")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_device, null);
         }
 
         Dialog dialog = new Dialog(context);
@@ -326,9 +341,10 @@ public class Utils {
             dialog.dismiss();
         });
 
-        if (dialogType.equals("dialog_room_add")) {
+        if (dialogType.equals("dialog_add_room")) {
 
             EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+            EditText topicEditText = dialog.findViewById(R.id.topicEditText);
 
             nameEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {}
@@ -338,27 +354,51 @@ public class Utils {
                 }
             });
 
+            topicEditText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    confirmButton.setEnabled(s.length() > 0);
+                }
+            });
+
             confirmButton.setOnClickListener(v -> {
                 String roomName = nameEditText.getText().toString();
-                dbHandler.addRoom(roomName);
+                String roomTopic = topicEditText.getText().toString();
+                dbHandler.addRoom(roomName, roomTopic);
                 Utils.updateRooms(context, dbHandler);
 
-                String newRoomRequest = "ADD_ROOM-";
-                newRoomRequest += roomName;
-                tcpClient.sendMessage(newRoomRequest);
+                String payload = roomName + "," + roomTopic;
+                mqttClient.publish("hap/main/database/add_room", payload);
 
                 backgroundLayout.setAlpha(1f);
                 dialog.dismiss();
             });
         }
 
-        else if (dialogType.contains("dialog_device")) {
+        else if (dialogType.equals("dialog_delete_room")) {
+
+            confirmButton.setOnClickListener(view -> {
+                Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
+                String roomName = roomSpinner.getSelectedItem().toString();
+                dbHandler.deleteRoom(roomName);
+                Utils.updateRooms(context, dbHandler);
+
+                mqttClient.publish("hap/main/database/delete_room", roomName);
+
+                backgroundLayout.setAlpha(1f);
+                dialog.dismiss();
+            });
+        }
+
+
+        else if (dialogType.equals("dialog_add_device")) {
 
             Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
             EditText nameEditText = dialog.findViewById(R.id.nameEditText);
             RadioGroup typeRadioGroup = dialog.findViewById(R.id.typeRadioGroup);
-            EditText designatorEditText = dialog.findViewById(R.id.designatorEditText);
-            EditText ipEditText = dialog.findViewById(R.id.ipEditText);
+            EditText idEditText = dialog.findViewById(R.id.idEditText);
+            EditText topicEditText = dialog.findViewById(R.id.topicEditText);
 
             List<String> typeList = dbHandler.getTypeList();
             List<Integer> idList = new ArrayList<>();
@@ -391,7 +431,7 @@ public class Utils {
                 checkInfo(deviceInfo, confirmButton);
             });
 
-            designatorEditText.addTextChangedListener(new TextWatcher() {
+            idEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {
                     deviceInfo[2] = s.toString();
                     checkInfo(deviceInfo, confirmButton);
@@ -400,7 +440,7 @@ public class Utils {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
             });
 
-            ipEditText.addTextChangedListener(new TextWatcher() {
+            topicEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {
                     deviceInfo[3] = s.toString();
                     checkInfo(deviceInfo, confirmButton);
@@ -409,79 +449,71 @@ public class Utils {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
             });
 
-            if (dialogType.equals("dialog_device_add")) {
-                confirmButton.setOnClickListener(view -> {
-                    String name = deviceInfo[0];
-                    String type = deviceInfo[1];
-                    String designator = deviceInfo[2];
-                    String ip = deviceInfo[3];
+            confirmButton.setOnClickListener(view -> {
+                String name = deviceInfo[0];
+                String type = deviceInfo[1];
+                String id = deviceInfo[2];
+                String topic = deviceInfo[3];
 
-                    String room = roomSpinner.getSelectedItem().toString();
+                String room = roomSpinner.getSelectedItem().toString();
 
-                    dbHandler.addDevice(name, room, type, designator, ip);
+                dbHandler.addDevice(id, name, room, type, topic);
 
-                    String newDeviceRequest = "ADD_DEVICE-";
-                    newDeviceRequest += name + ",";
-                    newDeviceRequest += room + ",";
-                    newDeviceRequest += type + ",";
-                    newDeviceRequest += designator + ",";
-                    newDeviceRequest += ip;
+                String payload = id + "," + name + "," + room + "," + type + "," + topic;
+                mqttClient.publish("hap/main/database/add_device", payload);
+                updateDevices(context, dbHandler);
 
-                    tcpClient.sendMessage(newDeviceRequest);
-                    updateDevices(context, dbHandler);
-
-                    backgroundLayout.setAlpha(1f);
-                    dialog.dismiss();
-                });
-            }
-
-            else if (dialogType.equals("dialog_device_config")) {
-                nameEditText.setText(deviceName);
-                designatorEditText.setText(dbHandler.getDesignator(deviceName));
-                ipEditText.setText(dbHandler.getAddress(deviceName));
-                for (int i = 0; i < typeRadioGroup.getChildCount(); i++) {
-                    View child = typeRadioGroup.getChildAt(i);
-                    RadioButton radio = (RadioButton) child;
-                    if (radio.getText().toString().equals(deviceName)) {
-                        radio.setChecked(true);
-                    }
-                }
-
-                confirmButton.setOnClickListener(view -> {
-                    String name = deviceInfo[0];
-                    String type = deviceInfo[1];
-                    String designator = deviceInfo[2];
-                    String ip = deviceInfo[3];
-
-                    String room = roomSpinner.getSelectedItem().toString();
-
-                    dbHandler.updateDevice(name, room, type, designator, ip);
-
-                    String updateDeviceRequest = "UPDATE_DEVICE-";
-                    updateDeviceRequest += name + ",";
-                    updateDeviceRequest += room + ",";
-                    updateDeviceRequest += type + ",";
-                    updateDeviceRequest += designator + ",";
-                    updateDeviceRequest += ip;
-
-                    tcpClient.sendMessage(updateDeviceRequest);
-                    updateDevices(context, dbHandler);
-
-                    backgroundLayout.setAlpha(1f);
-                    dialog.dismiss();
-                });
-            }
+                backgroundLayout.setAlpha(1f);
+                dialog.dismiss();
+            });
         }
 
-        else if (dialogType.equals("dialog_delete")) {
+        else if (dialogType.equals("dialog_config_device")) {
+            Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
+            EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+            RadioGroup typeRadioGroup = dialog.findViewById(R.id.typeRadioGroup);
+            EditText idEditText = dialog.findViewById(R.id.idEditText);
+            EditText topicEditText = dialog.findViewById(R.id.topicEditText);
+
+            String[] deviceInfo = new String[4];
+
+            nameEditText.setText(deviceName);
+            idEditText.setText(dbHandler.getID(deviceName));
+            topicEditText.setText(dbHandler.getDeviceTopic(dbHandler.getID(deviceName)));
+            for (int i = 0; i < typeRadioGroup.getChildCount(); i++) {
+                View child = typeRadioGroup.getChildAt(i);
+                RadioButton radio = (RadioButton) child;
+                if (radio.getText().toString().equals(deviceName)) {
+                    radio.setChecked(true);
+                }
+            }
 
             confirmButton.setOnClickListener(view -> {
-                dbHandler.deleteDevice(deviceName);
+                String id = deviceInfo[0];
+                String name = deviceInfo[1];
+                String type = deviceInfo[2];
+                String topic = deviceInfo[3];
 
-                String deleteDeviceRequest = "DELETE_DEVICE-";
-                deleteDeviceRequest += deviceName;
+                String room = roomSpinner.getSelectedItem().toString();
 
-                tcpClient.sendMessage(deleteDeviceRequest);
+                dbHandler.updateDevice(id, name, room, type, topic);
+                String payload = id + "," + name + "," + room + "," + type;
+
+                mqttClient.publish("hap/main/database/update_device", payload);
+                updateDevices(context, dbHandler);
+
+                backgroundLayout.setAlpha(1f);
+                dialog.dismiss();
+            });
+        }
+
+        else if (dialogType.equals("dialog_delete_device")) {
+
+            confirmButton.setOnClickListener(view -> {
+                String deviceID = dbHandler.getID(deviceName);
+                dbHandler.deleteDevice(deviceID);
+
+                mqttClient.publish("hap/main/database/delete_device", deviceID);
                 updateDevices(context, dbHandler);
 
                 backgroundLayout.setAlpha(1f);

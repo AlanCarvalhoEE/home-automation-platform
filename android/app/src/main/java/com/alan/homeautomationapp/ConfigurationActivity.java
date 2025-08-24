@@ -7,18 +7,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
 
     private DBhandler dbHandler;    // Database handler instance
-    private TCPclient tcpClient;    // TCP client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -35,9 +32,6 @@ public class ConfigurationActivity extends AppCompatActivity {
         // Initialize database instance
         dbHandler = DBhandler.getInstance(this);
 
-        // Initialize TCP client instance
-        tcpClient = TCPclient.getInstance();
-
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -50,6 +44,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         ImageButton roomAddImageButton = findViewById(R.id.roomAddImageButton);
+        ImageButton roomDeleteImageButton = findViewById(R.id.roomDeleteImageButton);
         ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
 
         // Change the configuration button icon
@@ -66,12 +61,17 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Room add button listener
         roomAddImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, dbHandler, "dialog_room_add", null));
+                Utils.openDialog(this, dbHandler, "dialog_add_room", null));
+
+        // Room delete button listener
+        roomDeleteImageButton.setOnClickListener(v ->
+                Utils.openDialog(this, dbHandler, "dialog_delete_room", null));
 
         // Device add button listener
         deviceAddImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, dbHandler, "dialog_device_add", null));
+                Utils.openDialog(this, dbHandler, "dialog_add_device", null));
 
+        // Room selection spinner listener
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
