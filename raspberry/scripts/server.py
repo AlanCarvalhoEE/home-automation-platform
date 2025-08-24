@@ -53,7 +53,7 @@ def newConnections(socket):
 
 def main():
     # Server host and port
-    host = '192.168.88.11'
+    host = '0.0.0.0'
     port = 5560
 
     # Create new server socket
