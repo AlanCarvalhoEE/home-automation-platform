@@ -2,6 +2,7 @@
 # Code: Raspberry MQTT client script
 # Author: Alan Carvalho
 # Date: 03/08/2025
+
 import paho.mqtt.client as mqtt
 import dbhandler
 import time
@@ -48,6 +49,10 @@ def on_message(client, userdata, message):
     elif topic == "hap/main/database/update_device":
         data = payload.split(',')
         dbhandler.updateDevice(data[0], data[1], data[2], data[3], data[4])
+
+    database = dbhandler.getDatabase()
+    database_str = json.dumps(database, ensure_ascii=False)
+    client.publish("hap/main/database/data", database_str, qos=1, retain=True)
 
 def start():
     client.on_connect = on_connect
