@@ -12,7 +12,7 @@ public class MQTTclient {
     private static MQTTclient instance;
     private final Mqtt3AsyncClient client;
     private final String ID = "11";
-    private static final String MQTT_BROKER = "192.168.88.11";
+    private static final String MQTT_BROKER = "10.147.19.177";
     private static final int port = 1883;
 
     public MQTTclient() {
@@ -34,12 +34,17 @@ public class MQTTclient {
         return instance;
     }
 
-    public void connect() {
-        client.connect().whenComplete((ack, throwable) -> {
+    public void connect(MqttConnectionCallback callback) {
+        client.connectWith()
+                .cleanSession(true)
+                .send()
+                .whenComplete((ack, throwable) -> {
             if (throwable != null) {
                 Log.e("MQTT_DEBUG", "Connection failed", throwable);
+                callback.onFailure(throwable);
             } else {
                 Log.d("MQTT_DEBUG", "Connection successful: " + ack);
+                callback.onSuccess();
             }
         });
     }
@@ -71,6 +76,7 @@ public class MQTTclient {
     }
 
     public void disconnect() {
+        Log.d("MQTT_DEBUG", "DISCONNECTED");
         client.disconnect();
     }
 

@@ -11,6 +11,8 @@
     <string name="type_label">Tipo:</string>
     <string name="topic_label">Tópico:</string>
     <string name="id_label">ID:</string>
+    <string name="ldr_reading_label">Leitura</string>
+    <string name="threshold_label">Limiar</string>
 
     // Buttons
     <string name="confirm_button">Confirmar</string>

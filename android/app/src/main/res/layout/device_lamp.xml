@@ -66,6 +66,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/lampNameTextView" />
 
+                <ToggleButton
+                    android:id="@+id/lampLdrToggleButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_ldr_states"
+                    android:textOn=""
+                    android:textOff=""
+                    android:visibility="invisible"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@string/lamp_control_description"
+                    app:layout_constraintBottom_toBottomOf="@id/lampNameTextView"
+                    app:layout_constraintEnd_toStartOf="@id/lampControlToggleButton"
+                    app:layout_constraintTop_toTopOf="@id/lampNameTextView" />
+
                 <ImageButton
                     android:id="@+id/lampConfigImageButton"
                     android:layout_width="35dp"
