@@ -1,4 +1,4 @@
-658876949135422
+677649780906576
 Alan_Capacitor
 CAP_SMD_CERAMIC_0201
 Capacitor SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
@@ -462,14 +462,14 @@ capacitor tantalum
 2
 2
 Alan_Capacitor
-CAP_THT_CERAMIC_X2_13x6x12
+CAP_THT_CERAMIC_X2_13x5x11_P10
 C, Rect series, Radial, pin pitch=10.00mm, , length*width=13*6mm^2, Capacitor, http://www.wima.com/EN/WIMA_FKS_3.pdf, http://www.wima.com/EN/WIMA_MKS_4.pdf
 C Rect series Radial pin pitch 10.00mm  length 13mm width 6mm Capacitor
 0
 2
 2
 Alan_Capacitor
-CAP_THT_CERAMIC_X2_18x6x15
+CAP_THT_CERAMIC_X2_18x6x15_P15
 C, Rect series, Radial, pin pitch=15.00mm, , length*width=18*6mm^2, Capacitor, http://www.wima.com/EN/WIMA_FKS_3.pdf
 C Rect series Radial pin pitch 15.00mm  length 18mm width 6mm Capacitor
 0
@@ -1820,6 +1820,13 @@ TVS protection diodes
 2
 2
 Alan_Fuse
+FUSEHOLDER_THT_5x20_CLIP
+
+
+0
+4
+2
+Alan_Fuse
 FUSE_SMD_0402
 Fuse SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
 fuse
@@ -1939,6 +1946,62 @@ D2PAK DDPAK TO-263 D2PAK-5 TO-263-5 SOT-426
 6
 5
 Alan_Inductor
+BEAD_SMD_0402
+Inductor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_0603
+Inductor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_0805
+Inductor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_1206
+Inductor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_1210
+Inductor SMD 1210 (3225 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_1806
+Inductor SMD 1806 (4516 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_2010
+Inductor SMD 2010 (5025 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
+BEAD_SMD_2512
+Inductor SMD 2512 (6332 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+Alan_Inductor
 IND_SMD_7.3x7.3x4.5
 Choke, SMD, 7.3x7.3mm 4.5mm height
 Choke SMD
@@ -2015,6 +2078,13 @@ LED
 0
 2
 2
+Alan_Label
+LABEL_ELECTRIC_SHOCK_RISK_10x10
+
+
+0
+0
+0
 Alan_MCU
 LQFP-48_7x7x0.5
 LQFP, 48 Pin (https://www.analog.com/media/en/technical-documentation/data-sheets/ltc2358-16.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
@@ -2043,6 +2113,13 @@ mounting hole 3.2mm no annular m3
 0
 0
 0
+Alan_Mechanics
+MOUNTING_HOLE_PAD_3mm
+Mounting Hole 3mm
+mounting hole 3mm
+0
+1
+1
 Alan_Module
 ESP-01
 Module, ESP-8266, ESP-01, 8 pin
@@ -2184,13 +2261,6 @@ RES_SMD_01005
 2
 2
 Alan_Resistor
-RES_SMD_1020
-
-
-0
-2
-2
-Alan_Resistor
 RES_SMD_1206
 
 
@@ -2215,6 +2285,13 @@ Alan_Resistor
 RES_SMD_2512
 
 
+0
+2
+2
+Alan_Resistor
+RES_THT_DIN0309_H
+Resistor, Axial_DIN0309 series, Axial, Horizontal, pin pitch=12.7mm, 0.5W = 1/2W, length*diameter=9*3.2mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf
+Resistor Axial_DIN0309 series Axial Horizontal pin pitch 12.7mm 0.5W = 1/2W length 9mm diameter 3.2mm
 0
 2
 2

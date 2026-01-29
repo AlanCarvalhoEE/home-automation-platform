@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -29,6 +30,8 @@ import android.widget.ToggleButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.videolan.libvlc.util.VLCVideoLayout;
 
 import java.util.ArrayList;
@@ -42,6 +45,14 @@ public class Utils {
 
     private static int temperature = 20;
     static MQTTclient mqttClient = MQTTclient.getInstance();
+
+    // Per-device LDR state holder (attached to each device view)
+    public static class DeviceState {
+        public boolean ldrEnabled = false;
+        public int ldrThreshold = -1;
+        public int ldrValue = -1;
+        public boolean loadOn = false;
+    }
 
     // Function to update rooms from database
     public static void updateRooms(Context context, DBhandler database) {
@@ -74,231 +85,289 @@ public class Utils {
             String deviceID = database.getID(devicesList.get(i));
             String deviceTopic = database.getDeviceTopic(deviceID);
 
-            switch (deviceType) {
+            if (deviceType.contains("Lamp")) {
+                vi = inflater.inflate(R.layout.device_lamp, null);
+                TextView lampNameTextView = vi.findViewById(R.id.lampNameTextView);
+                ToggleButton lampControlToggleButton = vi.findViewById(R.id.lampControlToggleButton);
+                ImageButton lampConfigImageButton = vi.findViewById(R.id.lampConfigImageButton);
+                ImageButton lampDeleteImageButton = vi.findViewById(R.id.lampDeleteImageButton);
+                ToggleButton lampLdrToggleButton = vi.findViewById(R.id.lampLdrToggleButton);
 
-                case "Lamp":
-                    vi = inflater.inflate(R.layout.device_lamp, null);
-                    TextView lampNameTextView = vi.findViewById(R.id.lampNameTextView);
-                    ToggleButton lampControlToggleButton = vi.findViewById(R.id.lampControlToggleButton);
-                    ImageButton lampConfigImageButton = vi.findViewById(R.id.lampConfigImageButton);
-                    ImageButton lampDeleteImageButton = vi.findViewById(R.id.lampDeleteImageButton);
+                lampNameTextView.setText(devicesList.get(i));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        MATCH_PARENT, WRAP_CONTENT));
 
-                    lampNameTextView.setText(devicesList.get(i));
-                    roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            MATCH_PARENT, WRAP_CONTENT));
+                lampControlToggleButton.setTag(deviceID);
+                // Attach deviceID to the device container and create per-device state
+                vi.setTag(deviceID);
+                DeviceState deviceState = new DeviceState();
+                vi.setTag(R.id.lampNameTextView, deviceState);
 
-                    lampControlToggleButton.setTag(deviceID);
+                String getStateTopic = "hap/";
+                getStateTopic += roomTopic + "/";
+                getStateTopic += deviceTopic + "/";
+                getStateTopic += "get_state";
 
-                    String topic = "hap/";
-                    topic += roomTopic + "/";
-                    topic += deviceTopic + "/";
-                    topic += "get_state";
+                mqttClient.subscribe(getStateTopic, (topic1, message) -> {
 
-                    mqttClient.subscribe(topic, (topic1, message) -> {
-                        if (message.equals("ON")) {lampControlToggleButton.setChecked(true);}
-                        else if (message.equals("OFF")) {lampControlToggleButton.setChecked(false);}
+                    try {
+                        JSONObject json = new JSONObject(message);
+
+                        // Update deviceState attached to this view
+                        DeviceState ds = (DeviceState) vi.getTag(R.id.lampNameTextView);
+
+                        if (json.has("load_status")) {
+                            String state = json.getString("load_status");
+                            ds.loadOn = state.equalsIgnoreCase("ON");
+                        }
+
+                        if (json.has("ldr_status")) {
+                            String state = json.getString("ldr_status");
+                            ds.ldrEnabled = state.equalsIgnoreCase("ENABLED");
+                        }
+
+                        if (json.has("ldr_threshold")) {
+                            ds.ldrThreshold = json.optInt("ldr_threshold", -1);
+                        }
+
+                        if (json.has("ldr_value")) {
+                            ds.ldrValue = json.optInt("ldr_value", -1);
+                        }
+
+                        // Update UI on main thread
+                        activity.runOnUiThread(() -> {
+                            if (ds.loadOn) lampControlToggleButton.setChecked(true);
+                            else lampControlToggleButton.setChecked(false);
+
+                            lampLdrToggleButton.setChecked(ds.ldrEnabled);
+                            lampControlToggleButton.setClickable(!ds.ldrEnabled);
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                if (context instanceof MainActivity) {
+                    lampControlToggleButton.setVisibility(View.VISIBLE);
+                    lampConfigImageButton.setVisibility(View.INVISIBLE);
+                    lampDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                    lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        String setStateTopic = "hap/";
+                        setStateTopic += roomTopic + "/";
+                        setStateTopic += deviceTopic + "/";
+                        setStateTopic += "set_state";
+
+                        if (isChecked) mqttClient.publish(setStateTopic, "ON");
+                        else mqttClient.publish(setStateTopic, "OFF");
                     });
 
-                    if (context instanceof MainActivity) {
-                        lampControlToggleButton.setVisibility(View.VISIBLE);
-                        lampConfigImageButton.setVisibility(View.INVISIBLE);
-                        lampDeleteImageButton.setVisibility(View.INVISIBLE);
+                    if (deviceType.contains("LDR")) {
+                        lampLdrToggleButton.setVisibility(View.VISIBLE);
 
-                        lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            if (isChecked) mqttClient.publish("hap/office/lamp/set_state", "ON");
-                            else mqttClient.publish("hap/office/lamp/set_state", "OFF");
-                        });
-                    } else if (context instanceof ConfigurationActivity) {
-                        lampControlToggleButton.setVisibility(View.INVISIBLE);
-                        lampConfigImageButton.setVisibility(View.VISIBLE);
-                        lampDeleteImageButton.setVisibility(View.VISIBLE);
+                        lampLdrToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                            String enableLdrTopic = "hap/";
+                            enableLdrTopic += roomTopic + "/";
+                            enableLdrTopic += deviceTopic + "/";
+                            enableLdrTopic += "enable_ldr";
 
-                        lampConfigImageButton.setOnClickListener(v -> {
-                            String name = (String) lampNameTextView.getText();
-                            openDialog(context, database, "dialog_config_device", name);
-                        });
-
-                        lampDeleteImageButton.setOnClickListener(v -> {
-                            String name = (String) lampNameTextView.getText();
-                            openDialog(context, database, "dialog_delete_device", name);
-                        });
-                    }
-
-                    break;
-
-                case "Wall socket":
-                    vi = inflater.inflate(R.layout.device_socket, null);
-                    TextView socketNameTextView = vi.findViewById(R.id.socketNameTextView);
-                    ToggleButton socketControlToggleButton = vi.findViewById(R.id.socketControlToggleButton);
-                    ImageButton socketConfigImageButton = vi.findViewById(R.id.socketConfigImageButton);
-                    ImageButton socketDeleteImageButton = vi.findViewById(R.id.socketDeleteImageButton);
-
-                    socketNameTextView.setText(devicesList.get(i));
-                    roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            MATCH_PARENT, WRAP_CONTENT));
-
-                    socketControlToggleButton.setTag(deviceID);
-
-                    if (context instanceof MainActivity) {
-                        socketControlToggleButton.setVisibility(View.VISIBLE);
-                        socketConfigImageButton.setVisibility(View.INVISIBLE);
-                        socketDeleteImageButton.setVisibility(View.INVISIBLE);
-
-                        socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            //if (isChecked) mqttClient.publish("SET-" + designator + "_ON");
-                            //else mqttClient.publish("SET-" + designator + "_OFF");
-                        });
-                    } else if (context instanceof ConfigurationActivity) {
-                        socketControlToggleButton.setVisibility(View.INVISIBLE);
-                        socketConfigImageButton.setVisibility(View.VISIBLE);
-                        socketDeleteImageButton.setVisibility(View.VISIBLE);
-
-                        socketConfigImageButton.setOnClickListener(v -> {
-                            String name = (String) socketNameTextView.getText();
-                            openDialog(context, database, "dialog_config_device", name);
-                        });
-
-                        socketDeleteImageButton.setOnClickListener(v -> {
-                            String name = (String) socketNameTextView.getText();
-                            openDialog(context, database, "dialog_delete_device", name);
-                        });
-                    }
-
-                    break;
-
-                case "Door":
-                    vi = inflater.inflate(R.layout.device_door, null);
-                    TextView doorNameTextView = vi.findViewById(R.id.doorNameTextView);
-                    ToggleButton doorControlToggleButton = vi.findViewById(R.id.doorControlToggleButton);
-                    ImageButton doorConfigImageButton = vi.findViewById(R.id.doorConfigImageButton);
-                    ImageButton doorDeleteImageButton = vi.findViewById(R.id.doorDeleteImageButton);
-
-                    doorNameTextView.setText(devicesList.get(i));
-                    roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            MATCH_PARENT, WRAP_CONTENT));
-
-                    doorControlToggleButton.setTag(deviceID);
-
-                    if (context instanceof MainActivity) {
-                        doorControlToggleButton.setVisibility(View.VISIBLE);
-                        doorConfigImageButton.setVisibility(View.INVISIBLE);
-                        doorDeleteImageButton.setVisibility(View.INVISIBLE);
-
-                        doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            //if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                            //else tcpClient.sendMessage("SET-" + designator + "_OFF");
-                        });
-                    } else if (context instanceof ConfigurationActivity) {
-                        doorControlToggleButton.setVisibility(View.INVISIBLE);
-                        doorConfigImageButton.setVisibility(View.VISIBLE);
-                        doorDeleteImageButton.setVisibility(View.VISIBLE);
-
-                        doorConfigImageButton.setOnClickListener(v -> {
-                            String name = (String) doorNameTextView.getText();
-                            openDialog(context, database, "dialog_config_device", name);
-                        });
-
-                        doorDeleteImageButton.setOnClickListener(v -> {
-                            String name = (String) doorNameTextView.getText();
-                            openDialog(context, database, "dialog_delete_device", name);
-                        });
-                    }
-
-                    break;
-
-                case "Camera":
-                    vi = inflater.inflate(R.layout.device_camera, null);
-                    TextView cameraNameTextView = vi.findViewById(R.id.cameraNameTextView);
-                    ToggleButton cameraControlToggleButton = vi.findViewById(R.id.cameraControlToggleButton);
-                    ImageButton cameraConfigImageButton = vi.findViewById(R.id.cameraConfigImageButton);
-                    ImageButton cameraDeleteImageButton = vi.findViewById(R.id.cameraDeleteImageButton);
-                    FrameLayout videoLayout = vi.findViewById(R.id.videoLayout);
-                    VLCVideoLayout cameraVideoLayout = vi.findViewById(R.id.cameraVideoLayout);
-
-                    streamPlayer = new VideoStreamPlayer(context, cameraVideoLayout);
-
-                    cameraNameTextView.setText(devicesList.get(i));
-                    roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            MATCH_PARENT, WRAP_CONTENT));
-
-                    cameraControlToggleButton.setTag(deviceID);
-
-                    if (context instanceof MainActivity) {
-                        cameraControlToggleButton.setVisibility(View.VISIBLE);
-                        cameraConfigImageButton.setVisibility(View.INVISIBLE);
-                        cameraDeleteImageButton.setVisibility(View.INVISIBLE);
-
-                        cameraControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
                             if (isChecked) {
-                                videoLayout.setVisibility(View.VISIBLE);
-                                streamPlayer.startVideo(rtspUrl);
+                                mqttClient.publish(enableLdrTopic, "ENABLE");
+                                lampControlToggleButton.setClickable(false);
                             }
                             else {
-                                videoLayout.setVisibility(View.GONE);
-                                streamPlayer.stopVideo();
+                                mqttClient.publish(enableLdrTopic, "DISABLE");
+                                lampControlToggleButton.setClickable(true);
                             }
-                        });
-
-
-                    } else if (context instanceof ConfigurationActivity) {
-                        cameraControlToggleButton.setVisibility(View.INVISIBLE);
-                        cameraConfigImageButton.setVisibility(View.VISIBLE);
-                        cameraDeleteImageButton.setVisibility(View.VISIBLE);
-
-                        cameraConfigImageButton.setOnClickListener(v -> {
-                            String name = (String) cameraNameTextView.getText();
-                            openDialog(context, database, "dialog_config_device", name);
-                        });
-
-                        cameraDeleteImageButton.setOnClickListener(v -> {
-                            String name = (String) cameraNameTextView.getText();
-                            openDialog(context, database, "dialog_delete_device", name);
                         });
                     }
 
-                    break;
+                } else if (context instanceof ConfigurationActivity) {
+                    lampControlToggleButton.setVisibility(View.INVISIBLE);
+                    lampLdrToggleButton.setVisibility(View.INVISIBLE);
+                    lampConfigImageButton.setVisibility(View.VISIBLE);
+                    lampDeleteImageButton.setVisibility(View.VISIBLE);
 
-                case "Air conditioner":
-                    vi = inflater.inflate(R.layout.device_air_conditioner, null);
-                    TextView airNameTextView = vi.findViewById(R.id.airNameTextView);
-                    ToggleButton airControlToggleButton = vi.findViewById(R.id.airControlToggleButton);
-                    ImageButton upImageButton = vi.findViewById(R.id.upImageButton);
-                    ImageButton downImageButton = vi.findViewById(R.id.downImageButton);
-                    EditText temperatureEditText = vi.findViewById(R.id.temperatureEditText);
-                    airNameTextView.setText(devicesList.get(i));
-                    temperatureEditText.setText(String.valueOf(temperature));
-                    roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                            MATCH_PARENT, WRAP_CONTENT));
+                    lampConfigImageButton.setOnClickListener(v -> {
+                        String name = (String) lampNameTextView.getText();
+                        openDialog(context, database, "dialog_config_ldr", name);
+                    });
 
-                    airControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                    lampDeleteImageButton.setOnClickListener(v -> {
+                        String name = (String) lampNameTextView.getText();
+                        openDialog(context, database, "dialog_delete_device", name);
+                    });
+                }
+            }
+
+            else if(deviceType.contains("Wall socket")) {
+                vi = inflater.inflate(R.layout.device_socket, null);
+                TextView socketNameTextView = vi.findViewById(R.id.socketNameTextView);
+                ToggleButton socketControlToggleButton = vi.findViewById(R.id.socketControlToggleButton);
+                ImageButton socketConfigImageButton = vi.findViewById(R.id.socketConfigImageButton);
+                ImageButton socketDeleteImageButton = vi.findViewById(R.id.socketDeleteImageButton);
+
+                socketNameTextView.setText(devicesList.get(i));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        MATCH_PARENT, WRAP_CONTENT));
+
+                socketControlToggleButton.setTag(deviceID);
+
+                if (context instanceof MainActivity) {
+                    socketControlToggleButton.setVisibility(View.VISIBLE);
+                    socketConfigImageButton.setVisibility(View.INVISIBLE);
+                    socketDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                    socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        //if (isChecked) mqttClient.publish("SET-" + designator + "_ON");
+                        //else mqttClient.publish("SET-" + designator + "_OFF");
+                    });
+                } else if (context instanceof ConfigurationActivity) {
+                    socketControlToggleButton.setVisibility(View.INVISIBLE);
+                    socketConfigImageButton.setVisibility(View.VISIBLE);
+                    socketDeleteImageButton.setVisibility(View.VISIBLE);
+
+                    socketConfigImageButton.setOnClickListener(v -> {
+                        String name = (String) socketNameTextView.getText();
+                        openDialog(context, database, "dialog_config_device", name);
+                    });
+
+                    socketDeleteImageButton.setOnClickListener(v -> {
+                        String name = (String) socketNameTextView.getText();
+                        openDialog(context, database, "dialog_delete_device", name);
+                    });
+                }
+            }
+
+            else if(deviceType.contains("Door")) {
+                vi = inflater.inflate(R.layout.device_door, null);
+                TextView doorNameTextView = vi.findViewById(R.id.doorNameTextView);
+                ToggleButton doorControlToggleButton = vi.findViewById(R.id.doorControlToggleButton);
+                ImageButton doorConfigImageButton = vi.findViewById(R.id.doorConfigImageButton);
+                ImageButton doorDeleteImageButton = vi.findViewById(R.id.doorDeleteImageButton);
+
+                doorNameTextView.setText(devicesList.get(i));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        MATCH_PARENT, WRAP_CONTENT));
+
+                doorControlToggleButton.setTag(deviceID);
+
+                if (context instanceof MainActivity) {
+                    doorControlToggleButton.setVisibility(View.VISIBLE);
+                    doorConfigImageButton.setVisibility(View.INVISIBLE);
+                    doorDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                    doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
                         //if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
                         //else tcpClient.sendMessage("SET-" + designator + "_OFF");
                     });
+                } else if (context instanceof ConfigurationActivity) {
+                    doorControlToggleButton.setVisibility(View.INVISIBLE);
+                    doorConfigImageButton.setVisibility(View.VISIBLE);
+                    doorDeleteImageButton.setVisibility(View.VISIBLE);
 
-                    upImageButton.setOnClickListener(view -> {
-                        temperature++;
-                        temperatureEditText.setText(String.valueOf(temperature));
+                    doorConfigImageButton.setOnClickListener(v -> {
+                        String name = (String) doorNameTextView.getText();
+                        openDialog(context, database, "dialog_config_device", name);
                     });
 
-                    downImageButton.setOnClickListener(view -> {
-                        temperature--;
-                        temperatureEditText.setText(String.valueOf(temperature));
+                    doorDeleteImageButton.setOnClickListener(v -> {
+                        String name = (String) doorNameTextView.getText();
+                        openDialog(context, database, "dialog_delete_device", name);
+                    });
+                }
+            }
+
+            else if(deviceType.contains("Camera")) {
+                vi = inflater.inflate(R.layout.device_camera, null);
+                TextView cameraNameTextView = vi.findViewById(R.id.cameraNameTextView);
+                ToggleButton cameraControlToggleButton = vi.findViewById(R.id.cameraControlToggleButton);
+                ImageButton cameraConfigImageButton = vi.findViewById(R.id.cameraConfigImageButton);
+                ImageButton cameraDeleteImageButton = vi.findViewById(R.id.cameraDeleteImageButton);
+                FrameLayout videoLayout = vi.findViewById(R.id.videoLayout);
+                VLCVideoLayout cameraVideoLayout = vi.findViewById(R.id.cameraVideoLayout);
+
+                streamPlayer = new VideoStreamPlayer(context, cameraVideoLayout);
+
+                cameraNameTextView.setText(devicesList.get(i));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        MATCH_PARENT, WRAP_CONTENT));
+
+                cameraControlToggleButton.setTag(deviceID);
+
+                if (context instanceof MainActivity) {
+                    cameraControlToggleButton.setVisibility(View.VISIBLE);
+                    cameraConfigImageButton.setVisibility(View.INVISIBLE);
+                    cameraDeleteImageButton.setVisibility(View.INVISIBLE);
+
+                    cameraControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        if (isChecked) {
+                            videoLayout.setVisibility(View.VISIBLE);
+                            streamPlayer.startVideo(rtspUrl);
+                        } else {
+                            videoLayout.setVisibility(View.GONE);
+                            streamPlayer.stopVideo();
+                        }
                     });
 
-                    temperatureEditText.addTextChangedListener(new TextWatcher() {
-                        public void afterTextChanged(Editable s) {
-                            temperature = Integer.parseInt(s.toString());
-                            //tcpClient.sendMessage("SET-" + designator + "_T" + temperature);
-                        }
 
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
+                } else if (context instanceof ConfigurationActivity) {
+                    cameraControlToggleButton.setVisibility(View.INVISIBLE);
+                    cameraConfigImageButton.setVisibility(View.VISIBLE);
+                    cameraDeleteImageButton.setVisibility(View.VISIBLE);
 
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
+                    cameraConfigImageButton.setOnClickListener(v -> {
+                        String name = (String) cameraNameTextView.getText();
+                        openDialog(context, database, "dialog_config_device", name);
                     });
 
-                    break;
+                    cameraDeleteImageButton.setOnClickListener(v -> {
+                        String name = (String) cameraNameTextView.getText();
+                        openDialog(context, database, "dialog_delete_device", name);
+                    });
+                }
+            }
+
+            else if(deviceType.contains("Air conditioner")) {
+                vi = inflater.inflate(R.layout.device_air_conditioner, null);
+                TextView airNameTextView = vi.findViewById(R.id.airNameTextView);
+                ToggleButton airControlToggleButton = vi.findViewById(R.id.airControlToggleButton);
+                ImageButton upImageButton = vi.findViewById(R.id.upImageButton);
+                ImageButton downImageButton = vi.findViewById(R.id.downImageButton);
+                EditText temperatureEditText = vi.findViewById(R.id.temperatureEditText);
+                airNameTextView.setText(devicesList.get(i));
+                temperatureEditText.setText(String.valueOf(temperature));
+                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
+                        MATCH_PARENT, WRAP_CONTENT));
+
+                airControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                    //if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
+                    //else tcpClient.sendMessage("SET-" + designator + "_OFF");
+                });
+
+                upImageButton.setOnClickListener(view -> {
+                    temperature++;
+                    temperatureEditText.setText(String.valueOf(temperature));
+                });
+
+                downImageButton.setOnClickListener(view -> {
+                    temperature--;
+                    temperatureEditText.setText(String.valueOf(temperature));
+                });
+
+                temperatureEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {
+                        temperature = Integer.parseInt(s.toString());
+                        //tcpClient.sendMessage("SET-" + designator + "_T" + temperature);
+                    }
+
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+                });
             }
         }
     }
@@ -322,6 +391,9 @@ public class Utils {
         }
         else if (dialogType.contains("dialog_delete_device")) {
             dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_device, null);
+        }
+        else if (dialogType.contains("dialog_config_ldr")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_config_ldr, null);
         }
 
         Dialog dialog = new Dialog(context);
@@ -468,45 +540,6 @@ public class Utils {
             });
         }
 
-        else if (dialogType.equals("dialog_config_device")) {
-            Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
-            EditText nameEditText = dialog.findViewById(R.id.nameEditText);
-            RadioGroup typeRadioGroup = dialog.findViewById(R.id.typeRadioGroup);
-            EditText idEditText = dialog.findViewById(R.id.idEditText);
-            EditText topicEditText = dialog.findViewById(R.id.topicEditText);
-
-            String[] deviceInfo = new String[4];
-
-            nameEditText.setText(deviceName);
-            idEditText.setText(dbHandler.getID(deviceName));
-            topicEditText.setText(dbHandler.getDeviceTopic(dbHandler.getID(deviceName)));
-            for (int i = 0; i < typeRadioGroup.getChildCount(); i++) {
-                View child = typeRadioGroup.getChildAt(i);
-                RadioButton radio = (RadioButton) child;
-                if (radio.getText().toString().equals(deviceName)) {
-                    radio.setChecked(true);
-                }
-            }
-
-            confirmButton.setOnClickListener(view -> {
-                String id = deviceInfo[0];
-                String name = deviceInfo[1];
-                String type = deviceInfo[2];
-                String topic = deviceInfo[3];
-
-                String room = roomSpinner.getSelectedItem().toString();
-
-                dbHandler.updateDevice(id, name, room, type, topic);
-                String payload = id + "," + name + "," + room + "," + type;
-
-                mqttClient.publish("hap/main/database/update_device", payload);
-                updateDevices(context, dbHandler);
-
-                backgroundLayout.setAlpha(1f);
-                dialog.dismiss();
-            });
-        }
-
         else if (dialogType.equals("dialog_delete_device")) {
 
             confirmButton.setOnClickListener(view -> {
@@ -514,6 +547,66 @@ public class Utils {
                 dbHandler.deleteDevice(deviceID);
 
                 mqttClient.publish("hap/main/database/delete_device", deviceID);
+                updateDevices(context, dbHandler);
+
+                backgroundLayout.setAlpha(1f);
+                dialog.dismiss();
+            });
+        }
+
+        else if (dialogType.equals("dialog_config_ldr")) {
+
+            // Find the device view by device ID stored in DB
+            String deviceID = dbHandler.getID(deviceName);
+            LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
+            View deviceView = findViewByTag(deviceID, roomDevicesLayout);
+            TextView readingTextView = dialog.findViewById(R.id.readingTextView);
+            SeekBar thresholdSeekBar = dialog.findViewById(R.id.thresholdSeekBar);
+            TextView thresholdTextView = dialog.findViewById(R.id.thresholdTextView);
+
+            thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) thresholdTextView.setText(String.valueOf(progress));
+                    confirmButton.setEnabled(true);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+
+            if (deviceView != null) {
+                DeviceState ds = (DeviceState) deviceView.getTag(R.id.lampNameTextView);
+
+                // Populate dialog UI with last known values
+                if (ds != null) {
+                    if (ds.ldrValue != -1) {
+                        readingTextView.setText(String.valueOf(ds.ldrValue));
+                    }
+                    if (ds.ldrThreshold != -1) {
+                        thresholdSeekBar.setProgress(ds.ldrThreshold);
+                        thresholdTextView.setText(String.valueOf(ds.ldrThreshold));
+                    }
+                }
+            }
+
+            confirmButton.setOnClickListener(view -> {
+
+                Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
+                String roomName = roomSpinner.getSelectedItem().toString();
+                String roomTopic = dbHandler.getRoomTopic(roomName);
+                String deviceTopic = dbHandler.getDeviceTopic(deviceID);
+
+                String payload = (String) thresholdTextView.getText();
+
+                String adjustLdrTopic = "hap/";
+                adjustLdrTopic += roomTopic + "/";
+                adjustLdrTopic += deviceTopic + "/";
+                adjustLdrTopic += "adjust_ldr";
+                mqttClient.publish(adjustLdrTopic, payload);
                 updateDevices(context, dbHandler);
 
                 backgroundLayout.setAlpha(1f);

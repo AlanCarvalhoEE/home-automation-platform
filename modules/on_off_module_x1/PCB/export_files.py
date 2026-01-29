@@ -193,4 +193,6 @@ run_kicad_command(f'kicad-cli pcb export gerbers "{PCB_FILE}" -o "{GERBER_PATH}"
 # Export Drill files (for all holes)
 run_kicad_command(f'kicad-cli pcb export drill --format gerber "{PCB_FILE}" -o "{GERBER_PATH}"', "Drill files export")
 
-# Export
+# Export the 3D model
+STEP_FILE = os.path.join(STEP_PATH, f"{PROJECT_NAME}.step")
+run_kicad_command(f'kicad-cli pcb export step "{PCB_FILE}" -o "{STEP_FILE}"', "3D STEP model export")
