@@ -25,8 +25,9 @@ dbStructure = [
 
 #Device types
 deviceTypes = [("Lamp",),
-               ("Wall socket",),
-               ("Air conditioner",),
+               ("LampLDR",),
+               ("WallSocket",),
+               ("AirConditioner",),
                ("Curtain",),
                ("Door",)]
 
