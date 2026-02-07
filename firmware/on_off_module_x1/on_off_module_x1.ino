@@ -11,11 +11,15 @@
 #include "credentials.h"
 
 // Device Parameters
-#define TOPIC "lamp"
+#define TYPE "LAMP"
+#define HAP_TOPIC "hap"
+#define DEVICE_TOPIC "device"
 #define SET_STATE_TOPIC "set_state"
 #define GET_STATE_TOPIC "get_state"
+#define STATUS_TOPIC "status"
 #define ENABLE_LDR_TOPIC "enable_ldr"
 #define ADJUST_LDR_TOPIC "adjust_ldr"
+#define DISCOVERY_TOPIC "discovery"
 
 // Pins
 #define SWITCH_PIN 12
@@ -44,10 +48,13 @@ unsigned long lastSwitchChange = 0;           // Last time the switch state has 
 const long debounceInterval = 500;            // Interval to debounce the switch state changing (ms)
 unsigned long lastLdrCheck = 0;               // Last time the LDR input was checked (ms)
 const long ldrCheckInterval = 10000;          // Interval to check the LDR input (ms)
+String deviceId;                              // The device's ID
 String setStateTopic;                         // Topic for setting the module state
 String getStateTopic;                         // Topic for retrieving the module state
+String statusTopic;                           // Topic for online/offline status
 String enableLdrTopic;                        // Topic for enabling and disabling the LDR
 String adjustLdrTopic;                        // Topic for adjusting the LDR threshold
+String discoveryTopic;                        // Topic for device discovery capability
 
 // Initial setup function
 void setup() {
@@ -64,13 +71,13 @@ void setup() {
   // Starts with the load turned OFF
   digitalWrite(RELAY_PIN, loadOn);
 
-  // Start the EEPROM with 4 bytes
-  EEPROM.begin(4);
+  // Start the EEPROM with 16 bytes
+  EEPROM.begin(16);
 
   // Update the LDR variables from EEPROM
   EEPROM.get(2, ldrEnabled);
   EEPROM.get(0, ldrThreshold);
-  if (ldrThreshold > 1024) ldrThreshold = 600;
+  if (ldrThreshold == 0xFFFF || ldrThreshold > 1023) ldrThreshold = 600;
 
   //Configure the WiFi
   WiFi.mode(WIFI_STA);
@@ -78,6 +85,9 @@ void setup() {
   // Configure the MQTT client
   mqttClient.setServer(brokerIP, brokerPort);
   mqttClient.setCallback(callback);
+
+  generateDeviceId();   // Generates the device ID
+  buildTopics();        // Builds all the relevant topics
 
   delay(500);
 }
@@ -93,6 +103,28 @@ void loop() {
   if (ldrEnabled) checkLDR();        // Check LDR changes
   
   printReport();    // Print relevant variables
+}
+
+// Function to generate the device ID
+void generateDeviceId() {
+  
+  deviceId = WiFi.macAddress();
+  deviceId.replace(":", "");
+  deviceId.toLowerCase();
+}
+
+// Function to build the topics
+void buildTopics() 
+{
+  String deviceTopic = String(HAP_TOPIC) + "/" + String(DEVICE_TOPIC) + "/" + deviceId + "/";
+
+  setStateTopic = deviceTopic + SET_STATE_TOPIC;
+  getStateTopic = deviceTopic + GET_STATE_TOPIC;
+  statusTopic = deviceTopic + STATUS_TOPIC;
+  enableLdrTopic = deviceTopic + ENABLE_LDR_TOPIC;
+  adjustLdrTopic = deviceTopic + ADJUST_LDR_TOPIC;
+
+  discoveryTopic = String(HAP_TOPIC) + "/" + String(DISCOVERY_TOPIC) + "/" + deviceId;
 }
 
 // Function to setup the WiFi
@@ -118,57 +150,23 @@ void checkBrokerConnection() {
     if (mqttClient.connected()) brokerConnected = true;
     
     else {
-      if (mqttClient.connect(ID)) {
-        // Build the base for all topics
-        String baseTopic = "hap/";
-        baseTopic += ROOM;
-        baseTopic += "/";
-        baseTopic += TOPIC;
-        baseTopic += "/";
-
-        // Complete the topics
-        setStateTopic = baseTopic + SET_STATE_TOPIC;
-        getStateTopic = baseTopic + GET_STATE_TOPIC;
-        enableLdrTopic = baseTopic + ENABLE_LDR_TOPIC;
-        adjustLdrTopic = baseTopic + ADJUST_LDR_TOPIC;
+      if (mqttClient.connect(deviceId.c_str(), statusTopic.c_str(), 1, true, "OFFLINE")) {
 
         // Subscribe to the appropriate topics
         mqttClient.subscribe(setStateTopic.c_str());
         mqttClient.subscribe(enableLdrTopic.c_str());
         mqttClient.subscribe(adjustLdrTopic.c_str());
+
+        mqttClient.publish(statusTopic.c_str(), "ONLINE", true);
+
+        publishDiscovery();   // Publish to the discovery topic
+        publishState();       // Publish the device state
       }
       brokerConnected = false;
     }
 
   lastBrokerCheck = millis();
   }
-}
-
-// Function to connect to MQTT broker
-void connectMQTT() {
-
-  // Build the base for all topics
-  String baseTopic = "hap/";
-  baseTopic += ROOM;
-  baseTopic += "/";
-  baseTopic += TOPIC;
-  baseTopic += "/";
-
-  // Complete the topics
-  setStateTopic = baseTopic + SET_STATE_TOPIC;
-  getStateTopic = baseTopic + GET_STATE_TOPIC;
-  enableLdrTopic = baseTopic + ENABLE_LDR_TOPIC;
-  adjustLdrTopic = baseTopic + ADJUST_LDR_TOPIC;
-
-  // Subscribe to the appropriate topics
-  mqttClient.subscribe(setStateTopic.c_str());
-  mqttClient.subscribe(enableLdrTopic.c_str());
-  mqttClient.subscribe(adjustLdrTopic.c_str());
-
-  // Start watching the topics
-  mqttClient.loop();
-
-  publishState();   // Publish the state to the broker
 }
 
 // Function to handle received commands
@@ -258,6 +256,20 @@ void publishState() {
   size_t n = serializeJson(doc, buffer);
 
   mqttClient.publish(getStateTopic.c_str(), buffer, true);
+}
+
+// Function to publish to the discovery topic
+void publishDiscovery() {
+
+  StaticJsonDocument<96> doc;
+
+  doc["id"] = deviceId;
+  doc["type"] = TYPE;
+
+  char buffer[96];
+  serializeJson(doc, buffer);
+
+  mqttClient.publish(discoveryTopic.c_str(), buffer, true);
 }
 
 // Function to print relevant variables
