@@ -11,7 +11,7 @@ public class MQTTclient {
 
     private static MQTTclient instance;
     private final Mqtt3AsyncClient client;
-    private final String ID = "11";
+    public static final String ID = "11";
     private static final String MQTT_BROKER = "10.147.19.177";
     private static final int port = 1883;
 
@@ -78,6 +78,23 @@ public class MQTTclient {
     public void disconnect() {
         Log.d("MQTT_DEBUG", "DISCONNECTED");
         client.disconnect();
+    }
+
+    public void subscribeDiscovery(MqttMessageCallback callback) {
+        client.subscribeWith()
+                .topicFilter("hap/discovery/+")
+                .qos(MqttQos.AT_LEAST_ONCE)
+                .callback(publish -> {
+                    String topic = publish.getTopic().toString();
+                    String payload = new String(
+                            publish.getPayloadAsBytes(),
+                            StandardCharsets.UTF_8
+                    );
+
+                    Log.d("MQTT_DISCOVERY", "Discovered: " + topic + " -> " + payload);
+                    callback.onMessageReceived(topic, payload);
+                })
+                .send();
     }
 
     public interface MqttConnectionCallback {

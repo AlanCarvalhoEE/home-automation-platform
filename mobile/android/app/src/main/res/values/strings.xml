@@ -5,7 +5,7 @@
     <string name="app_nickname">HAP</string>
 
     // Labels
-    <string name="room_label">Cômodo</string>
+    <string name="room_label">Cômodo:</string>
     <string name="devices_label">Dispositivos</string>
     <string name="name_label">Nome:</string>
     <string name="type_label">Tipo:</string>
@@ -13,6 +13,8 @@
     <string name="id_label">ID:</string>
     <string name="ldr_reading_label">Leitura</string>
     <string name="threshold_label">Limiar</string>
+    <string name="search_label">Buscar dispositivos</string>
+    <string name="discovered_label">Dispositivos encontrados</string>
 
     // Buttons
     <string name="confirm_button">Confirmar</string>
@@ -22,7 +24,7 @@
 
     // Hints
     <string name="logo_hint">HAP icon</string>
-    <string name="location_name_hint">Nome do local</string>
+    <string name="location_name_hint">Nome do cômodo</string>
     <string name="device_name_hint">Nome do dispositivo</string>
     <string name="device_designator_hint">Designador do dispositivo</string>
     <string name="device_id_hint">ID do dispositivo</string>
@@ -30,8 +32,9 @@
     <string name="device_topic_hint">Tópico do dispositivo</string>
 
     // Descriptions
-    <string name="location_add_description">Adicionar um novo local</string>
-    <string name="device_add_description">Adicionar um novo dispositivo</string>
+    <string name="room_add_description">Adicionar novo cômodo</string>
+    <string name="device_add_description">Adicionar novo dispositivo</string>
+    <string name="device_search_description">Buscar dispositivos</string>
     <string name="room_open_description">Mostrar informações do cômodo</string>
     <string name="configuration_button_description">Abrir janela de configurações</string>
     <string name="lamp_control_description">Ligar/Desligar lâmpada</string>
@@ -43,6 +46,8 @@
     <string name="temperature_down_button_description">Diminuir a temperatura</string>
     <string name="device_config_description">Configurar dispositivo</string>
     <string name="device_delete_description">Apagar dispositivo</string>
+    <string name="room_config_description">Configurar cômodo</string>
+    <string name="room_delete_description">Apagar cômodo</string>
 
     //  Messages
     <string name="connecting_message">Conectando ao servidor</string>

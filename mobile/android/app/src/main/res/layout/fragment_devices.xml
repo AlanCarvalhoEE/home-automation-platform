@@ -1,0 +1,70 @@
+<androidx.cardview.widget.CardView android:id="@+id/deviceCardView"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:cardBackgroundColor="@color/darkGrey"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp"
+    android:layout_marginTop="10dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/darkGrey"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/searchLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:singleLine="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/search_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/deviceSearchImageButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_search_states"
+            android:cropToPadding="false"
+            android:layout_marginStart="15dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/device_search_description"
+            app:layout_constraintStart_toEndOf="@id/searchLabelTextView"
+            app:layout_constraintTop_toTopOf="@id/searchLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@id/searchLabelTextView"/>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchLabelTextView">
+
+            <LinearLayout
+                android:id="@+id/devicesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

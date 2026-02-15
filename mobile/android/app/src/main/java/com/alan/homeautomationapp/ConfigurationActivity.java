@@ -6,16 +6,25 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import org.json.JSONException;
+
 import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
 
-    private DBhandler dbHandler;    // Database handler instance
+    private DBhandler dbHandler;                        // Database handler instance
+    MQTTclient mqttClient = MQTTclient.getInstance();   // MQTT client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -42,44 +51,42 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
-        Spinner roomSpinner = findViewById(R.id.roomSpinner);
-        ImageButton roomAddImageButton = findViewById(R.id.roomAddImageButton);
-        ImageButton roomDeleteImageButton = findViewById(R.id.roomDeleteImageButton);
-        ImageButton deviceAddImageButton = findViewById(R.id.deviceAddImageButton);
+        TabLayout tabLayout = findViewById(R.id.configTabLayout);
+        ViewPager2 viewPager = findViewById(R.id.configViewPager);
 
         // Change the configuration button icon
         configurationImageButton.setImageResource(R.drawable.ic_return);
 
-        // Update the activity views from database
-        Utils.updateRooms(this, dbHandler);
-        if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler);
-        }
+        viewPager.setAdapter(new ConfigPagerAdapter(this));
+
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> {
+                    if (position == 0) tab.setText("Cômodos");
+                    else tab.setText("Dispositivos");
+                }
+        ).attach();
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
 
-        // Room add button listener
-        roomAddImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, dbHandler, "dialog_add_room", null));
+/*
+        // Subscribe to the devices discovery topic
+        mqttClient.subscribe("hap/discovery/#", (topic, message) -> {
+            try {
+                DiscoveredDevice device = DiscoveredDevice.fromJson(message);
+                DiscoveryRegistry.getInstance().upsert(device);
 
-        // Room delete button listener
-        roomDeleteImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, dbHandler, "dialog_delete_room", null));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
+
 
         // Device add button listener
         deviceAddImageButton.setOnClickListener(v ->
                 Utils.openDialog(this, dbHandler, "dialog_add_device", null));
-
-        // Room selection spinner listener
-        roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Utils.updateDevices(ConfigurationActivity.this, dbHandler);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {}
-        });
+*/
     }
 
     @Override

@@ -20,15 +20,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +34,7 @@ import org.videolan.libvlc.util.VLCVideoLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Utils {
 
@@ -65,13 +63,47 @@ public class Utils {
         roomSpinner.setAdapter(adapter);
     }
 
+    // Function to update rooms from database
+    public static void updateConfigurationRooms(View rootView, DBhandler database) {
+        LinearLayout roomsLayout = rootView.findViewById(R.id.roomsLayout);
+        roomsLayout.removeAllViews();
+        List<String> roomsList = database.getRoomsList();
+
+        for (int i = 0; i < roomsList.size(); i++) {
+            LayoutInflater inflater = (LayoutInflater)
+                    rootView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            String roomID = database.getRoomID(roomsList.get(i));
+            String roomTopic = database.getRoomTopic(roomID);
+
+            View vi = inflater.inflate(R.layout.room_info, roomsLayout, false);
+            roomsLayout.addView(vi);
+            TextView roomNameTextView = vi.findViewById(R.id.roomNameTextView);
+            TextView roomTopicTextView = vi.findViewById(R.id.roomTopicTextView);
+            ImageButton roomConfigImageButton = vi.findViewById(R.id.roomConfigImageButton);
+            ImageButton roomDeleteImageButton = vi.findViewById(R.id.roomDeleteImageButton);
+
+            roomNameTextView.setText(roomsList.get(i));
+            roomTopicTextView.setText(roomTopic);
+            String roomName = roomsList.get(i);
+
+            // Room configuration button listener
+            roomConfigImageButton.setOnClickListener(v ->
+                    Utils.openDialog(rootView, rootView.getContext(), database,"dialog_update_room", roomName));
+
+            // Room delete button listener
+            roomDeleteImageButton.setOnClickListener(v ->
+                    Utils.openDialog(rootView, rootView.getContext(), database,"dialog_delete_room", roomName));
+        }
+    }
+
     // Function to update devices from database
     @SuppressLint({"InflateParams", "SetTextI18n"})
     public static void updateDevices(Context context, DBhandler database) {
         Activity activity = (Activity) context;
         Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
-        List<String> devicesList = database.getDevicesList(roomSpinner.getSelectedItem().toString());
+        List<String> devicesList = database.getDevicesListByRoom(roomSpinner.getSelectedItem().toString());
 
         if (roomDevicesLayout.getChildCount() > 0) roomDevicesLayout.removeAllViews();
 
@@ -80,10 +112,12 @@ public class Utils {
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View vi;
 
-            String roomTopic = database.getRoomTopic(roomSpinner.getSelectedItem().toString());
-            String deviceType = database.getType(devicesList.get(i));
-            String deviceID = database.getID(devicesList.get(i));
+            String deviceID = database.getDeviceID(devicesList.get(i));
+            String deviceType = database.getDeviceType(deviceID);
             String deviceTopic = database.getDeviceTopic(deviceID);
+            String roomName = roomSpinner.getSelectedItem().toString();
+            String roomID = database.getRoomID(roomName);
+            String roomTopic = database.getRoomTopic(roomID);
 
             if (deviceType.contains("Lamp")) {
                 vi = inflater.inflate(R.layout.device_lamp, null);
@@ -136,145 +170,47 @@ public class Utils {
 
                         // Update UI on main thread
                         activity.runOnUiThread(() -> {
-                            if (ds.loadOn) lampControlToggleButton.setChecked(true);
-                            else lampControlToggleButton.setChecked(false);
+                            lampControlToggleButton.setChecked(ds.loadOn);
 
                             lampLdrToggleButton.setChecked(ds.ldrEnabled);
                             lampControlToggleButton.setClickable(!ds.ldrEnabled);
                         });
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        e.printStackTrace();}
                 });
 
-                if (context instanceof MainActivity) {
-                    lampControlToggleButton.setVisibility(View.VISIBLE);
-                    lampConfigImageButton.setVisibility(View.INVISIBLE);
-                    lampDeleteImageButton.setVisibility(View.INVISIBLE);
+                lampControlToggleButton.setVisibility(View.VISIBLE);
+                lampConfigImageButton.setVisibility(View.INVISIBLE);
+                lampDeleteImageButton.setVisibility(View.INVISIBLE);
 
-                    lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        String setStateTopic = "hap/";
-                        setStateTopic += roomTopic + "/";
-                        setStateTopic += deviceTopic + "/";
-                        setStateTopic += "set_state";
+                lampControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                    String setStateTopic = "hap/";
+                    setStateTopic += roomTopic + "/";
+                    setStateTopic += deviceTopic + "/";
+                    setStateTopic += "set_state";
 
-                        if (isChecked) mqttClient.publish(setStateTopic, "ON");
-                        else mqttClient.publish(setStateTopic, "OFF");
-                    });
+                    if (isChecked) mqttClient.publish(setStateTopic, "ON");
+                    else mqttClient.publish(setStateTopic, "OFF");
+                });
 
-                    if (deviceType.contains("LDR")) {
-                        lampLdrToggleButton.setVisibility(View.VISIBLE);
+                if (deviceType.contains("LDR")) {
+                    lampLdrToggleButton.setVisibility(View.VISIBLE);
 
-                        lampLdrToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                            String enableLdrTopic = "hap/";
-                            enableLdrTopic += roomTopic + "/";
-                            enableLdrTopic += deviceTopic + "/";
-                            enableLdrTopic += "enable_ldr";
+                    lampLdrToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                        String enableLdrTopic = "hap/";
+                        enableLdrTopic += roomTopic + "/";
+                        enableLdrTopic += deviceTopic + "/";
+                        enableLdrTopic += "enable_ldr";
 
-                            if (isChecked) {
-                                mqttClient.publish(enableLdrTopic, "ENABLE");
-                                lampControlToggleButton.setClickable(false);
-                            }
-                            else {
-                                mqttClient.publish(enableLdrTopic, "DISABLE");
-                                lampControlToggleButton.setClickable(true);
-                            }
-                        });
-                    }
-
-                } else if (context instanceof ConfigurationActivity) {
-                    lampControlToggleButton.setVisibility(View.INVISIBLE);
-                    lampLdrToggleButton.setVisibility(View.INVISIBLE);
-                    lampConfigImageButton.setVisibility(View.VISIBLE);
-                    lampDeleteImageButton.setVisibility(View.VISIBLE);
-
-                    lampConfigImageButton.setOnClickListener(v -> {
-                        String name = (String) lampNameTextView.getText();
-                        openDialog(context, database, "dialog_config_ldr", name);
-                    });
-
-                    lampDeleteImageButton.setOnClickListener(v -> {
-                        String name = (String) lampNameTextView.getText();
-                        openDialog(context, database, "dialog_delete_device", name);
-                    });
-                }
-            }
-
-            else if(deviceType.contains("Wall socket")) {
-                vi = inflater.inflate(R.layout.device_socket, null);
-                TextView socketNameTextView = vi.findViewById(R.id.socketNameTextView);
-                ToggleButton socketControlToggleButton = vi.findViewById(R.id.socketControlToggleButton);
-                ImageButton socketConfigImageButton = vi.findViewById(R.id.socketConfigImageButton);
-                ImageButton socketDeleteImageButton = vi.findViewById(R.id.socketDeleteImageButton);
-
-                socketNameTextView.setText(devicesList.get(i));
-                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                        MATCH_PARENT, WRAP_CONTENT));
-
-                socketControlToggleButton.setTag(deviceID);
-
-                if (context instanceof MainActivity) {
-                    socketControlToggleButton.setVisibility(View.VISIBLE);
-                    socketConfigImageButton.setVisibility(View.INVISIBLE);
-                    socketDeleteImageButton.setVisibility(View.INVISIBLE);
-
-                    socketControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        //if (isChecked) mqttClient.publish("SET-" + designator + "_ON");
-                        //else mqttClient.publish("SET-" + designator + "_OFF");
-                    });
-                } else if (context instanceof ConfigurationActivity) {
-                    socketControlToggleButton.setVisibility(View.INVISIBLE);
-                    socketConfigImageButton.setVisibility(View.VISIBLE);
-                    socketDeleteImageButton.setVisibility(View.VISIBLE);
-
-                    socketConfigImageButton.setOnClickListener(v -> {
-                        String name = (String) socketNameTextView.getText();
-                        openDialog(context, database, "dialog_config_device", name);
-                    });
-
-                    socketDeleteImageButton.setOnClickListener(v -> {
-                        String name = (String) socketNameTextView.getText();
-                        openDialog(context, database, "dialog_delete_device", name);
-                    });
-                }
-            }
-
-            else if(deviceType.contains("Door")) {
-                vi = inflater.inflate(R.layout.device_door, null);
-                TextView doorNameTextView = vi.findViewById(R.id.doorNameTextView);
-                ToggleButton doorControlToggleButton = vi.findViewById(R.id.doorControlToggleButton);
-                ImageButton doorConfigImageButton = vi.findViewById(R.id.doorConfigImageButton);
-                ImageButton doorDeleteImageButton = vi.findViewById(R.id.doorDeleteImageButton);
-
-                doorNameTextView.setText(devicesList.get(i));
-                roomDevicesLayout.addView(vi, 0, new ViewGroup.LayoutParams(
-                        MATCH_PARENT, WRAP_CONTENT));
-
-                doorControlToggleButton.setTag(deviceID);
-
-                if (context instanceof MainActivity) {
-                    doorControlToggleButton.setVisibility(View.VISIBLE);
-                    doorConfigImageButton.setVisibility(View.INVISIBLE);
-                    doorDeleteImageButton.setVisibility(View.INVISIBLE);
-
-                    doorControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        //if (isChecked) tcpClient.sendMessage("SET-" + designator + "_ON");
-                        //else tcpClient.sendMessage("SET-" + designator + "_OFF");
-                    });
-                } else if (context instanceof ConfigurationActivity) {
-                    doorControlToggleButton.setVisibility(View.INVISIBLE);
-                    doorConfigImageButton.setVisibility(View.VISIBLE);
-                    doorDeleteImageButton.setVisibility(View.VISIBLE);
-
-                    doorConfigImageButton.setOnClickListener(v -> {
-                        String name = (String) doorNameTextView.getText();
-                        openDialog(context, database, "dialog_config_device", name);
-                    });
-
-                    doorDeleteImageButton.setOnClickListener(v -> {
-                        String name = (String) doorNameTextView.getText();
-                        openDialog(context, database, "dialog_delete_device", name);
+                        if (isChecked) {
+                            mqttClient.publish(enableLdrTopic, "ENABLE");
+                            lampControlToggleButton.setClickable(false);
+                        }
+                        else {
+                            mqttClient.publish(enableLdrTopic, "DISABLE");
+                            lampControlToggleButton.setClickable(true);
+                        }
                     });
                 }
             }
@@ -296,37 +232,19 @@ public class Utils {
 
                 cameraControlToggleButton.setTag(deviceID);
 
-                if (context instanceof MainActivity) {
-                    cameraControlToggleButton.setVisibility(View.VISIBLE);
-                    cameraConfigImageButton.setVisibility(View.INVISIBLE);
-                    cameraDeleteImageButton.setVisibility(View.INVISIBLE);
+                cameraControlToggleButton.setVisibility(View.VISIBLE);
+                cameraConfigImageButton.setVisibility(View.INVISIBLE);
+                cameraDeleteImageButton.setVisibility(View.INVISIBLE);
 
-                    cameraControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-                        if (isChecked) {
-                            videoLayout.setVisibility(View.VISIBLE);
-                            streamPlayer.startVideo(rtspUrl);
-                        } else {
-                            videoLayout.setVisibility(View.GONE);
-                            streamPlayer.stopVideo();
-                        }
-                    });
-
-
-                } else if (context instanceof ConfigurationActivity) {
-                    cameraControlToggleButton.setVisibility(View.INVISIBLE);
-                    cameraConfigImageButton.setVisibility(View.VISIBLE);
-                    cameraDeleteImageButton.setVisibility(View.VISIBLE);
-
-                    cameraConfigImageButton.setOnClickListener(v -> {
-                        String name = (String) cameraNameTextView.getText();
-                        openDialog(context, database, "dialog_config_device", name);
-                    });
-
-                    cameraDeleteImageButton.setOnClickListener(v -> {
-                        String name = (String) cameraNameTextView.getText();
-                        openDialog(context, database, "dialog_delete_device", name);
-                    });
-                }
+                cameraControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                    if (isChecked) {
+                        videoLayout.setVisibility(View.VISIBLE);
+                        streamPlayer.startVideo(rtspUrl);
+                    } else {
+                        videoLayout.setVisibility(View.GONE);
+                        streamPlayer.stopVideo();
+                    }
+                });
             }
 
             else if(deviceType.contains("Air conditioner")) {
@@ -372,8 +290,37 @@ public class Utils {
         }
     }
 
+    // Function to update devices from database
+    @SuppressLint({"InflateParams", "SetTextI18n"})
+    public static void updateConfigurationDevices(View rootView, DBhandler database) {
+
+        LinearLayout devicesLayout = rootView.findViewById(R.id.devicesLayout);
+        List<String> devicesList = database.getDevicesList();
+
+        for (int i = 0; i < devicesList.size(); i++) {
+            LayoutInflater inflater = (LayoutInflater)
+                    rootView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            String deviceID = database.getDeviceID(devicesList.get(i));
+            String deviceType = database.getDeviceType(deviceID);
+            String deviceRoom = database.getDeviceRoom(deviceID);
+
+            View vi = inflater.inflate(R.layout.device_info, devicesLayout, false);
+            devicesLayout.addView(vi);
+            TextView deviceNameTextView = vi.findViewById(R.id.deviceNameTextView);
+            TextView deviceIdTextView = vi.findViewById(R.id.deviceIdTextView);
+            TextView deviceRoomTextView = vi.findViewById(R.id.deviceRoomTextView);
+            TextView deviceTypeTextView = vi.findViewById(R.id.deviceTypeTextView);
+
+            deviceNameTextView.setText(devicesList.get(i));
+            deviceIdTextView.setText(deviceID);
+            deviceTypeTextView.setText(deviceType);
+            deviceRoomTextView.setText(deviceRoom);
+        }
+    }
+
     @SuppressLint("InflateParams")
-    public static void openDialog(Context context, DBhandler dbHandler, String dialogType, String deviceName) {
+    public static void openDialog(View rootView, Context context, DBhandler dbHandler, String dialogType, String deviceName) {
         Activity activity = (Activity) context;
         ConstraintLayout backgroundLayout = activity.findViewById(R.id.mainLayout);
         backgroundLayout.setAlpha(0.25f);
@@ -381,6 +328,9 @@ public class Utils {
         View dialogView = null;
 
         if (dialogType.equals("dialog_add_room")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_add_room, null);
+        }
+        else if (dialogType.equals("dialog_update_room")) {
             dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_add_room, null);
         }
         else if (dialogType.equals("dialog_delete_room")) {
@@ -413,137 +363,156 @@ public class Utils {
             dialog.dismiss();
         });
 
-        if (dialogType.equals("dialog_add_room")) {
+        switch (dialogType) {
 
-            EditText nameEditText = dialog.findViewById(R.id.nameEditText);
-            EditText topicEditText = dialog.findViewById(R.id.topicEditText);
+            case "dialog_add_room" -> {
 
-            nameEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {}
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    confirmButton.setEnabled(s.length() > 0);
-                }
-            });
+                EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+                EditText topicEditText = dialog.findViewById(R.id.topicEditText);
 
-            topicEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {}
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    confirmButton.setEnabled(s.length() > 0);
-                }
-            });
+                nameEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        confirmButton.setEnabled(s.length() > 0);
+                    }
+                });
 
-            confirmButton.setOnClickListener(v -> {
-                String roomName = nameEditText.getText().toString();
-                String roomTopic = topicEditText.getText().toString();
-                dbHandler.addRoom(roomName, roomTopic);
-                Utils.updateRooms(context, dbHandler);
+                topicEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        confirmButton.setEnabled(s.length() > 0);
+                    }
+                });
 
-                String payload = roomName + "," + roomTopic;
-                mqttClient.publish("hap/main/database/add_room", payload);
+                confirmButton.setOnClickListener(v -> {
+                    String roomID = UUID.randomUUID().toString();
+                    String roomName = nameEditText.getText().toString();
+                    String roomTopic = topicEditText.getText().toString();
 
-                backgroundLayout.setAlpha(1f);
-                dialog.dismiss();
-            });
-        }
+                    dbHandler.addRoom(roomID, roomName, roomTopic);
+                    Utils.updateConfigurationRooms(rootView, dbHandler);
 
-        else if (dialogType.equals("dialog_delete_room")) {
+                    String payload = roomID + "," + roomName + "," + roomTopic;
+                    mqttClient.publish("hap/main/database/add_room", payload);
 
-            confirmButton.setOnClickListener(view -> {
-                Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
-                String roomName = roomSpinner.getSelectedItem().toString();
-                dbHandler.deleteRoom(roomName);
-                Utils.updateRooms(context, dbHandler);
-
-                mqttClient.publish("hap/main/database/delete_room", roomName);
-
-                backgroundLayout.setAlpha(1f);
-                dialog.dismiss();
-            });
-        }
-
-
-        else if (dialogType.equals("dialog_add_device")) {
-
-            Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
-            EditText nameEditText = dialog.findViewById(R.id.nameEditText);
-            RadioGroup typeRadioGroup = dialog.findViewById(R.id.typeRadioGroup);
-            EditText idEditText = dialog.findViewById(R.id.idEditText);
-            EditText topicEditText = dialog.findViewById(R.id.topicEditText);
-
-            List<String> typeList = dbHandler.getTypeList();
-            List<Integer> idList = new ArrayList<>();
-            String[] deviceInfo = new String[4];
-
-            for (int i = 0; i < typeList.size(); i++) {
-                RadioButton typeRadio = new RadioButton(context);
-                typeRadioGroup.addView(typeRadio);
-                idList.add(typeRadio.getId());
-                typeRadio.setText(typeList.get(i));
-                typeRadio.setTextSize(18);
-                typeRadio.setHeight(120);
-                typeRadio.setSingleLine();
-                typeRadio.setTextColor(ContextCompat.getColor(activity.getApplicationContext(), R.color.lightGrey));
+                    backgroundLayout.setAlpha(1f);
+                    dialog.dismiss();
+                });
             }
 
-            nameEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {
-                    deviceInfo[0] = s.toString();
-                    checkInfo(deviceInfo, confirmButton);
-                }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            });
+            case "dialog_update_room" -> {
 
-            typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                RadioButton checkedRadioButton = group.findViewById(checkedId);
-                boolean isChecked = checkedRadioButton.isChecked();
-                if (isChecked) deviceInfo[1] = checkedRadioButton.getText().toString();
-                checkInfo(deviceInfo, confirmButton);
-            });
+                EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+                EditText topicEditText = dialog.findViewById(R.id.topicEditText);
 
-            idEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {
-                    deviceInfo[2] = s.toString();
-                    checkInfo(deviceInfo, confirmButton);
-                }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            });
+                String roomID = dbHandler.getRoomID(deviceName);
+                String roomTopic = dbHandler.getRoomTopic(roomID);
+                nameEditText.setText(deviceName);
+                topicEditText.setText(roomTopic);
 
-            topicEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {
-                    deviceInfo[3] = s.toString();
-                    checkInfo(deviceInfo, confirmButton);
-                }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            });
+                nameEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        confirmButton.setEnabled(s.length() > 0);
+                    }
+                });
 
-            confirmButton.setOnClickListener(view -> {
-                String name = deviceInfo[0];
-                String type = deviceInfo[1];
-                String id = deviceInfo[2];
-                String topic = deviceInfo[3];
+                topicEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        confirmButton.setEnabled(s.length() > 0);
+                    }
+                });
 
-                String room = roomSpinner.getSelectedItem().toString();
+                confirmButton.setOnClickListener(v -> {
+                    String newRoomName = nameEditText.getText().toString();
+                    String newRoomTopic = topicEditText.getText().toString();
 
-                dbHandler.addDevice(id, name, room, type, topic);
+                    dbHandler.updateRoom(roomID, newRoomName, newRoomTopic);
+                    Utils.updateConfigurationRooms(rootView, dbHandler);
 
-                String payload = id + "," + name + "," + room + "," + type + "," + topic;
-                mqttClient.publish("hap/main/database/add_device", payload);
-                updateDevices(context, dbHandler);
+                    String payload = roomID + "," + newRoomName + "," + newRoomTopic;
+                    mqttClient.publish("hap/main/database/update_room", payload);
+
+                    backgroundLayout.setAlpha(1f);
+                    dialog.dismiss();
+                });
+            }
+
+            case "dialog_delete_room" -> confirmButton.setOnClickListener(view -> {
+
+                String roomID = dbHandler.getRoomID(deviceName);
+                dbHandler.deleteRoom(roomID);
+                Utils.updateConfigurationRooms(rootView, dbHandler);
+
+                mqttClient.publish("hap/main/database/delete_room", roomID);
 
                 backgroundLayout.setAlpha(1f);
                 dialog.dismiss();
             });
-        }
 
-        else if (dialogType.equals("dialog_delete_device")) {
+            case "dialog_add_device" -> {
 
-            confirmButton.setOnClickListener(view -> {
-                String deviceID = dbHandler.getID(deviceName);
+                Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
+                EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+                EditText topicEditText = dialog.findViewById(R.id.topicEditText);
+
+                List<String> typeList = dbHandler.getTypeList();
+                List<Integer> idList = new ArrayList<>();
+                String[] deviceInfo = new String[4];
+
+                nameEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {
+                        deviceInfo[0] = s.toString();
+                        checkInfo(deviceInfo, confirmButton);
+                    }
+
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+                });
+
+                topicEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {
+                        deviceInfo[3] = s.toString();
+                        checkInfo(deviceInfo, confirmButton);
+                    }
+
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+                });
+
+                confirmButton.setOnClickListener(view -> {
+                    String name = deviceInfo[0];
+                    String type = deviceInfo[1];
+                    String id = deviceInfo[2];
+                    String topic = deviceInfo[3];
+
+                    String room = roomSpinner.getSelectedItem().toString();
+
+                    dbHandler.addDevice(id, name, room, type, topic);
+
+                    String payload = id + "," + name + "," + room + "," + type + "," + topic;
+                    mqttClient.publish("hap/main/database/add_device", payload);
+                    updateDevices(context, dbHandler);
+
+                    backgroundLayout.setAlpha(1f);
+                    dialog.dismiss();
+                });
+            }
+
+            case "dialog_delete_device" -> confirmButton.setOnClickListener(view -> {
+
+                String deviceID = dbHandler.getDeviceID(deviceName);
                 dbHandler.deleteDevice(deviceID);
 
                 mqttClient.publish("hap/main/database/delete_device", deviceID);
@@ -552,66 +521,64 @@ public class Utils {
                 backgroundLayout.setAlpha(1f);
                 dialog.dismiss();
             });
-        }
 
-        else if (dialogType.equals("dialog_config_ldr")) {
+            case "dialog_config_ldr" -> {
 
-            // Find the device view by device ID stored in DB
-            String deviceID = dbHandler.getID(deviceName);
-            LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
-            View deviceView = findViewByTag(deviceID, roomDevicesLayout);
-            TextView readingTextView = dialog.findViewById(R.id.readingTextView);
-            SeekBar thresholdSeekBar = dialog.findViewById(R.id.thresholdSeekBar);
-            TextView thresholdTextView = dialog.findViewById(R.id.thresholdTextView);
+                String deviceID = dbHandler.getDeviceID(deviceName);
+                LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
+                View deviceView = findViewByTag(deviceID, roomDevicesLayout);
+                TextView readingTextView = dialog.findViewById(R.id.readingTextView);
+                SeekBar thresholdSeekBar = dialog.findViewById(R.id.thresholdSeekBar);
+                TextView thresholdTextView = dialog.findViewById(R.id.thresholdTextView);
 
-            thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) thresholdTextView.setText(String.valueOf(progress));
-                    confirmButton.setEnabled(true);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {}
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {}
-            });
-
-            if (deviceView != null) {
-                DeviceState ds = (DeviceState) deviceView.getTag(R.id.lampNameTextView);
-
-                // Populate dialog UI with last known values
-                if (ds != null) {
-                    if (ds.ldrValue != -1) {
-                        readingTextView.setText(String.valueOf(ds.ldrValue));
+                thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if (fromUser) thresholdTextView.setText(String.valueOf(progress));
+                        confirmButton.setEnabled(true);
                     }
-                    if (ds.ldrThreshold != -1) {
-                        thresholdSeekBar.setProgress(ds.ldrThreshold);
-                        thresholdTextView.setText(String.valueOf(ds.ldrThreshold));
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {}
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {}
+                });
+
+                if (deviceView != null) {
+                    DeviceState ds = (DeviceState) deviceView.getTag(R.id.lampNameTextView);
+
+                    if (ds != null) {
+                        if (ds.ldrValue != -1) {
+                            readingTextView.setText(String.valueOf(ds.ldrValue));
+                        }
+                        if (ds.ldrThreshold != -1) {
+                            thresholdSeekBar.setProgress(ds.ldrThreshold);
+                            thresholdTextView.setText(String.valueOf(ds.ldrThreshold));
+                        }
                     }
                 }
+
+                confirmButton.setOnClickListener(view -> {
+
+                    Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
+                    String roomName = roomSpinner.getSelectedItem().toString();
+                    String roomID = dbHandler.getRoomID(roomName);
+                    String roomTopic = dbHandler.getRoomTopic(roomID);
+                    String deviceTopic = dbHandler.getDeviceTopic(deviceID);
+
+                    String payload = (String) thresholdTextView.getText();
+
+                    String adjustLdrTopic = "hap/";
+                    adjustLdrTopic += roomTopic + "/";
+                    adjustLdrTopic += deviceTopic + "/";
+                    adjustLdrTopic += "adjust_ldr";
+                    mqttClient.publish(adjustLdrTopic, payload);
+                    updateDevices(context, dbHandler);
+
+                    backgroundLayout.setAlpha(1f);
+                    dialog.dismiss();
+                });
             }
-
-            confirmButton.setOnClickListener(view -> {
-
-                Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
-                String roomName = roomSpinner.getSelectedItem().toString();
-                String roomTopic = dbHandler.getRoomTopic(roomName);
-                String deviceTopic = dbHandler.getDeviceTopic(deviceID);
-
-                String payload = (String) thresholdTextView.getText();
-
-                String adjustLdrTopic = "hap/";
-                adjustLdrTopic += roomTopic + "/";
-                adjustLdrTopic += deviceTopic + "/";
-                adjustLdrTopic += "adjust_ldr";
-                mqttClient.publish(adjustLdrTopic, payload);
-                updateDevices(context, dbHandler);
-
-                backgroundLayout.setAlpha(1f);
-                dialog.dismiss();
-            });
         }
     }
 
@@ -647,5 +614,4 @@ public class Utils {
     public static View findViewByTag(String tag, LinearLayout roomDevicesLayout) {
         return findViewByTag(roomDevicesLayout, tag);
     }
-
 }
