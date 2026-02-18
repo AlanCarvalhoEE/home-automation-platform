@@ -29,6 +29,7 @@
     <string name="device_designator_hint">Designador do dispositivo</string>
     <string name="device_id_hint">ID do dispositivo</string>
     <string name="room_topic_hint">Tópico do cômodo</string>
+    <string name="device_room_hint">Cômodo do dispositivo</string>
     <string name="device_topic_hint">Tópico do dispositivo</string>
 
     // Descriptions

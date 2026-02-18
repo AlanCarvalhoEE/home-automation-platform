@@ -31,7 +31,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.videolan.libvlc.util.VLCVideoLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -320,7 +319,7 @@ public class Utils {
     }
 
     @SuppressLint("InflateParams")
-    public static void openDialog(View rootView, Context context, DBhandler dbHandler, String dialogType, String deviceName) {
+    public static void openDialog(View rootView, Context context, DBhandler dbHandler, String dialogType, String data) {
         Activity activity = (Activity) context;
         ConstraintLayout backgroundLayout = activity.findViewById(R.id.mainLayout);
         backgroundLayout.setAlpha(0.25f);
@@ -335,6 +334,9 @@ public class Utils {
         }
         else if (dialogType.equals("dialog_delete_room")) {
             dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_delete_room, null);
+        }
+        else if (dialogType.contains("dialog_discovered_devices")) {
+            dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_discovered_devices, null);
         }
         else if (dialogType.contains("dialog_add_device")) {
             dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_add_device, null);
@@ -407,9 +409,9 @@ public class Utils {
                 EditText nameEditText = dialog.findViewById(R.id.nameEditText);
                 EditText topicEditText = dialog.findViewById(R.id.topicEditText);
 
-                String roomID = dbHandler.getRoomID(deviceName);
+                String roomID = dbHandler.getRoomID(data);
                 String roomTopic = dbHandler.getRoomTopic(roomID);
-                nameEditText.setText(deviceName);
+                nameEditText.setText(data);
                 topicEditText.setText(roomTopic);
 
                 nameEditText.addTextChangedListener(new TextWatcher() {
@@ -445,7 +447,7 @@ public class Utils {
 
             case "dialog_delete_room" -> confirmButton.setOnClickListener(view -> {
 
-                String roomID = dbHandler.getRoomID(deviceName);
+                String roomID = dbHandler.getRoomID(data);
                 dbHandler.deleteRoom(roomID);
                 Utils.updateConfigurationRooms(rootView, dbHandler);
 
@@ -455,55 +457,68 @@ public class Utils {
                 dialog.dismiss();
             });
 
+            case "dialog_discovered_devices" -> {
+
+                DeviceDiscoveryManager discoveryManager = new DeviceDiscoveryManager();
+                LinearLayout discoveredLayout = dialog.findViewById(R.id.discoveredLayout);
+
+                discoveryManager.clear();
+                if (discoveredLayout.getChildCount() > 0) discoveredLayout.removeAllViews();
+
+                discoveryManager.startDiscovery(device -> activity.runOnUiThread(() -> {
+
+                    LayoutInflater inflater = (LayoutInflater)
+                            rootView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View vi = inflater.inflate(R.layout.device_discovered, discoveredLayout, false);
+                    discoveredLayout.addView(vi);
+
+                    TextView deviceIdTextView = vi.findViewById(R.id.deviceIdTextView);
+                    TextView deviceTypeTextView = vi.findViewById(R.id.deviceTypeTextView);
+                    ImageButton deviceAddImageButton = vi.findViewById(R.id.deviceAddImageButton);
+
+                    deviceIdTextView.setText(device.id);
+                    deviceTypeTextView.setText(device.type);
+                    String deviceData = device.id + "," + device.type;
+
+                    deviceAddImageButton.setOnClickListener(vv ->
+                            Utils.openDialog(rootView, context, dbHandler, "dialog_add_device", deviceData));
+                }));
+            }
+
             case "dialog_add_device" -> {
 
-                Spinner roomSpinner = activity.findViewById(R.id.roomSpinner);
                 EditText nameEditText = dialog.findViewById(R.id.nameEditText);
-                EditText topicEditText = dialog.findViewById(R.id.topicEditText);
-
-                List<String> typeList = dbHandler.getTypeList();
-                List<Integer> idList = new ArrayList<>();
-                String[] deviceInfo = new String[4];
+                EditText roomEditText = dialog.findViewById(R.id.roomEditText);
 
                 nameEditText.addTextChangedListener(new TextWatcher() {
-                    public void afterTextChanged(Editable s) {
-                        deviceInfo[0] = s.toString();
-                        checkInfo(deviceInfo, confirmButton);
-                    }
-
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        confirmButton.setEnabled(s.length() > 0);
                     }
                 });
 
-                topicEditText.addTextChangedListener(new TextWatcher() {
-                    public void afterTextChanged(Editable s) {
-                        deviceInfo[3] = s.toString();
-                        checkInfo(deviceInfo, confirmButton);
-                    }
-
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
+                roomEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        confirmButton.setEnabled(s.length() > 0);
                     }
                 });
 
-                confirmButton.setOnClickListener(view -> {
-                    String name = deviceInfo[0];
-                    String type = deviceInfo[1];
-                    String id = deviceInfo[2];
-                    String topic = deviceInfo[3];
+                confirmButton.setOnClickListener(v -> {
+                    String deviceName = nameEditText.getText().toString();
+                    String deviceRoom = roomEditText.getText().toString();
 
-                    String room = roomSpinner.getSelectedItem().toString();
+                    String[] deviceData = data.split(",");
+                    String deviceID = deviceData[0];
+                    String deviceType = deviceData[1];
 
-                    dbHandler.addDevice(id, name, room, type, topic);
+                    dbHandler.addDevice(deviceID, deviceName, deviceRoom, deviceType, deviceID);
+                    Utils.updateConfigurationRooms(rootView, dbHandler);
 
-                    String payload = id + "," + name + "," + room + "," + type + "," + topic;
-                    mqttClient.publish("hap/main/database/add_device", payload);
-                    updateDevices(context, dbHandler);
+                    String payload = deviceID + "," + deviceName + "," + deviceRoom + ", " + deviceType + ", " + deviceID;
+                    mqttClient.publish("hap/main/database/add_room", payload);
 
                     backgroundLayout.setAlpha(1f);
                     dialog.dismiss();
@@ -512,7 +527,7 @@ public class Utils {
 
             case "dialog_delete_device" -> confirmButton.setOnClickListener(view -> {
 
-                String deviceID = dbHandler.getDeviceID(deviceName);
+                String deviceID = dbHandler.getDeviceID(data);
                 dbHandler.deleteDevice(deviceID);
 
                 mqttClient.publish("hap/main/database/delete_device", deviceID);
@@ -524,7 +539,7 @@ public class Utils {
 
             case "dialog_config_ldr" -> {
 
-                String deviceID = dbHandler.getDeviceID(deviceName);
+                String deviceID = dbHandler.getDeviceID(data);
                 LinearLayout roomDevicesLayout = activity.findViewById(R.id.roomDevicesLayout);
                 View deviceView = findViewByTag(deviceID, roomDevicesLayout);
                 TextView readingTextView = dialog.findViewById(R.id.readingTextView);

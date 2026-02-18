@@ -11,7 +11,7 @@
 #include "credentials.h"
 
 // Device Parameters
-#define TYPE "LAMP"
+#define TYPE "lamp"
 #define HAP_TOPIC "hap"
 #define DEVICE_TOPIC "device"
 #define SET_STATE_TOPIC "set_state"

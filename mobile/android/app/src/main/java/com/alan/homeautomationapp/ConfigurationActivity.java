@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +15,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.json.JSONException;
-
 import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
 
     private DBhandler dbHandler;                        // Database handler instance
-    MQTTclient mqttClient = MQTTclient.getInstance();   // MQTT client instance
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -68,25 +63,6 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Configuration button listener
         configurationImageButton.setOnClickListener(v -> finish());
-
-/*
-        // Subscribe to the devices discovery topic
-        mqttClient.subscribe("hap/discovery/#", (topic, message) -> {
-            try {
-                DiscoveredDevice device = DiscoveredDevice.fromJson(message);
-                DiscoveryRegistry.getInstance().upsert(device);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-
-
-        // Device add button listener
-        deviceAddImageButton.setOnClickListener(v ->
-                Utils.openDialog(this, dbHandler, "dialog_add_device", null));
-*/
     }
 
     @Override
