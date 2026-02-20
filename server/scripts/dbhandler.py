@@ -97,13 +97,16 @@ def getRooms():
 
 
 # Function to add a new room
-def addRoom(roomID, roomName, roomTopic):
+def addRoom(roomID, roomName):
+    print(roomID)
+    print("\n")
+    print(roomName)
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
 
     try:
-        query = "INSERT INTO " + setup.dbStructure[3][0] + " (" + setup.dbStructure[4][0] + ", " + setup.dbStructure[4][1] + ", " + setup.dbStructure[4][2] + ") VALUES (?, ?, ?)"
-        cursor.execute(query, (roomID, roomName, roomTopic))
+        query = "INSERT INTO " + setup.dbStructure[3][0] + " (" + setup.dbStructure[4][0] + ", " + setup.dbStructure[4][1] + ") VALUES (?, ?)"
+        cursor.execute(query, (roomID, roomName))
         connection.commit()
     except lite.Error as e:
         connection.rollback()
@@ -113,13 +116,13 @@ def addRoom(roomID, roomName, roomTopic):
         connection.close()
 
 # Function to update a room
-def updateRoom(roomID, roomName, roomTopic):
+def updateRoom(roomID, roomName):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
 
     try:
-        query = "UPDATE " + setup.dbStructure[3][0] + " SET " + setup.dbStructure[4][1] + " = ?, " + setup.dbStructure[4][2] + " = ? WHERE " + setup.dbStructure[4][0] + " = ?"
-        cursor.execute(query, (roomName, roomTopic, roomID))
+        query = "UPDATE " + setup.dbStructure[3][0] + " SET " + setup.dbStructure[4][1] + " = ? WHERE " + setup.dbStructure[4][0] + " = ?"
+        cursor.execute(query, (roomName, roomID))
         connection.commit()
     except lite.Error as e:
         connection.rollback()
@@ -154,6 +157,24 @@ def addDevice(deviceID, deviceName, deviceRoom, deviceType, deviceTopic):
     try:
         query = "INSERT INTO " + setup.dbStructure[0][0] + " (" + setup.dbStructure[1][0] + ", " + setup.dbStructure[1][1] + ", " + setup.dbStructure[1][2] + ", " + setup.dbStructure[1][3] + ", " + setup.dbStructure[1][4] + ") VALUES (?, ?, ?, ?, ?)"
         cursor.execute(query, (deviceID, deviceName, deviceRoom, deviceType, deviceTopic))
+        connection.commit()
+    except lite.Error as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()
+
+
+# Function to update a devices
+def updateDevice(deviceID, deviceName, deviceRoom, deviceType, deviceTopic):
+    connection = lite.connect(setup.dbName)
+    cursor = connection.cursor()
+
+    try:
+        query = "UPDATE " + setup.dbStructure[0][0] + " SET " + setup.dbStructure[1][1] + " = ?, " + setup.dbStructure[1][2] + " = ?, " + setup.dbStructure[1][3] + " = ?, " + setup.dbStructure[1][4] + " = ? WHERE " + setup.dbStructure[1][0] + " = ?"
+
+        cursor.execute(query, (deviceName, deviceRoom, deviceType, deviceTopic, deviceID))
         connection.commit()
     except lite.Error as e:
         connection.rollback()

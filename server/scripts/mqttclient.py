@@ -39,11 +39,11 @@ def on_message(client, userdata, message):
     try:
         if topic == "hap/main/database/add_room":
             data = payload.split(',')
-            dbhandler.addRoom(data[0], data[1], data[2])
+            dbhandler.addRoom(data[0], data[1])
 
         elif topic == "hap/main/database/update_room":
             data = payload.split(',')
-            dbhandler.updateRoom(data[0], data[1], data[2])
+            dbhandler.updateRoom(data[0], data[1])
 
         elif topic == "hap/main/database/delete_room":
             dbhandler.deleteRoom(payload)
