@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class DBhandler extends SQLiteOpenHelper {
     private static final String ROOMS_TABLE_NAME = "Rooms";
     private static final String ROOM_ID_COL = "ID";
     private static final String ROOM_NAME_COL = "Room";
-    private static final String ROOM_TOPIC_COL = "Topic";
 
     private static final String TYPES_TABLE_NAME = "Types";
     private static final String TYPE_ID_COL = "ID";
@@ -53,7 +53,7 @@ public class DBhandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + DEVICES_TABLE_NAME + " ("
-                + DEVICE_ID_COL + " INTEGER, "
+                + DEVICE_ID_COL + " TEXT PRIMARY KEY, "
                 + DEVICE_NAME_COL + " TEXT,"
                 + DEVICE_ROOM_COL + " TEXT,"
                 + DEVICE_TYPE_COL + " TEXT,"
@@ -61,9 +61,8 @@ public class DBhandler extends SQLiteOpenHelper {
         db.execSQL(query);
 
         query = "CREATE TABLE " + ROOMS_TABLE_NAME + " ("
-                + ROOM_ID_COL + " INTEGER PRIMARY KEY, "
-                + ROOM_NAME_COL + " TEXT,"
-                + ROOM_TOPIC_COL + " TEXT)";
+                + ROOM_ID_COL + " TEXT PRIMARY KEY, "
+                + ROOM_NAME_COL + " TEXT)";
         db.execSQL(query);
 
         query = "CREATE TABLE " + TYPES_TABLE_NAME + " ("
@@ -121,23 +120,36 @@ public class DBhandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addRoom(String roomName, String roomTopic) {
+    public void addRoom(String roomID, String roomName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
+        values.put(ROOM_ID_COL, roomID);
         values.put(ROOM_NAME_COL, roomName);
-        values.put(ROOM_TOPIC_COL, roomTopic);
         db.insert(ROOMS_TABLE_NAME, null, values);
         db.close();
     }
 
-    public void deleteRoom(String roomName) {
+    public void deleteRoom(String roomID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String selection = ROOM_NAME_COL + "=?";
-        String[] selectionArgs = {roomName};
+        String selection = ROOM_ID_COL + "=?";
+        String[] selectionArgs = {roomID};
 
         db.delete(ROOMS_TABLE_NAME, selection, selectionArgs);
+        db.close();
+    }
+
+    public void updateRoom(String roomID, String newRoomName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ROOM_NAME_COL, newRoomName);
+
+        String whereClause = ROOM_ID_COL + " = ?";
+        String[] whereArgs = new String[]{roomID};
+
+        db.update(ROOMS_TABLE_NAME, values, whereClause, whereArgs);
         db.close();
     }
 
@@ -184,7 +196,7 @@ public class DBhandler extends SQLiteOpenHelper {
                         for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
 
                         if (i == 0) addDevice(fields[0], fields[1], fields[2], fields[3], fields[4]);
-                        else if (i == 1) addRoom(fields[1], fields[2]);
+                        else if (i == 1) addRoom(fields[0], fields[1]);
                         else if (i == 2) addNewType(fields[1]);
                     }
                 }
@@ -204,7 +216,33 @@ public class DBhandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public List<String> getDevicesList(String room) {
+    public List<String> getDevicesList() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_ID_COL + " from " + DEVICES_TABLE_NAME,
+                null);
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String device = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
+            list.add(device);
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<String> getDeviceIdsList() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_ID_COL + " from " + DEVICES_TABLE_NAME,
+                null);
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
+            list.add(id);
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<String> getDevicesListByRoom(String room) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<String> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT " + DEVICE_NAME_COL + " from " + DEVICES_TABLE_NAME
@@ -230,17 +268,7 @@ public class DBhandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public String getType(String deviceName) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + DEVICE_TYPE_COL + " from " + DEVICES_TABLE_NAME
-                + " WHERE " + DEVICE_NAME_COL + "='" + deviceName + "'", null);
-        cursor.moveToFirst();
-        @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(DEVICE_TYPE_COL));
-        cursor.close();
-        return type;
-    }
-
-    public String getID(String deviceName) {
+    public String getDeviceID(String deviceName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + DEVICE_ID_COL + " from "
                 + DEVICES_TABLE_NAME + " WHERE " + DEVICE_NAME_COL + "='" + deviceName
@@ -249,6 +277,28 @@ public class DBhandler extends SQLiteOpenHelper {
         @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
         cursor.close();
         return id;
+    }
+
+    public String getDeviceName(String deviceID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_NAME_COL + " from "
+                + DEVICES_TABLE_NAME + " WHERE " + DEVICE_ID_COL + "='" + deviceID
+                + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_NAME_COL));
+        cursor.close();
+        return id;
+    }
+
+    public String getDeviceRoom(String deviceID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_ROOM_COL + " from "
+                + DEVICES_TABLE_NAME + " WHERE " + DEVICE_ID_COL + "='" + deviceID
+                + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String room = cursor.getString(cursor.getColumnIndex(DEVICE_ROOM_COL));
+        cursor.close();
+        return room;
     }
 
     public String getDeviceTopic(String deviceID) {
@@ -262,15 +312,25 @@ public class DBhandler extends SQLiteOpenHelper {
         return topic;
     }
 
-    public String getRoomTopic(String roomName) {
+    public String getDeviceType(String deviceID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + ROOM_TOPIC_COL + " from "
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_TYPE_COL + " from " + DEVICES_TABLE_NAME
+                + " WHERE " + DEVICE_ID_COL + "='" + deviceID + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(DEVICE_TYPE_COL));
+        cursor.close();
+        return type;
+    }
+
+    public String getRoomID(String roomName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + ROOM_ID_COL + " from "
                 + ROOMS_TABLE_NAME + " WHERE " + ROOM_NAME_COL + "='" + roomName
                 + "'", null);
         cursor.moveToFirst();
-        @SuppressLint("Range") String topic = cursor.getString(cursor.getColumnIndex(ROOM_TOPIC_COL));
+        @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ROOM_ID_COL));
         cursor.close();
-        return topic;
+        return id;
     }
 
     @Override

@@ -4,20 +4,21 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private DBhandler dbHandler;        // Database handler instance
-    MQTTclient mqtTclient = MQTTclient.getInstance();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -46,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        Utils.updateRooms(this, dbHandler);
+        Utils.updateRooms(this, dbHandler, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler);
+            String roomName = roomSpinner.getSelectedItem().toString();
+            Utils.updateDevices(this, dbHandler, roomName, roomDevicesLayout);
         }
 
         // Configuration button listener
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Utils.updateDevices(MainActivity.this, dbHandler);
+                Utils.updateDevices(MainActivity.this, dbHandler, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -74,10 +77,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
+        LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        Utils.updateRooms(this, dbHandler);
+        Utils.updateRooms(this, dbHandler, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler);
+            Utils.updateDevices(this, dbHandler, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
         }
     }
 

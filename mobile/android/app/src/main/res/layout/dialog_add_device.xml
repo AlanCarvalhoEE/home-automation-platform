@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/device_dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
@@ -7,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardBackgroundColor="@color/mediumYellow"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
@@ -30,7 +32,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/darkGrey"
                 android:orientation="vertical"
                 android:layout_margin="5dp"
@@ -41,7 +43,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/nameTextView"
@@ -62,143 +64,58 @@
                         android:id="@+id/nameEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:imeOptions="actionDone"
                         android:singleLine="true"
                         android:hint="@string/device_name_hint"
-                        android:textColor="@color/lightGrey"
                         android:textColorHint="@color/mediumGrey"
+                        android:textColor="@color/lightGrey"
                         app:layout_constraintStart_toEndOf="@id/nameTextView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/nameTextView"
-                        app:layout_constraintBottom_toBottomOf="@id/nameTextView"/>
+                        app:layout_constraintBottom_toBottomOf="@id/nameTextView" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
                     android:layout_marginTop="15dp"
+                    android:layout_height="3dp"
                     android:background="@color/mediumGrey" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/typeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/typeTextView"
+                        android:id="@+id/roomTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
                         android:singleLine="true"
-                        android:text="@string/type_label"
+                        android:text="@string/room_label"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioGroup
-                        android:id="@+id/typeRadioGroup"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="20dp"
-                        app:layout_constraintStart_toEndOf="@id/typeTextView"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" >
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
-                    </RadioGroup>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:layout_height="3dp"
-                    android:background="@color/mediumGrey" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp" >>
-                    <TextView
-                        android:id="@+id/idTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:singleLine="true"
-                        android:text="@string/id_label"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/idEditText"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="10dp"
-                            android:hint="@string/device_id_hint"
-                            android:imeOptions="actionDone"
-                            android:singleLine="true"
-                            android:textColor="@color/lightGrey"
-                            android:textColorHint="@color/mediumGrey"
-                            app:layout_constraintBottom_toBottomOf="@id/idTextView"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/idTextView"
-                            app:layout_constraintTop_toTopOf="@id/idTextView" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:layout_height="3dp"
-                    android:background="@color/mediumGrey" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp" >
-
-                    <TextView
-                        android:id="@+id/topicTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:singleLine="true"
-                        android:text="@string/topic_label"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/topicEditText"
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/roomSpinner"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:hint="@string/device_id_hint"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:textColor="@color/lightGrey"
-                        android:textColorHint="@color/mediumGrey"
-                        app:layout_constraintBottom_toBottomOf="@id/topicTextView"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="10dp"
+                        android:paddingEnd="35dp"
+                        android:background="@drawable/spinner_main"
+                        app:layout_constraintStart_toEndOf="@id/roomTextView"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/topicTextView"
-                        app:layout_constraintTop_toTopOf="@id/topicTextView" />
+                        app:layout_constraintTop_toTopOf="@id/roomTextView"
+                        app:layout_constraintBottom_toBottomOf="@id/roomTextView"
+                        tools:ignore="RtlSymmetry" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
