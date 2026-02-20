@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/device_dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -63,7 +64,7 @@
                         android:id="@+id/nameEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:imeOptions="actionDone"
                         android:singleLine="true"
@@ -93,6 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
                         android:singleLine="true"
                         android:text="@string/room_label"
                         android:textColor="@color/white"
@@ -102,21 +104,18 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/roomEditText"
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/roomSpinner"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:hint="@string/device_room_hint"
-                        android:textColorHint="@color/mediumGrey"
-                        android:textColor="@color/lightGrey"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="10dp"
+                        android:paddingEnd="35dp"
+                        android:background="@drawable/spinner_main"
                         app:layout_constraintStart_toEndOf="@id/roomTextView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/roomTextView"
-                        app:layout_constraintBottom_toBottomOf="@id/roomTextView" />
+                        app:layout_constraintBottom_toBottomOf="@id/roomTextView"
+                        tools:ignore="RtlSymmetry" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

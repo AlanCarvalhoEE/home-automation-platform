@@ -5,25 +5,33 @@ import android.util.Log;
 import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.datatypes.MqttQos;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
+
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MQTTclient {
 
     private static MQTTclient instance;
     private final Mqtt3AsyncClient client;
+
     public static final String ID = "11";
     private static final String MQTT_BROKER = "10.147.19.177";
-    private static final int port = 1883;
+    private static final int PORT = 1883;
+
+    private final Map<MqttMessageCallback, String> activeSubscriptions = new HashMap<>();
 
     public MQTTclient() {
         client = MqttClient.builder()
                 .useMqttVersion3()
                 .identifier(ID)
                 .serverHost(MQTT_BROKER)
-                .serverPort(port)
+                .serverPort(PORT)
                 .automaticReconnectWithDefaultConfig()
-                .addConnectedListener(context -> Log.d("MQTT_DEBUG", "Connected to broker!"))
-                .addDisconnectedListener(context -> Log.d("MQTT_DEBUG", "Disconnected from broker: " + context.getCause()))
+                .addConnectedListener(context ->
+                        Log.d("MQTT_DEBUG", "Connected to broker!"))
+                .addDisconnectedListener(context ->
+                        Log.d("MQTT_DEBUG", "Disconnected: " + context.getCause()))
                 .buildAsync();
     }
 
@@ -39,62 +47,100 @@ public class MQTTclient {
                 .cleanSession(true)
                 .send()
                 .whenComplete((ack, throwable) -> {
-            if (throwable != null) {
-                Log.e("MQTT_DEBUG", "Connection failed", throwable);
-                callback.onFailure(throwable);
-            } else {
-                Log.d("MQTT_DEBUG", "Connection successful: " + ack);
-                callback.onSuccess();
-            }
-        });
-    }
-
-    public void subscribe(String topic, MqttMessageCallback callback) {
-        client.subscribeWith()
-                .topicFilter(topic)
-                .callback(publish -> {
-                    String payload = new String(publish.getPayloadAsBytes(), StandardCharsets.UTF_8);
-                    Log.d("MQTT_DEBUG", "Message received on " + topic + ": " + payload);
-                    callback.onMessageReceived(topic, payload);
-                })
-                .send();
-    }
-
-    public void publish(String topic, String payload) {
-        client.publishWith()
-                .topic(topic)
-                .qos(MqttQos.AT_LEAST_ONCE)
-                .payload(payload.getBytes(StandardCharsets.UTF_8))
-                .send()
-                .whenComplete((pubAck, throwable) -> {
                     if (throwable != null) {
-                        Log.e("MQTT_DEBUG", "Publish failed", throwable);
+                        Log.e("MQTT_DEBUG", "Connection failed", throwable);
+                        callback.onFailure(throwable);
                     } else {
-                        Log.d("MQTT_DEBUG", "Message published to " + topic);
+                        Log.d("MQTT_DEBUG", "Connection successful");
+                        callback.onSuccess();
                     }
                 });
     }
 
-    public void disconnect() {
-        Log.d("MQTT_DEBUG", "DISCONNECTED");
-        client.disconnect();
-    }
+    public void subscribe(String topic, MqttMessageCallback callback) {
 
-    public void subscribeDiscovery(MqttMessageCallback callback) {
         client.subscribeWith()
-                .topicFilter("hap/discovery/+")
+                .topicFilter(topic)
                 .qos(MqttQos.AT_LEAST_ONCE)
                 .callback(publish -> {
-                    String topic = publish.getTopic().toString();
+
                     String payload = new String(
                             publish.getPayloadAsBytes(),
                             StandardCharsets.UTF_8
                     );
 
-                    Log.d("MQTT_DISCOVERY", "Discovered: " + topic + " -> " + payload);
+                    Log.d("MQTT_DEBUG", "Message on " + topic + ": " + payload);
+
                     callback.onMessageReceived(topic, payload);
                 })
                 .send();
+
+        activeSubscriptions.put(callback, topic);
+    }
+
+    public void subscribeDiscovery(MqttMessageCallback callback) {
+
+        String topic = "hap/discovery/+";
+
+        client.subscribeWith()
+                .topicFilter(topic)
+                .qos(MqttQos.AT_LEAST_ONCE)
+                .callback(publish -> {
+
+                    String receivedTopic = publish.getTopic().toString();
+                    String payload = new String(
+                            publish.getPayloadAsBytes(),
+                            StandardCharsets.UTF_8
+                    );
+
+                    Log.d("MQTT_DISCOVERY",
+                            "Discovered: " + receivedTopic + " -> " + payload);
+
+                    callback.onMessageReceived(receivedTopic, payload);
+                })
+                .send();
+
+        activeSubscriptions.put(callback, topic);
+    }
+
+    public void unsubscribeDiscovery(MqttMessageCallback callback) {
+
+        String topic = activeSubscriptions.get(callback);
+        if (topic == null) return;
+
+        client.unsubscribeWith()
+                .topicFilter(topic)
+                .send()
+                .whenComplete((ack, throwable) -> {
+                    if (throwable != null) {
+                        Log.e("MQTT_DEBUG", "Unsubscribe failed", throwable);
+                    } else {
+                        Log.d("MQTT_DEBUG", "Unsubscribed from " + topic);
+                    }
+                });
+
+        activeSubscriptions.remove(callback);
+    }
+
+    public void publish(String topic, String payload) {
+
+        client.publishWith()
+                .topic(topic)
+                .qos(MqttQos.AT_LEAST_ONCE)
+                .payload(payload.getBytes(StandardCharsets.UTF_8))
+                .send()
+                .whenComplete((ack, throwable) -> {
+                    if (throwable != null) {
+                        Log.e("MQTT_DEBUG", "Publish failed", throwable);
+                    } else {
+                        Log.d("MQTT_DEBUG", "Published to " + topic);
+                    }
+                });
+    }
+
+    public void disconnect() {
+        Log.d("MQTT_DEBUG", "Disconnecting...");
+        client.disconnect();
     }
 
     public interface MqttConnectionCallback {

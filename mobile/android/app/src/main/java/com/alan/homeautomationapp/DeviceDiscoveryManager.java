@@ -1,13 +1,23 @@
 package com.alan.homeautomationapp;
 
 import org.json.JSONObject;
-import java.util.Collection;
+
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class DeviceDiscoveryManager {
 
-    private final Map<String, DiscoveredDevice> devices = new HashMap<>();
+    private final Map<String, DiscoveredDevice> discoveredDevices = new HashMap<>();
+    private final Set<String> registeredDeviceIds =
+            Collections.synchronizedSet(new HashSet<>());
+
+    private final MQTTclient mqttClient = MQTTclient.getInstance();
+
+    private MQTTclient.MqttMessageCallback discoveryCallback;
+    private boolean discovering = false;
 
     public interface DiscoveryListener {
         void onDeviceFound(DiscoveredDevice device);
@@ -15,37 +25,64 @@ public class DeviceDiscoveryManager {
 
     public void startDiscovery(DiscoveryListener listener) {
 
-        MQTTclient.getInstance().subscribeDiscovery((topic, message) -> {
+        if (discovering) return;
+        discoveredDevices.clear();
+
+        discovering = true;
+
+        discoveryCallback = (topic, message) -> {
+
+            if (!discovering) return;
+
             try {
                 JSONObject json = new JSONObject(message);
 
                 String id = json.getString("id");
                 String type = json.getString("type");
 
-                boolean isNew = false;
+                if (registeredDeviceIds.contains(id)) return;
 
-                if (!devices.containsKey(id)) {
-                    devices.put(id, new DiscoveredDevice(id, type));
-                    isNew = true;
-                } else {
-                    devices.get(id).updateLastSeen();
-                }
+                synchronized (discoveredDevices) {
 
-                if (isNew && listener != null) {
-                    listener.onDeviceFound(devices.get(id));
+                    if (discoveredDevices.containsKey(id)) {
+                        discoveredDevices.get(id).updateLastSeen();
+                        return;
+                    }
+
+                    DiscoveredDevice device =
+                            new DiscoveredDevice(id, type);
+
+                    discoveredDevices.put(id, device);
+
+                    if (listener != null) {
+                        listener.onDeviceFound(device);
+                    }
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        };
+
+        mqttClient.subscribeDiscovery(discoveryCallback);
     }
 
-    public Collection<DiscoveredDevice> getDevices() {
-        return devices.values();
+    public void stopDiscovery() {
+
+        if (!discovering) return;
+
+        discovering = false;
+
+        if (discoveryCallback != null) {
+            mqttClient.unsubscribeDiscovery(discoveryCallback);
+            discoveryCallback = null;
+        }
     }
 
-    public void clear() {
-        devices.clear();
+    public void setRegisteredDevices(Set<String> deviceIds) {
+        synchronized (registeredDeviceIds) {
+            registeredDeviceIds.clear();
+            registeredDeviceIds.addAll(deviceIds);
+        }
     }
 }

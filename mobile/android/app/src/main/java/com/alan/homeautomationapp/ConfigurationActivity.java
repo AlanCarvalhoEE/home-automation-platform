@@ -19,8 +19,6 @@ import java.util.Objects;
 
 public class ConfigurationActivity extends AppCompatActivity {
 
-    private DBhandler dbHandler;                        // Database handler instance
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +30,6 @@ public class ConfigurationActivity extends AppCompatActivity {
         // Setup the StrictMode tool
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-        // Initialize database instance
-        dbHandler = DBhandler.getInstance(this);
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

@@ -26,7 +26,6 @@ public class DBhandler extends SQLiteOpenHelper {
     private static final String ROOMS_TABLE_NAME = "Rooms";
     private static final String ROOM_ID_COL = "ID";
     private static final String ROOM_NAME_COL = "Room";
-    private static final String ROOM_TOPIC_COL = "Topic";
 
     private static final String TYPES_TABLE_NAME = "Types";
     private static final String TYPE_ID_COL = "ID";
@@ -63,8 +62,7 @@ public class DBhandler extends SQLiteOpenHelper {
 
         query = "CREATE TABLE " + ROOMS_TABLE_NAME + " ("
                 + ROOM_ID_COL + " TEXT PRIMARY KEY, "
-                + ROOM_NAME_COL + " TEXT,"
-                + ROOM_TOPIC_COL + " TEXT)";
+                + ROOM_NAME_COL + " TEXT)";
         db.execSQL(query);
 
         query = "CREATE TABLE " + TYPES_TABLE_NAME + " ("
@@ -122,13 +120,12 @@ public class DBhandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addRoom(String roomID, String roomName, String roomTopic) {
+    public void addRoom(String roomID, String roomName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(ROOM_ID_COL, roomID);
         values.put(ROOM_NAME_COL, roomName);
-        values.put(ROOM_TOPIC_COL, roomTopic);
         db.insert(ROOMS_TABLE_NAME, null, values);
         db.close();
     }
@@ -143,12 +140,11 @@ public class DBhandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateRoom(String roomID, String newRoomName, String newRoomTopic) {
+    public void updateRoom(String roomID, String newRoomName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(ROOM_NAME_COL, newRoomName);
-        values.put(ROOM_TOPIC_COL, newRoomTopic);
 
         String whereClause = ROOM_ID_COL + " = ?";
         String[] whereArgs = new String[]{roomID};
@@ -200,7 +196,7 @@ public class DBhandler extends SQLiteOpenHelper {
                         for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
 
                         if (i == 0) addDevice(fields[0], fields[1], fields[2], fields[3], fields[4]);
-                        else if (i == 1) addRoom(fields[0], fields[1], fields[2]);
+                        else if (i == 1) addRoom(fields[0], fields[1]);
                         else if (i == 2) addNewType(fields[1]);
                     }
                 }
@@ -223,11 +219,24 @@ public class DBhandler extends SQLiteOpenHelper {
     public List<String> getDevicesList() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<String> list = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT " + DEVICE_NAME_COL + " from " + DEVICES_TABLE_NAME,
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_ID_COL + " from " + DEVICES_TABLE_NAME,
                 null);
         while (cursor.moveToNext()) {
-            @SuppressLint("Range") String device = cursor.getString(cursor.getColumnIndex(DEVICE_NAME_COL));
+            @SuppressLint("Range") String device = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
             list.add(device);
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<String> getDeviceIdsList() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_ID_COL + " from " + DEVICES_TABLE_NAME,
+                null);
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
+            list.add(id);
         }
         cursor.close();
         return list;
@@ -266,6 +275,17 @@ public class DBhandler extends SQLiteOpenHelper {
                 + "'", null);
         cursor.moveToFirst();
         @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
+        cursor.close();
+        return id;
+    }
+
+    public String getDeviceName(String deviceID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + DEVICE_NAME_COL + " from "
+                + DEVICES_TABLE_NAME + " WHERE " + DEVICE_ID_COL + "='" + deviceID
+                + "'", null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(DEVICE_NAME_COL));
         cursor.close();
         return id;
     }
@@ -311,17 +331,6 @@ public class DBhandler extends SQLiteOpenHelper {
         @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ROOM_ID_COL));
         cursor.close();
         return id;
-    }
-
-    public String getRoomTopic(String roomID) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + ROOM_TOPIC_COL + " from "
-                + ROOMS_TABLE_NAME + " WHERE " + ROOM_ID_COL + "='" + roomID
-                + "'", null);
-        cursor.moveToFirst();
-        @SuppressLint("Range") String topic = cursor.getString(cursor.getColumnIndex(ROOM_TOPIC_COL));
-        cursor.close();
-        return topic;
     }
 
     @Override
