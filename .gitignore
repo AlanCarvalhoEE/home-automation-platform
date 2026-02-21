@@ -2,6 +2,7 @@
 credentials.h
 *.elf
 *.bin
+**/build/
 
 #Server
 __pycache__/
