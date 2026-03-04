@@ -23,8 +23,10 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+// Class responsible for managing dialogs
 public class DialogManager {
 
+    // Method to open "Add room" dialog
     public static void openAddRoomDialog(Activity activity, Consumer<RoomData> onConfirm) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_room, null);
@@ -62,7 +64,8 @@ public class DialogManager {
         cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 
-    public static void openUpdateRoomDialog(Activity activity, String roomID, Consumer<RoomData> onConfirm) {
+    // Method to open "Configure room" dialog
+    public static void openConfigureRoomDialog(Activity activity, RoomData roomData, Consumer<RoomData> onConfirm) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_room, null);
 
@@ -80,6 +83,9 @@ public class DialogManager {
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
 
+        nameEditText.setText(roomData.getName());
+        confirmButton.setEnabled(true);
+
         nameEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -90,15 +96,16 @@ public class DialogManager {
 
         confirmButton.setOnClickListener(v -> {
 
-            String roomName = nameEditText.getText().toString();
+            String newRoomName = nameEditText.getText().toString();
 
-            if (onConfirm != null) {onConfirm.accept(new RoomData(roomID, roomName));}
+            if (onConfirm != null) {onConfirm.accept(new RoomData(roomData.getId(), newRoomName));}
             dialog.dismiss();
         });
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 
+    // Method to open "Delete room" dialog
     public static void openDeleteRoomDialog(Activity activity, String roomID, String roomName, Consumer<RoomData> onConfirm) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_delete_room, null);
@@ -125,6 +132,7 @@ public class DialogManager {
         cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 
+    // Method to open "Device search" dialog
     public static void openDiscoveredDevicesDialog(Activity activity,
                                                    DeviceDiscoveryManager discoveryManager,
                                                    Consumer<DiscoveredDevice> onDeviceSelected) {
@@ -178,6 +186,7 @@ public class DialogManager {
         dialog.setOnDismissListener(d -> discoveryManager.stopDiscovery());
     }
 
+    // Method to open "Add device" dialog
     public static void openAddDeviceDialog(Activity activity, DiscoveredDevice discoveredDevice,
                                            List<String> roomsList,
                                            Consumer<DeviceData> onConfirm) {
@@ -226,10 +235,11 @@ public class DialogManager {
         cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 
-    public static void openUpdateDeviceDialog(Activity activity, String deviceID, String deviceType,
-                                              List<String> roomsList, Consumer<DeviceData> onConfirm) {
+    // Method to open "Configure device" dialog
+    public static void openConfigureDeviceDialog(Activity activity, DeviceData device,
+                                                 List<String> roomsList, Consumer<DeviceData> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_device, null);
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_configure_device, null);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -243,12 +253,17 @@ public class DialogManager {
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
+        ImageButton updateImageButton = dialog.findViewById(R.id.updateImageButton);
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
 
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
         roomSpinner.setAdapter(adapter);
+
+        nameEditText.setText(device.getName());
+        roomSpinner.setSelection(adapter.getPosition(device.getRoom()));
+        confirmButton.setEnabled(true);
 
         nameEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
@@ -258,19 +273,24 @@ public class DialogManager {
             }
         });
 
+        updateImageButton.setOnClickListener(v -> {
+
+        });
+
         confirmButton.setOnClickListener(v -> {
 
             String deviceName = nameEditText.getText().toString();
             String deviceRoom = roomSpinner.getSelectedItem().toString();
 
             if (onConfirm != null) {onConfirm.accept(
-                    new DeviceData(deviceID, deviceName, deviceRoom, deviceType, deviceID));}
+                    new DeviceData(device.getId(), deviceName, deviceRoom, device.getType(), device.getTopic()));}
             dialog.dismiss();
         });
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 
+    // Method to open "Delete device" dialog
     public static void openDeleteDeviceDialog(Activity activity, String deviceID, Consumer<String> onConfirm) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_delete_device, null);
@@ -297,9 +317,9 @@ public class DialogManager {
         cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 
-    public static void openConfigLdrDialog(Activity activity, int currentReading,
-            int currentThreshold, Consumer<Integer> onConfirm
-    ) {
+    // Method to open "Configure LDR" dialog
+    public static void openConfigureLdrDialog(Activity activity, int currentReading,
+                                              int currentThreshold, Consumer<Integer> onConfirm) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_config_ldr, null);
 
