@@ -17,6 +17,7 @@ import java.util.Set;
 public class DevicesFragment extends Fragment {
 
     private DatabaseManager databaseManager;
+    private DeviceManager.DeviceUpdateListener listener;
     private MQTTclient mqttClient;
     private DeviceDiscoveryManager discoveryManager;
     private LinearLayout devicesLayout;
@@ -66,6 +67,23 @@ public class DevicesFragment extends Fragment {
 
         refreshDevices();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        listener = device ->
+                requireActivity().runOnUiThread(this::refreshDevices);
+
+        DeviceManager.getInstance().addListener(listener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        DeviceManager.getInstance().removeListener(listener);
     }
 
     // Method to refresh devices on screen
@@ -132,6 +150,9 @@ public class DevicesFragment extends Fragment {
                             }));
 
             devicesLayout.addView(deviceView);
+
+            boolean online = "ONLINE".equals(device.getStatus());
+            MainScreenRenderer.setViewStatus(deviceView, online);
         }
     }
 }

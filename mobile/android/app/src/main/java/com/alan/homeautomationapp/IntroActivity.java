@@ -113,10 +113,13 @@ public class IntroActivity extends AppCompatActivity {
                     if (parts.length < 4) return;
                     String deviceId = parts[2];
 
-                    DeviceData device = this.deviceManager.getDevice(deviceId);
+                    DeviceData device = deviceManager.getDevice(deviceId);
+
                     if (device == null) return;
 
-                    device.setStatus(message);
+                    String status = message.trim();
+                    device.setStatus(status);
+
                     DeviceManager.getInstance().notifyDeviceUpdated(device);
 
                 } catch (Exception ignored) {}

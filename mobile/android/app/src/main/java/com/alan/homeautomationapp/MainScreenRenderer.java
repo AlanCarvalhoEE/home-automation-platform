@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -58,7 +59,25 @@ public class MainScreenRenderer {
                         DeviceController.setLdr(device.getId(), isChecked));
 
                 layout.addView(vi);
+
+                boolean online = "ONLINE".equals(device.getStatus());
+                setViewStatus(vi, online);
             }
         }
+    }
+
+    // Method to set device visibility based on its status (ONLINE or OFFLINE)
+    public static void setViewStatus(View view, boolean enabled) {
+
+        view.setEnabled(enabled);
+
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                setViewStatus(group.getChildAt(i), enabled);
+            }
+        }
+
+        view.setAlpha(enabled ? 1.0f : 0.5f);
     }
 }

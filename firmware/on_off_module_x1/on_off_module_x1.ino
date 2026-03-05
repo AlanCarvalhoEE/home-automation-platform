@@ -1,7 +1,7 @@
 // Project - HAP - Home Automation Platform 
 // Code - ON-OFF module X1
 // Author - Alan Carvalho
-// Date - 21/02/2026
+// Date - 05/03/2026
 
 // Libraries
 #include <ESP8266WiFi.h>
@@ -13,7 +13,7 @@
 
 // Firmware Information
 #define FW_TAG "on-off"
-#define FW_VERSION "1.0.0"
+#define FW_VERSION "1.0.1"
 
 // Device Parameters
 #define TYPE "lamp"
@@ -49,6 +49,8 @@ unsigned long lastWifiCheck = 0;              // Last time the WiFi connection w
 const long wifiCheckInterval = 5000;          // Interval to check the WiFi connection (ms)
 unsigned long lastBrokerCheck = 0;            // Last time the broker connection was checked (ms)
 const long brokerCheckInterval = 5000;        // Interval to check the broker connection (ms)
+unsigned long lastDiscoveryPublish = 0;       // Last time the device has published to discovery topic (ms)
+const long discoveryPublishInterval = 5000;   // Interval to publish to discovery topic (ms)
 unsigned long lastReportPrint = 0;            // Last time the report was printed (ms)
 const long reportPrintInterval = 500;         // Interval to print the report (ms)
 unsigned long lastSwitchChange = 0;           // Last time the switch state has changed (ms)
@@ -125,7 +127,8 @@ void loop() {
   if (!ldrEnabled) checkSwitch();   // Check switch changes
   if (ldrEnabled) checkLDR();       // Check LDR changes
 
-  printReport();    // Print relevant data
+  publishDiscovery(); // Publish to discovery topic
+  printReport();      // Print relevant data
 }
 
 // Function to generate the device ID
@@ -335,15 +338,20 @@ void publishState() {
 // Function to publish to the discovery topic
 void publishDiscovery() {
 
-  StaticJsonDocument<96> doc;
+  if ((millis() - lastDiscoveryPublish) > discoveryPublishInterval) {
+    
+    StaticJsonDocument<96> doc;
 
-  doc["id"] = deviceId;
-  doc["type"] = TYPE;
+    doc["id"] = deviceId;
+    doc["type"] = TYPE;
 
-  char buffer[96];
-  serializeJson(doc, buffer);
+    char buffer[96];
+    serializeJson(doc, buffer);
 
-  mqttClient.publish(discoveryTopic.c_str(), buffer, true);
+    mqttClient.publish(discoveryTopic.c_str(), buffer, false);
+
+    lastDiscoveryPublish = millis();
+  }
 }
 
 // Function to print relevant variables

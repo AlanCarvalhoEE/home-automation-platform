@@ -69,9 +69,11 @@ public class MQTTclient {
                             StandardCharsets.UTF_8
                     );
 
-                    Log.d("MQTT_DEBUG", "Message on " + topic + ": " + payload);
+                    String actualTopic = publish.getTopic().toString();
 
-                    callback.onMessageReceived(topic, payload);
+                    Log.d("MQTT_DEBUG", "Message on " + actualTopic + ": " + payload);
+
+                    callback.onMessageReceived(actualTopic, payload);
                 })
                 .send();
 
