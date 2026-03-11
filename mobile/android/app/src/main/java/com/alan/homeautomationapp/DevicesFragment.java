@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.Set;
 
 // Class responsible for running the devices fragment
@@ -116,11 +119,20 @@ public class DevicesFragment extends Fragment {
             deviceTypeTextView.setText(deviceType);
             deviceRoomTextView.setText(deviceRoom);
 
+            FirmwareData firmwareData;
+            try {
+                firmwareData = FirmwareManager.getFirmwareData("on-off");
+            } catch (IOException | JSONException e) {
+                throw new RuntimeException(e);
+            }
+            String latestFirmwareVersion = firmwareData.version;
+
             //Configure button listener
             deviceConfigImageButton.setOnClickListener(v -> DialogManager.openConfigureDeviceDialog(
                             requireActivity(), device, RoomManager.getInstance().getAllRoomNames(),
-                            deviceData -> {
+                            latestFirmwareVersion,
 
+                            deviceData -> {
                                 databaseManager.configureDevice(deviceData.getId(), deviceData.getName(),
                                         deviceData.getRoom(), deviceData.getType(), deviceData.getTopic());
 
@@ -133,7 +145,13 @@ public class DevicesFragment extends Fragment {
                                 mqttClient.publish("hap/main/database/update_device", payload);
 
                                 refreshDevices();
-                            }));
+                            },
+
+                    deviceData -> {
+                        String payload = "{\"version\":\"" + firmwareData.version + "\"}";
+                        mqttClient.publish(
+                                "hap/device/" + deviceData.getId() + "/update", payload);
+                    }));
 
             // Delete button listener
             deviceDeleteImageButton.setOnClickListener(v ->
@@ -152,7 +170,7 @@ public class DevicesFragment extends Fragment {
             devicesLayout.addView(deviceView);
 
             boolean online = "ONLINE".equals(device.getStatus());
-            MainScreenRenderer.setViewStatus(deviceView, online);
+            MainScreenRenderer.setViewStatus(deviceView, online, true);
         }
     }
 }

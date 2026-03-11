@@ -61,6 +61,8 @@
     <string name="database_failed_message">Falha na atualização dos dados.\nDeseja tentar novamente?</string>
     <string name="confirm_device_delete_message">Deseja realmente apagar esse dispositivo?</string>
     <string name="confirm_room_delete_message">Deseja realmente apagar esse cômodo?</string>
+    <string name="firmware_updated_message">Firmware atualizado</string>
+    <string name="firmware_not_updated_message">Atualização disponível</string>
 
     // Units
     <string name="temperature_unit">°C</string>

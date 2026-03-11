@@ -16,8 +16,6 @@ public class MQTTclient {
     private final Mqtt3AsyncClient client;
 
     public static final String ID = "11";
-    private static final String MQTT_BROKER = "10.147.19.177";
-    private static final int PORT = 1883;
 
     private final Map<MqttMessageCallback, String> activeSubscriptions = new HashMap<>();
 
@@ -25,8 +23,8 @@ public class MQTTclient {
         client = MqttClient.builder()
                 .useMqttVersion3()
                 .identifier(ID)
-                .serverHost(MQTT_BROKER)
-                .serverPort(PORT)
+                .serverHost(Credentials.SERVER_IP)
+                .serverPort(Credentials.SERVER_PORT)
                 .automaticReconnectWithDefaultConfig()
                 .addConnectedListener(context ->
                         Log.d("MQTT_DEBUG", "Connected to broker!"))

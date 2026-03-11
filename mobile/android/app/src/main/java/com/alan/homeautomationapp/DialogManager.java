@@ -237,7 +237,9 @@ public class DialogManager {
 
     // Method to open "Configure device" dialog
     public static void openConfigureDeviceDialog(Activity activity, DeviceData device,
-                                                 List<String> roomsList, Consumer<DeviceData> onConfirm) {
+                                                 List<String> roomsList, String latestFirmwareVersion,
+                                                 Consumer<DeviceData> onConfirm,
+                                                 Consumer<DeviceData> onFirmwareUpdate) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_configure_device, null);
 
@@ -253,7 +255,10 @@ public class DialogManager {
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
-        ImageButton updateImageButton = dialog.findViewById(R.id.updateImageButton);
+        TextView currentVersionTextView = dialog.findViewById(R.id.currentVersionTextView);
+        TextView latestVersionTextView = dialog.findViewById(R.id.latestVersionTextView);
+        TextView firmwareStatusTextView = dialog.findViewById(R.id.firmwareStatusTextView);
+        ImageButton firmwareUpdateImageButton = dialog.findViewById(R.id.updateImageButton);
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
 
@@ -261,9 +266,22 @@ public class DialogManager {
         adapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
         roomSpinner.setAdapter(adapter);
 
+        String currentFirmwareVersion = device.getFirmwareVersion();
+
         nameEditText.setText(device.getName());
+        currentVersionTextView.setText(currentFirmwareVersion);
+        latestVersionTextView.setText(latestFirmwareVersion);
         roomSpinner.setSelection(adapter.getPosition(device.getRoom()));
+
         confirmButton.setEnabled(true);
+
+        if (currentFirmwareVersion.equals(latestFirmwareVersion)) {
+            firmwareStatusTextView.setText(activity.getString(R.string.firmware_updated_message));
+        } else {
+            firmwareStatusTextView.setText(activity.getString(R.string.firmware_not_updated_message));
+        }
+
+        firmwareUpdateImageButton.setEnabled(!currentFirmwareVersion.equals(latestFirmwareVersion));
 
         nameEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
@@ -273,8 +291,10 @@ public class DialogManager {
             }
         });
 
-        updateImageButton.setOnClickListener(v -> {
-
+        firmwareUpdateImageButton.setOnClickListener(v -> {
+            if (onFirmwareUpdate != null) {
+                onFirmwareUpdate.accept(device);
+            }
         });
 
         confirmButton.setOnClickListener(v -> {

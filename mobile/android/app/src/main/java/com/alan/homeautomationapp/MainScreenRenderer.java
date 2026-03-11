@@ -61,23 +61,24 @@ public class MainScreenRenderer {
                 layout.addView(vi);
 
                 boolean online = "ONLINE".equals(device.getStatus());
-                setViewStatus(vi, online);
+                setViewStatus(vi, online, true);
             }
         }
     }
 
     // Method to set device visibility based on its status (ONLINE or OFFLINE)
-    public static void setViewStatus(View view, boolean enabled) {
+    public static void setViewStatus(View view, boolean enabled, boolean isRoot) {
 
+        if (isRoot) {
+            view.setAlpha(enabled ? 1.0f : 0.5f);
+        }
         view.setEnabled(enabled);
 
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int i = 0; i < group.getChildCount(); i++) {
-                setViewStatus(group.getChildAt(i), enabled);
+                setViewStatus(group.getChildAt(i), enabled, false);
             }
         }
-
-        view.setAlpha(enabled ? 1.0f : 0.5f);
     }
 }

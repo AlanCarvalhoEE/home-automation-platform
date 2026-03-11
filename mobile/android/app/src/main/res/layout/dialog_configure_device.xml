@@ -151,6 +151,7 @@
                         android:layout_gravity="center_vertical"
                         android:singleLine="true"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
                         android:text="@string/current_firmware_label"
                         android:textColor="@color/white"
                         android:textSize="16sp"
@@ -195,6 +196,19 @@
                         app:layout_constraintStart_toEndOf="@id/latestFirmwareTextView"
                         app:layout_constraintTop_toTopOf="@id/latestFirmwareTextView"
                         app:layout_constraintBottom_toBottomOf="@id/latestFirmwareTextView" />
+
+                    <TextView
+                        android:id="@+id/firmwareStatusTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/lightGrey"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/latestFirmwareTextView" />
 
                     <ImageButton
                         android:id="@+id/updateImageButton"
