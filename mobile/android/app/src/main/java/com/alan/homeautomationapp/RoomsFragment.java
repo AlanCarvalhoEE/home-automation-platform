@@ -13,9 +13,10 @@ import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
+// Class responsible for running the rooms fragment
 public class RoomsFragment extends Fragment {
 
-    private DBhandler dbHandler;
+    private DatabaseManager dbHandler;
     private MQTTclient mqttClient;
     private LinearLayout roomsLayout;
 
@@ -26,19 +27,24 @@ public class RoomsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_rooms, container, false);
 
-        dbHandler = DBhandler.getInstance(requireContext());
+        dbHandler = DatabaseManager.getInstance(requireContext());
         mqttClient = MQTTclient.getInstance();
         roomsLayout = view.findViewById(R.id.roomsLayout);
 
         ImageButton roomAddImageButton = view.findViewById(R.id.roomAddImageButton);
 
+        // Room add button listener
         roomAddImageButton.setOnClickListener(v ->
-                DialogManager.openAddRoomDialog(
-                        requireActivity(),
-                        roomData -> {
-                            dbHandler.addRoom(roomData.id, roomData.name);
-                            String payload = roomData.id + "," + roomData.name;
+                DialogManager.openAddRoomDialog(requireActivity(), roomData -> {
+
+                            dbHandler.addRoom(roomData.getId(), roomData.getName());
+
+                            RoomManager.getInstance().addRoom(
+                                    new RoomData(roomData.getId(), roomData.getName()));
+
+                            String payload = roomData.getId() + "," + roomData.getName();
                             mqttClient.publish("hap/main/database/add_room", payload);
+
                             refreshRooms();
                         }));
 
@@ -47,17 +53,19 @@ public class RoomsFragment extends Fragment {
         return view;
     }
 
+    // Method to refresh rooms on screen
     private void refreshRooms() {
 
         roomsLayout.removeAllViews();
 
-        List<String> roomsList = dbHandler.getRoomsList();
+        List<String> roomsList = RoomManager.getInstance().getAllRoomNames();
 
         LayoutInflater inflater = LayoutInflater.from(requireContext());
 
         for (String roomName : roomsList) {
 
-            String roomID = dbHandler.getRoomID(roomName);
+            RoomData room = RoomManager.getInstance().getRoomByName(roomName);
+            String roomID = room.getId();
 
             View roomView = inflater.inflate(R.layout.room_info, roomsLayout, false);
 
@@ -67,21 +75,33 @@ public class RoomsFragment extends Fragment {
 
             roomNameTextView.setText(roomName);
 
+            //Room configure button listener
             roomConfigImageButton.setOnClickListener(v ->
-                    DialogManager.openUpdateRoomDialog(
-                            requireActivity(), roomID, roomData -> {
-                                dbHandler.updateRoom(roomData.id, roomData.name);
-                                String payload = roomData.id + "," + roomData.name;
+                    DialogManager.openConfigureRoomDialog(
+                            requireActivity(), room, roomData -> {
+
+                                dbHandler.configureRoom(roomData.getId(), roomData.getName());
+
+                                RoomManager.getInstance().configureRoom(
+                                        roomData.getId(), roomData.getName());
+
+                                String payload = roomData.getId() + "," + roomData.getName();
                                 mqttClient.publish("hap/main/database/update_room", payload);
+
                                 refreshRooms();
                             }));
 
-            roomDeleteImageButton.setOnClickListener(v ->
-                    DialogManager.openDeleteRoomDialog(
+            // Room delete button listener
+            roomDeleteImageButton.setOnClickListener(v -> DialogManager.openDeleteRoomDialog(
                             requireActivity(), roomID, roomName, roomData -> {
-                                dbHandler.deleteRoom(roomData.id);
-                                String payload = roomData.id;
+
+                                dbHandler.deleteRoom(roomData.getId());
+
+                                RoomManager.getInstance().deleteRoom(roomData.getId());
+
+                                String payload = roomData.getId();
                                 mqttClient.publish("hap/main/database/delete_room", payload);
+
                                 refreshRooms();
                             }));
 

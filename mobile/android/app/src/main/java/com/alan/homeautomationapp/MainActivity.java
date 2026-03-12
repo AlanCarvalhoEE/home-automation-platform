@@ -3,7 +3,6 @@ package com.alan.homeautomationapp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -16,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
+// Class responsible for running the main activity (main screen)
 public class MainActivity extends AppCompatActivity {
 
-    private DBhandler dbHandler;        // Database handler instance
+    private DatabaseManager databaseManager;                // DatabaseManager instance
+    private DeviceManager.DeviceUpdateListener listener;    // DeviceManager listener
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -28,13 +29,9 @@ public class MainActivity extends AppCompatActivity {
         // Load the layout
         setContentView(R.layout.activity_main);
 
-        // Setup the StrictMode tool
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         // Initialize database instance
-        dbHandler = DBhandler.getInstance(this);
-        dbHandler.getWritableDatabase();
+        databaseManager = DatabaseManager.getInstance(this);
+        databaseManager.getWritableDatabase();
 
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -49,10 +46,11 @@ public class MainActivity extends AppCompatActivity {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        Utils.updateRooms(this, dbHandler, roomSpinner);
+        // Update rooms on the spinner
+        MainScreenRenderer.updateRooms(this, databaseManager, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
             String roomName = roomSpinner.getSelectedItem().toString();
-            Utils.updateDevices(this, dbHandler, roomName, roomDevicesLayout);
+            MainScreenRenderer.updateDevices(this, roomName, roomDevicesLayout);
         }
 
         // Configuration button listener
@@ -65,11 +63,21 @@ public class MainActivity extends AppCompatActivity {
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Utils.updateDevices(MainActivity.this, dbHandler, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
+                MainScreenRenderer.updateDevices(MainActivity.this, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
+
+        // Listener to update the screen when there is an update on devices
+        listener = device ->
+                runOnUiThread(() ->
+                        MainScreenRenderer.updateDevices(
+                                MainActivity.this,
+                                roomSpinner.getSelectedItem().toString(),
+                                roomDevicesLayout)
+        );
+        DeviceManager.getInstance().addListener(listener);
     }
 
     @Override
@@ -79,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        Utils.updateRooms(this, dbHandler, roomSpinner);
+        MainScreenRenderer.updateRooms(this, databaseManager, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            Utils.updateDevices(this, dbHandler, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
+            MainScreenRenderer.updateDevices(this, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
         }
     }
 
@@ -103,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MQTTclient mqttClient = MQTTclient.getInstance();
-        mqttClient.disconnect();
+        DeviceManager.getInstance().removeListener(listener);
     }
 }

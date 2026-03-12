@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -13,45 +12,48 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import org.json.JSONObject;
+
+import java.util.List;
 import java.util.Objects;
 
-
+// Class responsible for running the intro activity (intro screen)
 public class IntroActivity extends AppCompatActivity {
 
-    private DBhandler dbHandler;                          // Database handler instance
-    private final Handler introHandler = new Handler();   // IntroActivity finish handler
-    private boolean databaseUpdated = false;
+    private DatabaseManager databaseManager;                    // DatabaseManager instance
+    MQTTclient mqttClient;                                      // MQTTclient instance
+    DeviceManager deviceManager = DeviceManager.getInstance();  // DeviceManager instance
+    private final Handler introHandler = new Handler();         // IntroActivity finish handler
+    private boolean databaseUpdated = false;                    // Store the database update status
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         // Initialize database instance
-        dbHandler = DBhandler.getInstance(this);
-        dbHandler.getWritableDatabase();
+        databaseManager = DatabaseManager.getInstance(this);
+        databaseManager.getWritableDatabase();
 
         // Hide the actionBar
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        MQTTclient mqttClient = MQTTclient.getInstance();
+        // Initialize the MQTTclient instance
+        mqttClient = MQTTclient.getInstance();
 
+        // Connect MQTT
         mqttClient.connect(new MQTTclient.MqttConnectionCallback() {
             @Override
             public void onSuccess() {
-                // Only subscribe when connection is ready
+
                 mqttClient.subscribe("hap/main/database/data", (topic, message) -> {
-                    dbHandler.updateDatabase(message);
+                    databaseManager.updateDatabase(message);
                     databaseUpdated = true;
                 });
             }
 
             @Override
             public void onFailure(Throwable exception) {
-                // Handle connection failure (show dialog, retry, etc.)
             }
         });
 
@@ -59,15 +61,76 @@ public class IntroActivity extends AppCompatActivity {
         introHandler.postDelayed(this::checkConnection, 3000);
     }
 
+    // Method to check connection to server
     public void checkConnection() {
-        if(databaseUpdated) {
+        if(databaseUpdated) {       // If the connection is active...
             TextView messageTextView = findViewById(R.id.messageTextView);
             messageTextView.setText(getResources().getString(R.string.loading_message));
+
+            RoomManager roomManager = RoomManager.getInstance();
+            DeviceManager deviceManager = DeviceManager.getInstance();
+
+            mqttClient = MQTTclient.getInstance();
+            List<DeviceData> databaseDevices = databaseManager.getAllDevices();
+            List<RoomData> databaseRooms = databaseManager.getAllRooms();
+
+            for (RoomData room : databaseRooms) roomManager.addRoom(room);
+            for (DeviceData device : databaseDevices) deviceManager.addDevice(device);
+
+            // Subscribe to "get_state" topic of each device
+            mqttClient.subscribe("hap/device/+/get_state", (topic, message) -> {
+                try {
+                    String[] parts = topic.split("/");
+                    if (parts.length < 4) return;
+                    String deviceId = parts[2];
+
+                    DeviceData device = this.deviceManager.getDevice(deviceId);
+                    if (device == null) return;
+
+                    JSONObject json = new JSONObject(message);
+
+                    String fwVersion   = json.optString("fw_version", null);
+                    String loadStatus  = json.optString("load_status", null);
+                    String ldrStatus   = json.optString("ldr_status", null);
+                    int threshold      = json.optInt("ldr_threshold", -1);
+                    int ldrValue       = json.optInt("ldr_value", -1);
+
+                    device.setFirmwareVersion(fwVersion);
+                    device.setLoadStatus(loadStatus);
+                    device.setLdrStatus(ldrStatus);
+                    device.setLdrThreshold(threshold);
+                    device.setLdrValue(ldrValue);
+
+                    DeviceManager.getInstance().notifyDeviceUpdated(device);
+
+                } catch (Exception ignored) {}
+            });
+
+            // Subscribe to "status" topic of each device
+            mqttClient.subscribe("hap/device/+/status", (topic, message) -> {
+                try {
+                    String[] parts = topic.split("/");
+                    if (parts.length < 4) return;
+                    String deviceId = parts[2];
+
+                    DeviceData device = deviceManager.getDevice(deviceId);
+
+                    if (device == null) return;
+
+                    String status = message.trim();
+                    device.setStatus(status);
+
+                    DeviceManager.getInstance().notifyDeviceUpdated(device);
+
+                } catch (Exception ignored) {}
+            });
+
+            // Finish IntroActivity and start MainActivity
             Intent intent = new Intent(IntroActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
-        else {
+        else {      // If the connection is not active
             ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
             mainLayout.setAlpha(0.25f);
 
