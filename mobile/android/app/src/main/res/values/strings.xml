@@ -63,6 +63,7 @@
     <string name="confirm_room_delete_message">Deseja realmente apagar esse cômodo?</string>
     <string name="firmware_updated_message">Firmware atualizado</string>
     <string name="firmware_not_updated_message">Atualização disponível</string>
+    <string name="firmware_updating_message">Atualização em andamento…</string>
 
     // Units
     <string name="temperature_unit">°C</string>

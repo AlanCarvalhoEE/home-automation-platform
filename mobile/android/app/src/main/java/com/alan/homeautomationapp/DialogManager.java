@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -259,6 +260,7 @@ public class DialogManager {
         TextView latestVersionTextView = dialog.findViewById(R.id.latestVersionTextView);
         TextView firmwareStatusTextView = dialog.findViewById(R.id.firmwareStatusTextView);
         ImageButton firmwareUpdateImageButton = dialog.findViewById(R.id.updateImageButton);
+        ProgressBar loadingProgressBar = dialog.findViewById(R.id.loadingProgressBar);
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
 
@@ -308,6 +310,47 @@ public class DialogManager {
         });
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        DeviceManager.DeviceUpdateListener updateListener = updatedDevice -> {
+
+            if (!updatedDevice.getId().equals(device.getId())) return;
+
+            activity.runOnUiThread(() -> {
+
+                String status = updatedDevice.getStatus();
+
+                if ("UPDATING".equals(status)) {
+                    firmwareStatusTextView.setText(activity.getString(R.string.firmware_updating_message));
+                    firmwareUpdateImageButton.setEnabled(false);
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    confirmButton.setEnabled(false);
+                    cancelButton.setEnabled(false);
+                }
+
+                if ("ONLINE".equals(status)) {
+                    if (updatedDevice.getFirmwareVersion()
+                            .equals(latestFirmwareVersion)) {
+
+                        firmwareStatusTextView.setText(activity.getString(R.string.firmware_updated_message));
+                        firmwareUpdateImageButton.setEnabled(false);
+                        loadingProgressBar.setVisibility(View.INVISIBLE);
+                        confirmButton.setEnabled(true);
+                        cancelButton.setEnabled(true);
+
+                    } else {
+                        firmwareStatusTextView.setText(activity.getString(R.string.firmware_not_updated_message));
+                        loadingProgressBar.setVisibility(View.INVISIBLE);
+                        confirmButton.setEnabled(true);
+                        cancelButton.setEnabled(true);
+                    }
+                }
+            });
+        };
+
+        DeviceManager.getInstance().addListener(updateListener);
+
+        dialog.setOnDismissListener(d ->
+                DeviceManager.getInstance().removeListener(updateListener));
     }
 
     // Method to open "Delete device" dialog
