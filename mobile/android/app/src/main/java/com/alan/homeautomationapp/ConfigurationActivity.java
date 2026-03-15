@@ -51,8 +51,8 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
-                    if (position == 0) tab.setText("Cômodos");
-                    else tab.setText("Dispositivos");
+                    if (position == 0) tab.setText(getString(R.string.rooms_tab_label));
+                    else tab.setText(getString(R.string.devices_tab_label));
                 }
         ).attach();
 

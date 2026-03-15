@@ -1,0 +1,76 @@
+<resources>
+
+    // APP name
+    <string name="app_name">Home Automation Platform</string>
+    <string name="app_nickname">HAP</string>
+
+    // Labels
+    <string name="main_room_label">Cômodo</string>
+    <string name="room_label">Cômodo:</string>
+    <string name="devices_label">Dispositivos</string>
+    <string name="name_label">Nome:</string>
+    <string name="type_label">Tipo:</string>
+    <string name="topic_label">Tópico:</string>
+    <string name="id_label">ID:</string>
+    <string name="ldr_reading_label">Leitura</string>
+    <string name="threshold_label">Limiar</string>
+    <string name="search_label">Buscar dispositivos</string>
+    <string name="discovered_label">Dispositivos encontrados</string>
+    <string name="firmware_label">Firmware</string>
+    <string name="current_firmware_label">Atual:</string>
+    <string name="latest_firmware_label">Último:</string>
+    <string name="language_selection_label">Selecione o idioma:</string>
+    <string name="english_label">Inglês</string>
+    <string name="portuguese_label">Português</string>
+    <string name="rooms_tab_label">Cômodos</string>
+    <string name="devices_tab_label">Dispositivos</string>
+
+    // Buttons
+    <string name="confirm_button">Confirmar</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="yes_button">Sim</string>
+    <string name="no_button">Não</string>
+
+    // Hints
+    <string name="logo_hint">HAP icon</string>
+    <string name="location_name_hint">Nome do cômodo</string>
+    <string name="device_name_hint">Nome do dispositivo</string>
+    <string name="device_id_hint">ID do dispositivo</string>
+    <string name="device_room_hint">Cômodo do dispositivo</string>
+    <string name="device_topic_hint">Tópico do dispositivo</string>
+
+    // Descriptions
+    <string name="room_add_description">Adicionar novo cômodo</string>
+    <string name="device_add_description">Adicionar novo dispositivo</string>
+    <string name="device_search_description">Buscar dispositivos</string>
+    <string name="room_open_description">Mostrar informações do cômodo</string>
+    <string name="configuration_button_description">Abrir janela de configurações</string>
+    <string name="language_button_description">Selecionar o idioma</string>
+    <string name="lamp_control_description">Ligar/Desligar lâmpada</string>
+    <string name="socket_control_description">Ligar/Desligar tomada</string>
+    <string name="door_control_description">Abrir/Fechar porta</string>
+    <string name="air_control_description">Ligar/Desligar ar condicionado</string>
+    <string name="camera_control_description">Ver streaming</string>
+    <string name="temperature_up_button_description">Aumentar a temperatura</string>
+    <string name="temperature_down_button_description">Diminuir a temperatura</string>
+    <string name="device_config_description">Configurar dispositivo</string>
+    <string name="device_delete_description">Apagar dispositivo</string>
+    <string name="room_config_description">Configurar cômodo</string>
+    <string name="room_delete_description">Apagar cômodo</string>
+    <string name="firmware_update_description">Atualizar firmware</string>
+
+    //  Messages
+    <string name="connecting_message">Conectando ao servidor</string>
+    <string name="loading_message">Carregando dados</string>
+    <string name="connection_failed_message">Falha na conexão.\nDeseja tentar novamente?</string>
+    <string name="database_failed_message">Falha na atualização dos dados.\nDeseja tentar novamente?</string>
+    <string name="confirm_device_delete_message">Deseja realmente apagar esse dispositivo?</string>
+    <string name="confirm_room_delete_message">Deseja realmente apagar esse cômodo?</string>
+    <string name="firmware_updated_message">Firmware atualizado</string>
+    <string name="firmware_not_updated_message">Atualização disponível</string>
+    <string name="firmware_updating_message">Atualização em andamento…</string>
+
+    // Units
+    <string name="temperature_unit">°C</string>
+
+</resources>

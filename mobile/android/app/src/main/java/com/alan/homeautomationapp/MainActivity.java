@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseManager databaseManager;                // DatabaseManager instance
     private DeviceManager.DeviceUpdateListener listener;    // DeviceManager listener
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +43,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Component references
         ImageButton configurationImageButton = actionBarView.findViewById(R.id.configurationImageButton);
+        ImageButton languageImageButton = actionBarView.findViewById(R.id.languageImageButton);
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
+
+        // Configure the language button
+        String currentLanguage = LanguageManager.getLanguage();
+        switch (currentLanguage) {
+            case "pt": languageImageButton.setImageDrawable(getDrawable(R.drawable.portuguese_image));
+                break;
+            default: languageImageButton.setImageDrawable(getDrawable(R.drawable.english_image));
+        }
 
         // Update rooms on the spinner
         MainScreenRenderer.updateRooms(this, databaseManager, roomSpinner);
@@ -57,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         configurationImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
             startActivity(intent);
+        });
+
+        // Language button listener
+        languageImageButton.setOnClickListener(v -> {
+            DialogManager.openLanguageSelectionDialog(this, currentLanguage);
         });
 
         // Room selection spinner listener

@@ -45,4 +45,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_configuration" />
 
+    <ImageButton
+        android:id="@+id/languageImageButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_info_states"
+        android:cropToPadding="false"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/language_button_description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/configurationImageButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/english_image" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
