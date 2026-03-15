@@ -4,6 +4,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -440,5 +443,54 @@ public class DialogManager {
         });
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    // Method to open "Language selection" dialog
+    public static void openLanguageSelectionDialog(Activity activity, String currentLanguage) {
+
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_language, null);
+
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(Objects.requireNonNull(dialogView));
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        Window window = dialog.getWindow();
+        window.setLayout(
+                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+
+        RadioGroup languageRadioGroup = dialog.findViewById(R.id.languageRadioGroup);
+        Button confirmButton = dialog.findViewById(R.id.yesButton);
+        Button cancelButton = dialog.findViewById(R.id.noButton);
+
+        confirmButton.setEnabled(true);
+
+        switch (currentLanguage) {
+            case "pt": languageRadioGroup.check(R.id.portugueseRadioButton);
+                break;
+            default: languageRadioGroup.check(R.id.englishRadioButton);
+        }
+
+        confirmButton.setOnClickListener(v -> {
+            int selectedID = languageRadioGroup.getCheckedRadioButtonId();
+
+            if (selectedID == R.id.englishRadioButton) {
+                LanguageManager.setLanguage("en");
+            }
+            else if (selectedID == R.id.portugueseRadioButton) {
+                LanguageManager.setLanguage("pt");
+            }
+
+            dialog.dismiss();
+
+            Intent intent = new Intent(activity, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            activity.startActivity(intent);
+            activity.finish();
+        });
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
     }
 }
