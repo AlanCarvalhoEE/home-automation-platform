@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.firmware;
 
 // Class responsible for storing firmware data
 public class FirmwareData {

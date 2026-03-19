@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.core;
 
 import android.content.Context;
 import android.net.Uri;

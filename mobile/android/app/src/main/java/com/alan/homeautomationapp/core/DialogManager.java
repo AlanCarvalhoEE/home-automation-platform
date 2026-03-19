@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.core;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -20,6 +20,15 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.core.LanguageManager;
+import com.alan.homeautomationapp.devices.DeviceData;
+import com.alan.homeautomationapp.devices.DeviceDiscoveryManager;
+import com.alan.homeautomationapp.devices.DeviceManager;
+import com.alan.homeautomationapp.devices.DiscoveredDevice;
+import com.alan.homeautomationapp.rooms.RoomData;
+import com.alan.homeautomationapp.ui.MainActivity;
 
 import java.util.List;
 import java.util.Objects;

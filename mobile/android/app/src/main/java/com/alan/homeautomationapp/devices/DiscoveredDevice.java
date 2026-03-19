@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.devices;
 
 // Class responsible for storing discovered devices data
 public class DiscoveredDevice {

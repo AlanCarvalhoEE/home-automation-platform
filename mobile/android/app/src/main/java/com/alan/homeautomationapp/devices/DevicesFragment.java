@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.devices;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.alan.homeautomationapp.core.DatabaseManager;
+import com.alan.homeautomationapp.core.DialogManager;
+import com.alan.homeautomationapp.firmware.FirmwareData;
+import com.alan.homeautomationapp.firmware.FirmwareManager;
+import com.alan.homeautomationapp.core.MQTTclient;
+import com.alan.homeautomationapp.ui.MainScreenRenderer;
+import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.rooms.RoomManager;
 
 import org.json.JSONException;
 

@@ -1,9 +1,13 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.ui;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.alan.homeautomationapp.devices.DevicesFragment;
+import com.alan.homeautomationapp.log.LogFragment;
+import com.alan.homeautomationapp.rooms.RoomsFragment;
 
 public class ConfigPagerAdapter extends FragmentStateAdapter {
 

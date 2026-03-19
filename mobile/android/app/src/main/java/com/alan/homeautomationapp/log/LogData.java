@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

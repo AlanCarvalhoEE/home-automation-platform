@@ -1,4 +1,7 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.devices;
+
+import com.alan.homeautomationapp.core.MQTTclient;
+import com.alan.homeautomationapp.devices.DiscoveredDevice;
 
 import org.json.JSONObject;
 
