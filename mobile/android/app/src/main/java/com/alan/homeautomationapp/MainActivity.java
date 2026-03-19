@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Update rooms on the spinner
-        MainScreenRenderer.updateRooms(this, databaseManager, roomSpinner);
+        MainScreenRenderer.updateRooms(this, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
             String roomName = roomSpinner.getSelectedItem().toString();
             MainScreenRenderer.updateDevices(this, roomName, roomDevicesLayout);
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                                 roomSpinner.getSelectedItem().toString(),
                                 roomDevicesLayout)
         );
-        DeviceManager.getInstance().addListener(listener);
+        DeviceManager.getInstance(this).addListener(listener);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         Spinner roomSpinner = findViewById(R.id.roomSpinner);
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
-        MainScreenRenderer.updateRooms(this, databaseManager, roomSpinner);
+        MainScreenRenderer.updateRooms(this, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
             MainScreenRenderer.updateDevices(this, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
         }
@@ -125,6 +125,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DeviceManager.getInstance().removeListener(listener);
+        DeviceManager.getInstance(this).removeListener(listener);
     }
 }

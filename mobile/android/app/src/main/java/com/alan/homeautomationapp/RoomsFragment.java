@@ -39,8 +39,8 @@ public class RoomsFragment extends Fragment {
 
                             dbHandler.addRoom(roomData.getId(), roomData.getName());
 
-                            RoomManager.getInstance().addRoom(
-                                    new RoomData(roomData.getId(), roomData.getName()));
+                            RoomManager.getInstance(requireContext()).addRoom(
+                                    new RoomData(roomData.getId(), roomData.getName()), true);
 
                             String payload = roomData.getId() + "," + roomData.getName();
                             mqttClient.publish("hap/main/database/add_room", payload);
@@ -58,13 +58,13 @@ public class RoomsFragment extends Fragment {
 
         roomsLayout.removeAllViews();
 
-        List<String> roomsList = RoomManager.getInstance().getAllRoomNames();
+        List<String> roomsList = RoomManager.getInstance(requireContext()).getAllRoomNames();
 
         LayoutInflater inflater = LayoutInflater.from(requireContext());
 
         for (String roomName : roomsList) {
 
-            RoomData room = RoomManager.getInstance().getRoomByName(roomName);
+            RoomData room = RoomManager.getInstance(requireContext()).getRoomByName(roomName);
             String roomID = room.getId();
 
             View roomView = inflater.inflate(R.layout.room_info, roomsLayout, false);
@@ -82,8 +82,8 @@ public class RoomsFragment extends Fragment {
 
                                 dbHandler.configureRoom(roomData.getId(), roomData.getName());
 
-                                RoomManager.getInstance().configureRoom(
-                                        roomData.getId(), roomData.getName());
+                                RoomManager.getInstance(requireContext()).configureRoom(
+                                        roomData.getId(), roomData.getName(), true);
 
                                 String payload = roomData.getId() + "," + roomData.getName();
                                 mqttClient.publish("hap/main/database/update_room", payload);
@@ -97,7 +97,7 @@ public class RoomsFragment extends Fragment {
 
                                 dbHandler.deleteRoom(roomData.getId());
 
-                                RoomManager.getInstance().deleteRoom(roomData.getId());
+                                RoomManager.getInstance(requireContext()).deleteRoom(roomData.getId(), true);
 
                                 String payload = roomData.getId();
                                 mqttClient.publish("hap/main/database/delete_room", payload);

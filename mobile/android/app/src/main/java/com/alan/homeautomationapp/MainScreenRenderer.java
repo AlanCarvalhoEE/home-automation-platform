@@ -17,11 +17,11 @@ import java.util.Collection;
 public class MainScreenRenderer {
 
     // Method to update rooms
-    public static void updateRooms(Context context, DatabaseManager database, Spinner spinner) {
+    public static void updateRooms(Context context, Spinner spinner) {
         ArrayAdapter<String> adapter;
 
         adapter = new ArrayAdapter<>(
-                context, R.layout.spinner_item, RoomManager.getInstance().getAllRoomNames());
+                context, R.layout.spinner_item, RoomManager.getInstance(context).getAllRoomNames());
         spinner.setAdapter(adapter);
     }
 
@@ -31,7 +31,7 @@ public class MainScreenRenderer {
 
         layout.removeAllViews();
 
-        Collection<DeviceData> devices = DeviceManager.getInstance().getAllDevices();
+        Collection<DeviceData> devices = DeviceManager.getInstance(context).getAllDevices();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         for (DeviceData device : devices) {
@@ -74,8 +74,7 @@ public class MainScreenRenderer {
         }
         view.setEnabled(enabled);
 
-        if (view instanceof ViewGroup) {
-            ViewGroup group = (ViewGroup) view;
+        if (view instanceof ViewGroup group) {
             for (int i = 0; i < group.getChildCount(); i++) {
                 setViewStatus(group.getChildAt(i), enabled, false);
             }

@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -350,10 +349,10 @@ public class DialogManager {
             });
         };
 
-        DeviceManager.getInstance().addListener(updateListener);
+        DeviceManager.getInstance(activity.getApplicationContext()).addListener(updateListener);
 
         dialog.setOnDismissListener(d ->
-                DeviceManager.getInstance().removeListener(updateListener));
+                DeviceManager.getInstance(activity.getApplicationContext()).removeListener(updateListener));
     }
 
     // Method to open "Delete device" dialog

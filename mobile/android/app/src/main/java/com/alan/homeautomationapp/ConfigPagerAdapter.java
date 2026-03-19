@@ -14,13 +14,23 @@ public class ConfigPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return position == 0
-                ? new RoomsFragment()
-                : new DevicesFragment();
+        switch (position) {
+            case 0:
+                return new RoomsFragment();
+
+            case 1:
+                return new DevicesFragment();
+
+            case 2:
+                return new LogFragment();
+
+            default:
+                return new RoomsFragment();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

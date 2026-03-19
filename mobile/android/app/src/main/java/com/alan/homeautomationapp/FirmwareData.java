@@ -1,5 +1,6 @@
 package com.alan.homeautomationapp;
 
+// Class responsible for storing firmware data
 public class FirmwareData {
 
     public final String device;

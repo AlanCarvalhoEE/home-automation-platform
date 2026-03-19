@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:singleLine="true"
-                android:text="@string/room_label"
+                android:text="@string/main_room_label"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"

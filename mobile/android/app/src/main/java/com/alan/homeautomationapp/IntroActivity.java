@@ -20,11 +20,11 @@ import java.util.Objects;
 // Class responsible for running the intro activity (intro screen)
 public class IntroActivity extends AppCompatActivity {
 
-    private DatabaseManager databaseManager;                    // DatabaseManager instance
-    MQTTclient mqttClient;                                      // MQTTclient instance
-    DeviceManager deviceManager = DeviceManager.getInstance();  // DeviceManager instance
-    private final Handler introHandler = new Handler();         // IntroActivity finish handler
-    private boolean databaseUpdated = false;                    // Store the database update status
+    private DatabaseManager databaseManager;                                // DatabaseManager instance
+    MQTTclient mqttClient;                                                  // MQTTclient instance
+    DeviceManager deviceManager;                                            // DeviceManager instance
+    private final Handler introHandler = new Handler();                     // IntroActivity finish handler
+    private boolean databaseUpdated = false;                                // Store the database update status
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,7 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro);
 
         // Initialize database instance
+        deviceManager = DeviceManager.getInstance(this);
         databaseManager = DatabaseManager.getInstance(this);
         databaseManager.getWritableDatabase();
 
@@ -67,15 +68,15 @@ public class IntroActivity extends AppCompatActivity {
             TextView messageTextView = findViewById(R.id.messageTextView);
             messageTextView.setText(getResources().getString(R.string.loading_message));
 
-            RoomManager roomManager = RoomManager.getInstance();
-            DeviceManager deviceManager = DeviceManager.getInstance();
+            RoomManager roomManager = RoomManager.getInstance(this);
+            DeviceManager deviceManager = DeviceManager.getInstance(this);
 
             mqttClient = MQTTclient.getInstance();
             List<DeviceData> databaseDevices = databaseManager.getAllDevices();
             List<RoomData> databaseRooms = databaseManager.getAllRooms();
 
-            for (RoomData room : databaseRooms) roomManager.addRoom(room);
-            for (DeviceData device : databaseDevices) deviceManager.addDevice(device);
+            for (RoomData room : databaseRooms) roomManager.addRoom(room, false);
+            for (DeviceData device : databaseDevices) deviceManager.addDevice(device, false);
 
             // Subscribe to "get_state" topic of each device
             mqttClient.subscribe("hap/device/+/get_state", (topic, message) -> {
@@ -101,7 +102,7 @@ public class IntroActivity extends AppCompatActivity {
                     device.setLdrThreshold(threshold);
                     device.setLdrValue(ldrValue);
 
-                    DeviceManager.getInstance().notifyDeviceUpdated(device);
+                    DeviceManager.getInstance(this).notifyDeviceUpdated(device);
 
                 } catch (Exception ignored) {}
             });
@@ -120,7 +121,7 @@ public class IntroActivity extends AppCompatActivity {
                     String status = message.trim();
                     device.setStatus(status);
 
-                    DeviceManager.getInstance().notifyDeviceUpdated(device);
+                    DeviceManager.getInstance(this).notifyDeviceUpdated(device);
 
                 } catch (Exception ignored) {}
             });
