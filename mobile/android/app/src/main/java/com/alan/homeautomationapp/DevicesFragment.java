@@ -44,18 +44,18 @@ public class DevicesFragment extends Fragment {
         // Search button listener
         deviceSearchImageButton.setOnClickListener(v -> {
             discoveryManager.setRegisteredDevices(
-                    DeviceManager.getInstance().getAllDeviceIds()
+                    DeviceManager.getInstance(requireContext()).getAllDeviceIds()
             );
 
                 DialogManager.openDiscoveredDevicesDialog(requireActivity(), discoveryManager,
                         discoveredDevice -> DialogManager.openAddDeviceDialog(requireActivity(),
-                                discoveredDevice, RoomManager.getInstance().getAllRoomNames(),
+                                discoveredDevice, RoomManager.getInstance(requireContext()).getAllRoomNames(),
                                 deviceData -> {
 
                                     databaseManager.addDevice(deviceData.getId(), deviceData.getName(),
                                             deviceData.getRoom(), deviceData.getType(), deviceData.getTopic());
 
-                                    DeviceManager.getInstance().addDevice(deviceData);
+                                    DeviceManager.getInstance(requireContext()).addDevice(deviceData, true);
 
                                     String payload = deviceData.getId() + "," + deviceData.getName() +
                                             "," + deviceData.getRoom() + "," + deviceData.getType() +
@@ -79,27 +79,27 @@ public class DevicesFragment extends Fragment {
         listener = device ->
                 requireActivity().runOnUiThread(this::refreshDevices);
 
-        DeviceManager.getInstance().addListener(listener);
+        DeviceManager.getInstance(requireContext()).addListener(listener);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        DeviceManager.getInstance().removeListener(listener);
+        DeviceManager.getInstance(requireContext()).removeListener(listener);
     }
 
     // Method to refresh devices on screen
     private void refreshDevices() {
 
         devicesLayout.removeAllViews();
-        Set<String> devicesList = DeviceManager.getInstance().getAllDeviceIds();
+        Set<String> devicesList = DeviceManager.getInstance(requireContext()).getAllDeviceIds();
 
         LayoutInflater inflater = LayoutInflater.from(requireContext());
 
         for (String deviceID : devicesList) {
 
-            DeviceData device = DeviceManager.getInstance().getDevice(deviceID);
+            DeviceData device = DeviceManager.getInstance(requireContext()).getDevice(deviceID);
 
             String deviceName = device.getName();
             String deviceType = device.getType();
@@ -129,15 +129,15 @@ public class DevicesFragment extends Fragment {
 
             //Configure button listener
             deviceConfigImageButton.setOnClickListener(v -> DialogManager.openConfigureDeviceDialog(
-                            requireActivity(), device, RoomManager.getInstance().getAllRoomNames(),
+                            requireActivity(), device, RoomManager.getInstance(requireContext()).getAllRoomNames(),
                             latestFirmwareVersion,
 
                             deviceData -> {
                                 databaseManager.configureDevice(deviceData.getId(), deviceData.getName(),
                                         deviceData.getRoom(), deviceData.getType(), deviceData.getTopic());
 
-                                DeviceManager.getInstance().configureDevice(deviceID,
-                                        deviceData.getName(), deviceData.getRoom());
+                                DeviceManager.getInstance(requireContext()).configureDevice(deviceID,
+                                        deviceData.getName(), deviceData.getRoom(), true);
 
                                 String payload = deviceData.getId() + "," + deviceData.getName() +
                                         "," + deviceData.getRoom() + "," + deviceData.getType() +
@@ -160,7 +160,7 @@ public class DevicesFragment extends Fragment {
 
                                 databaseManager.deleteDevice(deviceID);
 
-                                DeviceManager.getInstance().deleteDevice(deviceID);
+                                DeviceManager.getInstance(requireContext()).deleteDevice(deviceID, true);
 
                                 mqttClient.publish("hap/main/database/delete_device", deviceID);
 

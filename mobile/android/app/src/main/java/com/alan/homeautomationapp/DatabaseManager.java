@@ -43,6 +43,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String USER_PASSWORD_COL = "Password";
     private static final String USER_LEVEL_COL = "Level";
 
+    // Database "Log" table definition
+    private static final String LOG_TABLE_NAME = "Log";
+    private static final String LOG_ID_COL = "ID";
+    private static final String LOG_TIMESTAMP_COL = "Timestamp";
+    private static final String LOG_TYPE_COL = "Type";
+    private static final String LOG_MESSAGE_COL = "Message";
+
     private static DatabaseManager instance;    // DatabaseManager instance
 
     // DatabaseManager constructor
@@ -89,6 +96,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 + USER_PASSWORD_COL + " TEXT,"
                 + USER_LEVEL_COL + " TEXT)";
         db.execSQL(query);
+
+        // Create "Log" table
+        query = "CREATE TABLE " + LOG_TABLE_NAME + " ("
+                + LOG_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + LOG_TIMESTAMP_COL + " INTEGER,"
+                + LOG_TYPE_COL + " TEXT,"
+                + LOG_MESSAGE_COL + " TEXT)";
+        db.execSQL(query);
     }
 
     @Override
@@ -117,7 +132,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         databaseString = databaseString.replaceAll("\\[]", "[[]]");
 
         String[] tables = databaseString.split("]],\\[\\[");
-        Log.d("DEBUG_DATABASE", databaseString);
 
         for (int i = 0; i < tables.length; i++) {
             String[] rows = tables[i].split("],\\[");
@@ -259,6 +273,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Method to get the list of devices from the database
+    @SuppressLint("Range")
     public List<DeviceData> getAllDevices() {
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -271,15 +286,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
 
-            @SuppressLint("Range")
             String id = cursor.getString(cursor.getColumnIndex(DEVICE_ID_COL));
-            @SuppressLint("Range")
             String name = cursor.getString(cursor.getColumnIndex(DEVICE_NAME_COL));
-            @SuppressLint("Range")
             String room = cursor.getString(cursor.getColumnIndex(DEVICE_ROOM_COL));
-            @SuppressLint("Range")
             String type = cursor.getString(cursor.getColumnIndex(DEVICE_TYPE_COL));
-            @SuppressLint("Range")
             String topic = cursor.getString(cursor.getColumnIndex(DEVICE_TOPIC_COL));
 
             devices.add(new DeviceData(id, name, room, type, topic));
@@ -287,5 +297,45 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         cursor.close();
         return devices;
+    }
+
+    // Method to add a log entry to the database
+    public void logEvent(String type, String message) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(LOG_TIMESTAMP_COL, System.currentTimeMillis());
+        values.put(LOG_TYPE_COL, type);
+        values.put(LOG_MESSAGE_COL, message);
+
+        db.insert(LOG_TABLE_NAME, null, values);
+        db.close();
+    }
+
+    // Method to get the event logs from the database
+    @SuppressLint("Range")
+    public List<LogData> getEvents() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<LogData> events = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + LOG_TABLE_NAME + " ORDER BY " + LOG_TIMESTAMP_COL + " DESC",
+                null);
+
+        while(cursor.moveToNext()) {
+
+            LogData log = new LogData();
+
+            log.timestamp = cursor.getLong(cursor.getColumnIndex(LOG_TIMESTAMP_COL));
+            log.type = cursor.getString(cursor.getColumnIndex(LOG_TYPE_COL));
+            log.message = cursor.getString(cursor.getColumnIndex(LOG_MESSAGE_COL));
+
+            events.add(log);
+        }
+
+        cursor.close();
+        return events;
     }
 }

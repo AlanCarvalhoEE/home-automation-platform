@@ -12,6 +12,7 @@
     <string name="type_label">Type:</string>
     <string name="topic_label">Topic:</string>
     <string name="id_label">ID:</string>
+    <string name="time_label">Time:</string>
     <string name="ldr_reading_label">Reading</string>
     <string name="threshold_label">Threshold</string>
     <string name="search_label">Search devices</string>
@@ -24,6 +25,7 @@
     <string name="portuguese_label">Portuguese</string>
     <string name="rooms_tab_label">Rooms</string>
     <string name="devices_tab_label">Devices</string>
+    <string name="log_tab_label">Log</string>
 
     // Buttons
     <string name="confirm_button">Confirm</string>
@@ -69,6 +71,13 @@
     <string name="firmware_updated_message">Firmware up to date</string>
     <string name="firmware_not_updated_message">Update available</string>
     <string name="firmware_updating_message">Updating…</string>
+    <string name="log_device_message">"Device "</string>
+    <string name="log_room_message">"Room "</string>
+    <string name="log_device_add_message">" added to "</string>
+    <string name="log_room_add_message">" added"</string>
+    <string name="log_delete_message">" deleted"</string>
+    <string name="log_configure_message">" updated as "</string>
+    <string name="log_device_room_message">" in "</string>
 
     // Units
     <string name="temperature_unit">°C</string>

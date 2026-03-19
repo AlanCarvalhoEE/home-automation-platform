@@ -12,6 +12,7 @@
     <string name="type_label">Tipo:</string>
     <string name="topic_label">Tópico:</string>
     <string name="id_label">ID:</string>
+    <string name="time_label">Hora:</string>
     <string name="ldr_reading_label">Leitura</string>
     <string name="threshold_label">Limiar</string>
     <string name="search_label">Buscar dispositivos</string>
@@ -24,6 +25,7 @@
     <string name="portuguese_label">Português</string>
     <string name="rooms_tab_label">Cômodos</string>
     <string name="devices_tab_label">Dispositivos</string>
+    <string name="log_tab_label">Log</string>
 
     // Buttons
     <string name="confirm_button">Confirmar</string>
@@ -69,6 +71,13 @@
     <string name="firmware_updated_message">Firmware atualizado</string>
     <string name="firmware_not_updated_message">Atualização disponível</string>
     <string name="firmware_updating_message">Atualização em andamento…</string>
+    <string name="log_device_message">"Dispositivo "</string>
+    <string name="log_room_message">"Cômodo "</string>
+    <string name="log_device_add_message">" adicionado a "</string>
+    <string name="log_room_add_message">" adicionado"</string>
+    <string name="log_delete_message">" excluido"</string>
+    <string name="log_configure_message">" atualizado como "</string>
+    <string name="log_device_room_message">" em "</string>
 
     // Units
     <string name="temperature_unit">°C</string>
