@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.log;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.alan.homeautomationapp.core.DatabaseManager;
+import com.alan.homeautomationapp.R;
 
 import java.util.List;
 

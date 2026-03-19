@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.devices.DeviceController;
+import com.alan.homeautomationapp.devices.DeviceData;
+import com.alan.homeautomationapp.devices.DeviceManager;
+import com.alan.homeautomationapp.rooms.RoomManager;
 
 import java.util.Collection;
 

@@ -1,4 +1,6 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.devices;
+
+import com.alan.homeautomationapp.core.MQTTclient;
 
 // Class responsible for implementing devices control
 public class DeviceController {

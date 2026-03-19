@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,12 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.alan.homeautomationapp.core.DatabaseManager;
+import com.alan.homeautomationapp.core.DialogManager;
+import com.alan.homeautomationapp.core.LanguageManager;
+import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.devices.DeviceManager;
 
 import java.util.Objects;
 

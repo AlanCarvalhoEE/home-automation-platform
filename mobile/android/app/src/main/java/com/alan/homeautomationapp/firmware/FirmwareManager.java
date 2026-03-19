@@ -1,4 +1,6 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.firmware;
+
+import com.alan.homeautomationapp.core.Credentials;
 
 import org.json.JSONException;
 import org.json.JSONObject;

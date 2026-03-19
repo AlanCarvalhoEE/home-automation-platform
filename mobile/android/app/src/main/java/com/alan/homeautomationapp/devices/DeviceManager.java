@@ -1,6 +1,9 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.devices;
 
 import android.content.Context;
+
+import com.alan.homeautomationapp.core.DatabaseManager;
+import com.alan.homeautomationapp.R;
 
 import java.util.ArrayList;
 import java.util.Collection;

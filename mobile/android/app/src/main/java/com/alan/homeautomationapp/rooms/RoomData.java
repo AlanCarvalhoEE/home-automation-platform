@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.rooms;
 
 // Class responsible for storing rooms data
 public class RoomData {

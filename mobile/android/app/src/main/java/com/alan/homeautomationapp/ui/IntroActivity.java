@@ -1,4 +1,4 @@
-package com.alan.homeautomationapp;
+package com.alan.homeautomationapp.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -11,6 +11,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.alan.homeautomationapp.core.DatabaseManager;
+import com.alan.homeautomationapp.core.MQTTclient;
+import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.rooms.RoomData;
+import com.alan.homeautomationapp.rooms.RoomManager;
+import com.alan.homeautomationapp.devices.DeviceData;
+import com.alan.homeautomationapp.devices.DeviceManager;
 
 import org.json.JSONObject;
 
