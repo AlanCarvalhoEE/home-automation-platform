@@ -118,8 +118,9 @@ public class DevicesFragment extends Fragment {
             DeviceData device = DeviceManager.getInstance(requireContext()).getDevice(deviceID);
 
             String deviceName = device.getName();
-            String deviceType = device.getType();
             String deviceRoom = device.getRoom();
+            String deviceType = device.getType();
+            String deviceFunction = device.getFunction();
 
             View deviceView = inflater.inflate(
                     R.layout.device_info, devicesLayout, false);
@@ -128,12 +129,14 @@ public class DevicesFragment extends Fragment {
             TextView deviceIdTextView = deviceView.findViewById(R.id.deviceIdTextView);
             TextView deviceRoomTextView = deviceView.findViewById(R.id.deviceRoomTextView);
             TextView deviceTypeTextView = deviceView.findViewById(R.id.deviceTypeTextView);
+            TextView deviceFunctionTextView = deviceView.findViewById(R.id.deviceFunctionTextView);
             ImageButton deviceConfigImageButton = deviceView.findViewById(R.id.deviceConfigImageButton);
             ImageButton deviceDeleteImageButton = deviceView.findViewById(R.id.deviceDeleteImageButton);
 
             deviceNameTextView.setText(deviceName);
             deviceIdTextView.setText(deviceID);
             deviceTypeTextView.setText(deviceType);
+            deviceFunctionTextView.setText(deviceFunction);
             deviceRoomTextView.setText(deviceRoom);
 
             FirmwareData firmwareData;
@@ -155,11 +158,12 @@ public class DevicesFragment extends Fragment {
                                         deviceData.getTopic());
 
                                 DeviceManager.getInstance(requireContext()).configureDevice(deviceID,
-                                        deviceData.getName(), deviceData.getRoom(), true);
+                                        deviceData.getName(), deviceData.getRoom(),
+                                        deviceData.getFunction(), true);
 
                                 String payload = deviceData.getId() + "," + deviceData.getName() +
                                         "," + deviceData.getRoom() + "," + deviceData.getType() +
-                                        "," + deviceData.getTopic();
+                                        "," + deviceData.getFunction() + "," + deviceData.getTopic();
                                 mqttClient.publish("hap/main/database/update_device", payload);
 
                                 refreshDevices();
@@ -189,7 +193,7 @@ public class DevicesFragment extends Fragment {
             devicesLayout.addView(deviceView);
 
             boolean online = "ONLINE".equals(device.getStatus());
-            MainScreenRenderer.setViewStatus(deviceView, online, true);
+            deviceView.setAlpha(online ? 1.0f : 0.5f);
         }
     }
 }

@@ -50,11 +50,13 @@ public class DeviceManager {
     }
 
     // Method to configure a device
-    public void configureDevice(String deviceId, String newName, String newRoom, boolean log) {
+    public void configureDevice(String deviceId, String newName, String newRoom,
+                                String newFunction, boolean log) {
         DeviceData device = devicesMap.get(deviceId);
         if (device != null) {
             device.setName(newName);
             device.setRoom(newRoom);
+            device.setName(newFunction);
         }
 
         if (log) {

@@ -47,22 +47,24 @@ public class MainScreenRenderer {
 
                 View vi = inflater.inflate(R.layout.device_lamp, layout, false);
 
-                TextView name = vi.findViewById(R.id.lampNameTextView);
-                ToggleButton control = vi.findViewById(R.id.lampControlToggleButton);
-                ToggleButton ldr = vi.findViewById(R.id.lampLdrToggleButton);
+                TextView lampNameTextView = vi.findViewById(R.id.lampNameTextView);
+                ToggleButton lampControlToggleButton = vi.findViewById(R.id.lampControlToggleButton);
 
-                name.setText(device.getName());
+                lampNameTextView.setText(device.getName());
 
-                control.setChecked("ON".equals(device.getLoadStatus()));
-                ldr.setChecked("ENABLED".equals(device.getLdrStatus()));
+                lampControlToggleButton.setChecked("ON".equals(device.getLoadStatus()));
+                lampControlToggleButton.setClickable(!"ENABLED".equals(device.getLdrStatus()));
 
-                control.setClickable(!"ENABLED".equals(device.getLdrStatus()));
-
-                control.setOnCheckedChangeListener((btn, isChecked) ->
+                lampControlToggleButton.setOnCheckedChangeListener((btn, isChecked) ->
                         DeviceController.setLoad(device.getId(), isChecked));
 
-                ldr.setOnCheckedChangeListener((btn, isChecked) ->
-                        DeviceController.setLdr(device.getId(), isChecked));
+                if (device.getFunction().contains("ldr")) {
+                    ToggleButton lampLdrToggleButton = vi.findViewById(R.id.lampLdrToggleButton);
+                    lampLdrToggleButton.setVisibility(View.VISIBLE);
+                    lampLdrToggleButton.setChecked("ENABLED".equals(device.getLdrStatus()));
+                    lampLdrToggleButton.setOnCheckedChangeListener((btn, isChecked) ->
+                            DeviceController.setLdr(device.getId(), isChecked));
+                }
 
                 layout.addView(vi);
 

@@ -324,13 +324,12 @@ public class DialogManager {
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
 
-        ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
-        roomSpinner.setAdapter(adapter);
+        ArrayAdapter<String> roomAdapter;
+        roomAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
+        roomSpinner.setAdapter(roomAdapter);
 
         List<String> functionList = new ArrayList<>();
         for (DeviceFunction function : DeviceFunction.values()) functionList.add(function.name());
-
         ArrayAdapter<String> functionAdapter;
         functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
         functionSpinner.setAdapter(functionAdapter);
@@ -340,7 +339,8 @@ public class DialogManager {
         nameEditText.setText(device.getName());
         currentVersionTextView.setText(currentFirmwareVersion);
         latestVersionTextView.setText(latestFirmwareVersion);
-        roomSpinner.setSelection(adapter.getPosition(device.getRoom()));
+        roomSpinner.setSelection(roomAdapter.getPosition(device.getRoom()));
+        functionSpinner.setSelection(functionAdapter.getPosition(device.getFunction()));
 
         confirmButton.setEnabled(true);
 
@@ -370,10 +370,11 @@ public class DialogManager {
 
             String deviceName = nameEditText.getText().toString();
             String deviceRoom = roomSpinner.getSelectedItem().toString();
+            String deviceFunction = functionSpinner.getSelectedItem().toString();
 
             if (onConfirm != null) {onConfirm.accept(
                     new DeviceData(device.getId(), deviceName, deviceRoom, device.getType(),
-                            device.getFunction(), device.getTopic()));}
+                            deviceFunction, device.getTopic()));}
             dialog.dismiss();
         });
 
