@@ -10,6 +10,7 @@
     <string name="devices_label">Dispositivos</string>
     <string name="name_label">Nome:</string>
     <string name="type_label">Tipo:</string>
+    <string name="function_label">Função:</string>
     <string name="topic_label">Tópico:</string>
     <string name="id_label">ID:</string>
     <string name="time_label">Hora:</string>

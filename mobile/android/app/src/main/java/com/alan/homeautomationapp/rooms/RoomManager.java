@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alan.homeautomationapp.core.DatabaseManager;
 import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.log.LogType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +40,7 @@ public class RoomManager {
         if (log) {
             String message = context.getString(R.string.log_room_message) + room.getName() +
                     context.getString(R.string.log_room_add_message) + ".";
-            DatabaseManager.getInstance(context).logEvent("ROOM_ADD", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.room_added, message);
         }
     }
 
@@ -52,7 +53,7 @@ public class RoomManager {
         if (log) {
             String message = context.getString(R.string.log_room_message) + room.getName() +
                     context.getString(R.string.log_delete_message) + ".";
-            DatabaseManager.getInstance(context).logEvent("ROOM_DELETE", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.room_deleted, message);
         }
     }
 
@@ -65,7 +66,7 @@ public class RoomManager {
         if (log) {
             String message = context.getString(R.string.log_device_message) + room.getName() +
                     context.getString(R.string.log_configure_message) + newName + ".";
-            DatabaseManager.getInstance(context).logEvent("ROOM_CONFIGURE", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.room_configured, message);
         }
     }
 

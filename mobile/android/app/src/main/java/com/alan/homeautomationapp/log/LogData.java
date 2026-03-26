@@ -40,3 +40,4 @@ public class LogData {
         return sdf.format(new Date(timestamp));
     }
 }
+

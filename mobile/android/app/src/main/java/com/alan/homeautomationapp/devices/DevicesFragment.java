@@ -62,13 +62,14 @@ public class DevicesFragment extends Fragment {
                                 deviceData -> {
 
                                     databaseManager.addDevice(deviceData.getId(), deviceData.getName(),
-                                            deviceData.getRoom(), deviceData.getType(), deviceData.getTopic());
+                                            deviceData.getRoom(), deviceData.getType(),
+                                            deviceData.getFunction(), deviceData.getTopic());
 
                                     DeviceManager.getInstance(requireContext()).addDevice(deviceData, true);
 
                                     String payload = deviceData.getId() + "," + deviceData.getName() +
                                             "," + deviceData.getRoom() + "," + deviceData.getType() +
-                                            "," + deviceData.getTopic();
+                                            "," + deviceData.getFunction() + "," + deviceData.getTopic();
                                     mqttClient.publish("hap/main/database/add_device", payload);
 
                                     refreshDevices();
@@ -130,7 +131,7 @@ public class DevicesFragment extends Fragment {
 
             FirmwareData firmwareData;
             try {
-                firmwareData = FirmwareManager.getFirmwareData("on-off");
+                firmwareData = FirmwareManager.getFirmwareData(deviceType);
             } catch (IOException | JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -143,7 +144,8 @@ public class DevicesFragment extends Fragment {
 
                             deviceData -> {
                                 databaseManager.configureDevice(deviceData.getId(), deviceData.getName(),
-                                        deviceData.getRoom(), deviceData.getType(), deviceData.getTopic());
+                                        deviceData.getRoom(), deviceData.getType(),
+                                        deviceData.getFunction(), deviceData.getTopic());
 
                                 DeviceManager.getInstance(requireContext()).configureDevice(deviceID,
                                         deviceData.getName(), deviceData.getRoom(), true);

@@ -1,7 +1,7 @@
 // Project - HAP - Home Automation Platform 
-// Code - ON-OFF module X1
+// Code - ON-OFF module
 // Author - Alan Carvalho
-// Date - 05/03/2026
+// Date - 19/03/2026
 
 // Libraries
 #include <ESP8266WiFi.h>
@@ -12,11 +12,10 @@
 #include "credentials.h"
 
 // Firmware Information
-#define FW_TAG "on-off"
-#define FW_VERSION "1.0.1"
+#define TYPE "on-off"
+#define FW_VERSION "1.0.2"
 
-// Device Parameters
-#define TYPE "lamp"
+// Topics
 #define HAP_TOPIC "hap"
 #define DEVICE_TOPIC "device"
 #define SET_STATE_TOPIC "set_state"
@@ -252,7 +251,7 @@ void performOTA(String version) {
          "http://%s:%d/firmware/%s_v%s.bin",
          FW_SERVER_IP,
          FW_SERVER_PORT,
-         FW_TAG,
+         TYPE,
          version.c_str());
 
   ESPhttpUpdate.setLedPin(LED_BUILTIN, LOW);
@@ -359,8 +358,8 @@ void printReport() {
 
   if ((millis() - lastReportPrint) > reportPrintInterval) {
 
-    Serial.print("Firmware Tag: ");
-    Serial.println(FW_TAG);
+    Serial.print("Device type: ");
+    Serial.println(TYPE);
 
     Serial.print("Firmware Version: ");
     Serial.println(FW_VERSION);

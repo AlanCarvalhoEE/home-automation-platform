@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alan.homeautomationapp.core.DatabaseManager;
 import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.log.LogType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class DeviceManager {
             String message = context.getString(R.string.log_device_message) +
                     device.getName() + "(" + device.getId() + ")" +
                     context.getString(R.string.log_device_add_message) + device.getRoom() + ".";
-            DatabaseManager.getInstance(context).logEvent("DEVICE_ADD", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.device_added, message);
         }
     }
 
@@ -59,7 +60,7 @@ public class DeviceManager {
             String message = context.getString(R.string.log_device_message) + device.getId() +
                     context.getString(R.string.log_configure_message) + device.getName() +
                     context.getString(R.string.log_device_room_message) + device.getRoom() + ".";
-            DatabaseManager.getInstance(context).logEvent("DEVICE_CONFIGURE", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.device_configured, message);
         }
     }
 
@@ -72,7 +73,7 @@ public class DeviceManager {
         if (log) {
             String message = context.getString(R.string.log_device_message) + device.getName() +
                     "(" + device.getId() + ")" + context.getString(R.string.log_delete_message) +".";
-            DatabaseManager.getInstance(context).logEvent("DEVICE_DELETE", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.device_deleted, message);
         }
     }
 

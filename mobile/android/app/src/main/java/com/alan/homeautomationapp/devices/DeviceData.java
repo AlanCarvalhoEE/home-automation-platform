@@ -7,6 +7,7 @@ public class DeviceData {
     private String name;
     private String room;
     private String type;
+    private String function;
     private String topic;
 
     private String firmwareVersion;
@@ -17,11 +18,12 @@ public class DeviceData {
     private int ldrValue;
 
     // DeviceData constructor
-    public DeviceData(String id, String name, String room, String type, String topic) {
+    public DeviceData(String id, String name, String room, String type, String function, String topic) {
         this.id = id;
         this.name = name;
         this.room = room;
         this.type = type;
+        this.function = function;
         this.topic = topic;
 
         this.firmwareVersion = null;
@@ -48,6 +50,11 @@ public class DeviceData {
     // Method to get the device type
     public String getType() {
         return type;
+    }
+
+    // Method to get the device function
+    public String getFunction() {
+        return function;
     }
 
     // Method to get the device topic

@@ -22,14 +22,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.alan.homeautomationapp.R;
-import com.alan.homeautomationapp.core.LanguageManager;
 import com.alan.homeautomationapp.devices.DeviceData;
 import com.alan.homeautomationapp.devices.DeviceDiscoveryManager;
+import com.alan.homeautomationapp.devices.DeviceFunction;
 import com.alan.homeautomationapp.devices.DeviceManager;
 import com.alan.homeautomationapp.devices.DiscoveredDevice;
 import com.alan.homeautomationapp.rooms.RoomData;
 import com.alan.homeautomationapp.ui.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -200,8 +201,7 @@ public class DialogManager {
 
     // Method to open "Add device" dialog
     public static void openAddDeviceDialog(Activity activity, DiscoveredDevice discoveredDevice,
-                                           List<String> roomsList,
-                                           Consumer<DeviceData> onConfirm) {
+                                           List<String> roomsList, Consumer<DeviceData> onConfirm) {
 
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_device, null);
 
@@ -217,12 +217,20 @@ public class DialogManager {
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
+        Spinner functionSpinner = dialog.findViewById(R.id.functionSpinner);
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
 
-        ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
-        roomSpinner.setAdapter(adapter);
+        ArrayAdapter<String> roomAdapter;
+        roomAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
+        roomSpinner.setAdapter(roomAdapter);
+
+        List<String> functionList = new ArrayList<>();
+        for (DeviceFunction function : DeviceFunction.values()) functionList.add(function.name());
+
+        ArrayAdapter<String> functionAdapter;
+        functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
+        functionSpinner.setAdapter(functionAdapter);
 
         nameEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
@@ -237,10 +245,12 @@ public class DialogManager {
             String deviceID = discoveredDevice.id;
             String deviceName = nameEditText.getText().toString();
             String deviceRoom = roomSpinner.getSelectedItem().toString();
+            String deviceFunction = functionSpinner.getSelectedItem().toString();
             String deviceType = discoveredDevice.type;
 
             if (onConfirm != null) {onConfirm.accept(
-                    new DeviceData(deviceID, deviceName, deviceRoom, deviceType, deviceID));}
+                    new DeviceData(deviceID, deviceName, deviceRoom, deviceType,
+                            deviceFunction, deviceID));}
             dialog.dismiss();
         });
 
@@ -249,7 +259,8 @@ public class DialogManager {
 
     // Method to open "Configure device" dialog
     public static void openConfigureDeviceDialog(Activity activity, DeviceData device,
-                                                 List<String> roomsList, String latestFirmwareVersion,
+                                                 List<String> roomsList,
+                                                 String latestFirmwareVersion,
                                                  Consumer<DeviceData> onConfirm,
                                                  Consumer<DeviceData> onFirmwareUpdate) {
 
@@ -267,6 +278,7 @@ public class DialogManager {
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
+        Spinner functionSpinner = dialog.findViewById(R.id.functionSpinner);
         TextView currentVersionTextView = dialog.findViewById(R.id.currentVersionTextView);
         TextView latestVersionTextView = dialog.findViewById(R.id.latestVersionTextView);
         TextView firmwareStatusTextView = dialog.findViewById(R.id.firmwareStatusTextView);
@@ -278,6 +290,13 @@ public class DialogManager {
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
         roomSpinner.setAdapter(adapter);
+
+        List<String> functionList = new ArrayList<>();
+        for (DeviceFunction function : DeviceFunction.values()) functionList.add(function.name());
+
+        ArrayAdapter<String> functionAdapter;
+        functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
+        functionSpinner.setAdapter(functionAdapter);
 
         String currentFirmwareVersion = device.getFirmwareVersion();
 
@@ -316,7 +335,8 @@ public class DialogManager {
             String deviceRoom = roomSpinner.getSelectedItem().toString();
 
             if (onConfirm != null) {onConfirm.accept(
-                    new DeviceData(device.getId(), deviceName, deviceRoom, device.getType(), device.getTopic()));}
+                    new DeviceData(device.getId(), deviceName, deviceRoom, device.getType(),
+                            device.getFunction(), device.getTopic()));}
             dialog.dismiss();
         });
 
@@ -342,6 +362,7 @@ public class DialogManager {
                     if (updatedDevice.getFirmwareVersion()
                             .equals(latestFirmwareVersion)) {
 
+                        currentVersionTextView.setText(updatedDevice.getFirmwareVersion());
                         firmwareStatusTextView.setText(activity.getString(R.string.firmware_updated_message));
                         firmwareUpdateImageButton.setEnabled(false);
                         loadingProgressBar.setVisibility(View.INVISIBLE);
