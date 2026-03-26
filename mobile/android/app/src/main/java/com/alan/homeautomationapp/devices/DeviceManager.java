@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alan.homeautomationapp.core.DatabaseManager;
 import com.alan.homeautomationapp.R;
+import com.alan.homeautomationapp.log.LogType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 // Class responsible for managing devices
@@ -43,7 +45,7 @@ public class DeviceManager {
             String message = context.getString(R.string.log_device_message) +
                     device.getName() + "(" + device.getId() + ")" +
                     context.getString(R.string.log_device_add_message) + device.getRoom() + ".";
-            DatabaseManager.getInstance(context).logEvent("DEVICE_ADD", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.device_added, message);
         }
     }
 
@@ -56,10 +58,10 @@ public class DeviceManager {
         }
 
         if (log) {
-            String message = context.getString(R.string.log_device_message) + device.getId() +
+            String message = context.getString(R.string.log_device_message) + Objects.requireNonNull(device).getId() +
                     context.getString(R.string.log_configure_message) + device.getName() +
                     context.getString(R.string.log_device_room_message) + device.getRoom() + ".";
-            DatabaseManager.getInstance(context).logEvent("DEVICE_CONFIGURE", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.device_configured, message);
         }
     }
 
@@ -70,9 +72,9 @@ public class DeviceManager {
         devicesMap.remove(id);
 
         if (log) {
-            String message = context.getString(R.string.log_device_message) + device.getName() +
+            String message = context.getString(R.string.log_device_message) + Objects.requireNonNull(device).getName() +
                     "(" + device.getId() + ")" + context.getString(R.string.log_delete_message) +".";
-            DatabaseManager.getInstance(context).logEvent("DEVICE_DELETE", message);
+            DatabaseManager.getInstance(context).logEvent(LogType.device_deleted, message);
         }
     }
 

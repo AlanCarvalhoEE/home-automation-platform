@@ -7,7 +7,7 @@
     android:textSize="20sp"
     android:textStyle="bold"
     android:padding="10dp"
-    android:gravity="start"
+    android:gravity="start|center_vertical"
     android:textColor="@color/black"
     android:background="@drawable/spinner_bg"
     />

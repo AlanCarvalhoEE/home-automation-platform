@@ -43,7 +43,7 @@ public class MainScreenRenderer {
         for (DeviceData device : devices) {
             if (!device.getRoom().trim().equalsIgnoreCase(room.trim())) continue;
 
-            if (device.getType().contains("lamp")) {
+            if (device.getFunction().contains("lamp")) {
 
                 View vi = inflater.inflate(R.layout.device_lamp, layout, false);
 

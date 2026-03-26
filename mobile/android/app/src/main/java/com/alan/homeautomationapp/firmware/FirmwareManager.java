@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class FirmwareManager {
 
-    public static FirmwareData getFirmwareData(String device)
+    public static FirmwareData getFirmwareData(String type)
             throws IOException, JSONException {
 
         URL url = new URL(Credentials.FIRMWARE_URL);
@@ -35,11 +35,11 @@ public class FirmwareManager {
 
         JSONObject manifest = new JSONObject(response.toString());
 
-        JSONObject deviceInfo = manifest.getJSONObject(device);
+        JSONObject deviceInfo = manifest.getJSONObject(type);
 
         String version = deviceInfo.getString("version");
         String firmwareUrl = deviceInfo.getString("url");
 
-        return new FirmwareData(device, version, firmwareUrl);
+        return new FirmwareData(type, version, firmwareUrl);
     }
 }

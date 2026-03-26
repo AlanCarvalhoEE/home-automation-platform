@@ -6,10 +6,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.alan.homeautomationapp.devices.DeviceData;
 import com.alan.homeautomationapp.log.LogData;
+import com.alan.homeautomationapp.log.LogType;
 import com.alan.homeautomationapp.rooms.RoomData;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +24,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     // Database information
     private static final String DB_NAME = "HOME_AUTOMATION_DB";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     // Database "Devices" table definition
     private static final String DEVICES_TABLE_NAME = "Devices";
@@ -27,17 +32,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String DEVICE_NAME_COL = "Name";
     private static final String DEVICE_ROOM_COL = "Room";
     private static final String DEVICE_TYPE_COL = "Type";
+    private static final String DEVICE_FUNCTION_COL = "Function";
     private static final String DEVICE_TOPIC_COL = "Topic";
 
     // Database "Rooms" table definition
     private static final String ROOMS_TABLE_NAME = "Rooms";
     private static final String ROOM_ID_COL = "ID";
-    private static final String ROOM_NAME_COL = "Room";
-
-    // Database "Types" table definition
-    private static final String TYPES_TABLE_NAME = "Types";
-    private static final String TYPE_ID_COL = "ID";
-    private static final String TYPE_NAME_COL = "Type";
+    private static final String ROOM_NAME_COL = "Name";
 
     // Database "Users" table definition
     private static final String USERS_TABLE_NAME = "Users";
@@ -77,6 +78,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 + DEVICE_NAME_COL + " TEXT,"
                 + DEVICE_ROOM_COL + " TEXT,"
                 + DEVICE_TYPE_COL + " TEXT,"
+                + DEVICE_FUNCTION_COL + " TEXT,"
                 + DEVICE_TOPIC_COL + " TEXT)";
         db.execSQL(query);
 
@@ -84,12 +86,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         query = "CREATE TABLE " + ROOMS_TABLE_NAME + " ("
                 + ROOM_ID_COL + " TEXT PRIMARY KEY, "
                 + ROOM_NAME_COL + " TEXT)";
-        db.execSQL(query);
-
-        // Create "Types" table
-        query = "CREATE TABLE " + TYPES_TABLE_NAME + " ("
-                + TYPE_ID_COL + " INTEGER PRIMARY KEY, "
-                + TYPE_NAME_COL + " TEXT)";
         db.execSQL(query);
 
         // Create "Users" table
@@ -111,8 +107,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DEVICES_TABLE_NAME);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + DEVICES_TABLE_NAME + " ADD COLUMN " +
+                    DEVICE_FUNCTION_COL + " TEXT");
+        }
     }
 
     // Method to clear the whole database
@@ -121,40 +119,66 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         db.delete(DEVICES_TABLE_NAME, null, null);
         db.delete(ROOMS_TABLE_NAME, null, null);
-        db.delete(TYPES_TABLE_NAME, null, null);
         db.delete(USERS_TABLE_NAME, null, null);
     }
 
     // Method to update the database from MQTT
     public void updateDatabase(String databaseString) {
+
         clearDatabase();
 
-        databaseString = databaseString.replace("\"", "");
-        databaseString = databaseString.replace("\\", "");
-        databaseString = databaseString.replace(" ", "");
-        databaseString = databaseString.replaceAll("\\[]", "[[]]");
+        try {
+            JSONObject dbJson = new JSONObject(databaseString);
 
-        String[] tables = databaseString.split("]],\\[\\[");
+            if (dbJson.has("Devices")) {
+                JSONArray devices = dbJson.getJSONArray("Devices");
 
-        for (int i = 0; i < tables.length; i++) {
-            String[] rows = tables[i].split("],\\[");
+                for (int i = 0; i < devices.length(); i++) {
+                    JSONArray row = devices.getJSONArray(i);
 
-            if (rows.length > 0) {
-                for (int j = 0; j < rows.length; j++) {
-                    rows[j] = rows[j].replace("[", "");
-                    rows[j] = rows[j].replace("]", "");
+                    String id = row.getString(0);
+                    String name = row.getString(1);
+                    String room = row.getString(2);
+                    String type = row.getString(3);
+                    String function = row.getString(4);
+                    String topic = row.getString(5);
 
-                    String[] fields = rows[j].split(",");
-
-                    if (fields.length > 1) {
-                        for (int k = 0; k < fields.length; k++) fields[k] = fields[k].replace("\"", "");
-
-                        if (i == 0) addDevice(fields[0], fields[1], fields[2], fields[3], fields[4]);
-                        else if (i == 1) addRoom(fields[0], fields[1]);
-                        else if (i == 2) addType(fields[1]);
-                    }
+                    addDevice(id, name, room, type, function, topic);
                 }
             }
+
+            if (dbJson.has("Rooms")) {
+                JSONArray rooms = dbJson.getJSONArray("Rooms");
+
+                for (int i = 0; i < rooms.length(); i++) {
+                    JSONArray row = rooms.getJSONArray(i);
+
+                    String id = row.getString(0);
+                    String name = row.getString(1);
+
+                    addRoom(id, name);
+                }
+            }
+
+            if (dbJson.has("Users")) {
+                JSONArray users = dbJson.getJSONArray("Users");
+
+                for (int i = 0; i < users.length(); i++) {
+                    JSONArray row = users.getJSONArray(i);
+
+                    ContentValues values = new ContentValues();
+                    values.put(USER_ID_COL, row.getInt(0));
+                    values.put(USER_NAME_COL, row.getString(1));
+                    values.put(USER_PASSWORD_COL, row.getString(2));
+                    values.put(USER_LEVEL_COL, row.getString(3));
+
+                    getWritableDatabase().insert(USERS_TABLE_NAME, null, values);
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e("DB_PARSE", "Failed to parse database JSON", e);
+            throw new RuntimeException("Failed to parse database JSON", e);
         }
     }
 
@@ -162,7 +186,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void addRoom(String roomID, String roomName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
+        System.out.println("JJJJJJJJJJJJJJJJJJ");
         values.put(ROOM_ID_COL, roomID);
         values.put(ROOM_NAME_COL, roomName);
         db.insert(ROOMS_TABLE_NAME, null, values);
@@ -196,7 +220,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     // Method to add a device to the database
     public void addDevice(String deviceID, String deviceName, String deviceRoom,
-                          String deviceType, String deviceTopic) {
+                          String deviceType, String deviceFunction, String deviceTopic) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -204,6 +228,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(DEVICE_NAME_COL, deviceName);
         values.put(DEVICE_ROOM_COL, deviceRoom);
         values.put(DEVICE_TYPE_COL, deviceType);
+        values.put(DEVICE_FUNCTION_COL, deviceFunction);
         values.put(DEVICE_TOPIC_COL, deviceTopic);
 
         db.insert(DEVICES_TABLE_NAME, null, values);
@@ -212,13 +237,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     // Method to update a device on the database
     public void configureDevice(String deviceID, String deviceName, String deviceRoom,
-                                String deviceType, String deviceTopic) {
+                                String deviceType, String deviceFunction, String deviceTopic) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DEVICE_NAME_COL, deviceName);
         values.put(DEVICE_ROOM_COL, deviceRoom);
         values.put(DEVICE_TYPE_COL, deviceType);
+        values.put(DEVICE_FUNCTION_COL, deviceFunction);
         values.put(DEVICE_TOPIC_COL, deviceTopic);
 
         String whereClause = DEVICE_ID_COL + " = ?";
@@ -236,16 +262,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         String[] selectionArgs = {deviceID};
 
         db.delete(DEVICES_TABLE_NAME, selection, selectionArgs);
-        db.close();
-    }
-
-    // Method to add a type to the database
-    public void addType(String typeName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(TYPE_NAME_COL, typeName);
-        db.insert(TYPES_TABLE_NAME, null, values);
         db.close();
     }
 
@@ -293,9 +309,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String name = cursor.getString(cursor.getColumnIndex(DEVICE_NAME_COL));
             String room = cursor.getString(cursor.getColumnIndex(DEVICE_ROOM_COL));
             String type = cursor.getString(cursor.getColumnIndex(DEVICE_TYPE_COL));
+            String function = cursor.getString(cursor.getColumnIndex(DEVICE_FUNCTION_COL));
             String topic = cursor.getString(cursor.getColumnIndex(DEVICE_TOPIC_COL));
 
-            devices.add(new DeviceData(id, name, room, type, topic));
+            devices.add(new DeviceData(id, name, room, type, function, topic));
         }
 
         cursor.close();
@@ -303,13 +320,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Method to add a log entry to the database
-    public void logEvent(String type, String message) {
+    public void logEvent(LogType type, String message) {
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(LOG_TIMESTAMP_COL, System.currentTimeMillis());
-        values.put(LOG_TYPE_COL, type);
+        values.put(LOG_TYPE_COL, type.name());
         values.put(LOG_MESSAGE_COL, message);
 
         db.insert(LOG_TABLE_NAME, null, values);

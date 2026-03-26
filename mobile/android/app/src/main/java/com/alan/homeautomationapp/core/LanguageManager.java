@@ -3,6 +3,8 @@ package com.alan.homeautomationapp.core;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 
+import java.util.Objects;
+
 // Class responsible for managing the APP language
 public class LanguageManager {
 
@@ -22,7 +24,7 @@ public class LanguageManager {
                 AppCompatDelegate.getApplicationLocales();
 
         if (!locales.isEmpty()) {
-            return locales.get(0).getLanguage();
+            return Objects.requireNonNull(locales.get(0)).getLanguage();
         }
 
         return "en";
