@@ -11,40 +11,21 @@ import json             # Library to work with json packages
 
 # Function to create and configure the database
 def createDatabase():
-
-    # Create the database file
     connection = lite.connect(setup.dbName)
-    connection.commit()
-
-    # Create the tables
     cursor = connection.cursor()
 
     try:
-        # Create the database tables
-        for table in range(0, len(setup.dbStructure), 3):
-            query = "CREATE TABLE IF NOT EXISTS "
-            query += setup.dbStructure[table][0] + " ("
+        for tableName, tableData in setup.databaseStructure.items():
+            columns = tableData["columns"]
 
-            for field in range(len(setup.dbStructure[table + 1])):
-                query += setup.dbStructure[table + 1][field] + ' '
-                query += setup.dbStructure[table + 2][field]
-                if (field < (len(setup.dbStructure[table + 1]) - 1)): 
-                    query += ", "
+            query = f"CREATE TABLE IF NOT EXISTS {tableName} ("
+            query += ", ".join([f"{name} {type_}" for name, type_ in columns])
             query += ")"
+
             cursor.execute(query)
 
-        # Populate the device types table if it is empty
-        query = "SELECT COUNT(*) FROM "
-        query += setup.dbStructure[6][0]
-        cursor.execute(query)
-        rows = cursor.fetchone()[0]
+        connection.commit()
 
-        if (rows == 0):
-            query = "INSERT INTO "
-            query += setup.dbStructure[6][0]
-            query += " VALUES (null, ?)"
-            cursor.executemany(query, setup.deviceTypes)
-            connection.commit()
     except lite.Error as e:
         connection.rollback()
         raise e
@@ -57,25 +38,21 @@ def createDatabase():
 def getDatabase():
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
-    jsonList = []
+    dbDict = {}
 
     try:
-        for table in range(0, len(setup.dbStructure), 3):
-            query = "SELECT * FROM "
-            query += setup.dbStructure[table][0]
-            cursor.execute(query)
+        for tableName in setup.databaseStructure.keys():
+            cursor.execute(f"SELECT * FROM {tableName}")
             data = cursor.fetchall()
-            
+
             dataList = [list(row) for row in data]
-            dataJSON = json.dumps(dataList, ensure_ascii=False)
-            jsonList.append(dataJSON)
-    except lite.Error as e:
-        raise e
+            dbDict[tableName] = dataList
+
     finally:
         cursor.close()
         connection.close()
 
-    return jsonList
+    return json.dumps(dbDict, ensure_ascii=False)
 
 
 # Function to get the list of rooms
@@ -84,11 +61,8 @@ def getRooms():
     cursor = connection.cursor()
 
     try:
-        query = "SELECT " + setup.dbStructure[4][0] + ", " + setup.dbStructure[4][1] + " FROM " + setup.dbStructure[3][0]
-        cursor.execute(query)
+        cursor.execute("SELECT ID, Name FROM Rooms")
         rooms = [{"id": row[0], "name": row[1]} for row in cursor.fetchall()]
-    except lite.Error as e:
-        raise e
     finally:
         cursor.close()
         connection.close()
@@ -98,18 +72,18 @@ def getRooms():
 
 # Function to add a new room
 def addRoom(roomID, roomName):
-    print(roomID)
-    print("\n")
-    print(roomName)
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
 
     try:
-        query = "INSERT INTO " + setup.dbStructure[3][0] + " (" + setup.dbStructure[4][0] + ", " + setup.dbStructure[4][1] + ") VALUES (?, ?)"
-        cursor.execute(query, (roomID, roomName))
+        cursor.execute(
+            "INSERT INTO Rooms (ID, Name) VALUES (?, ?)",
+            (roomID, roomName)
+        )
         connection.commit()
     except lite.Error as e:
         connection.rollback()
+        print("ERROR addRoom:", e)
         raise e
     finally:
         cursor.close()
@@ -121,11 +95,14 @@ def updateRoom(roomID, roomName):
     cursor = connection.cursor()
 
     try:
-        query = "UPDATE " + setup.dbStructure[3][0] + " SET " + setup.dbStructure[4][1] + " = ? WHERE " + setup.dbStructure[4][0] + " = ?"
-        cursor.execute(query, (roomName, roomID))
+        cursor.execute(
+            "UPDATE Rooms SET Name = ? WHERE ID = ?",
+            (roomName, roomID)
+        )
         connection.commit()
     except lite.Error as e:
         connection.rollback()
+        print("ERROR updateRoom:", e)
         raise e
     finally:
         cursor.close()
@@ -138,11 +115,14 @@ def deleteRoom(roomID):
     cursor = connection.cursor()
 
     try:
-        query = "DELETE FROM " + setup.dbStructure[3][0] + " WHERE " + setup.dbStructure[4][0] + " = ?"
-        cursor.execute(query, (roomID,))
+        cursor.execute(
+            "DELETE FROM Rooms WHERE ID = ?",
+            (roomID,)
+        )
         connection.commit()
     except lite.Error as e:
         connection.rollback()
+        print("ERROR deleteRoom:", e)
         raise e
     finally:
         cursor.close()
@@ -150,13 +130,23 @@ def deleteRoom(roomID):
 
 
 # Function to add new devices
-def addDevice(deviceID, deviceName, deviceRoom, deviceType, deviceTopic):
+def addDevice(deviceID, name, room, type_, function, topic):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
 
     try:
-        query = "INSERT INTO " + setup.dbStructure[0][0] + " (" + setup.dbStructure[1][0] + ", " + setup.dbStructure[1][1] + ", " + setup.dbStructure[1][2] + ", " + setup.dbStructure[1][3] + ", " + setup.dbStructure[1][4] + ") VALUES (?, ?, ?, ?, ?)"
-        cursor.execute(query, (deviceID, deviceName, deviceRoom, deviceType, deviceTopic))
+        query = """
+        INSERT INTO Devices (ID, Name, Room, Type, Function, Topic)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """
+        cursor.execute(query, (
+            deviceID,
+            name,
+            room,
+            type_.lower(),
+            function.lower(),
+            topic
+        ))
         connection.commit()
     except lite.Error as e:
         connection.rollback()
@@ -167,14 +157,24 @@ def addDevice(deviceID, deviceName, deviceRoom, deviceType, deviceTopic):
 
 
 # Function to update a devices
-def updateDevice(deviceID, deviceName, deviceRoom, deviceType, deviceTopic):
+def updateDevice(deviceID, name, room, type_, function, topic):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
 
     try:
-        query = "UPDATE " + setup.dbStructure[0][0] + " SET " + setup.dbStructure[1][1] + " = ?, " + setup.dbStructure[1][2] + " = ?, " + setup.dbStructure[1][3] + " = ?, " + setup.dbStructure[1][4] + " = ? WHERE " + setup.dbStructure[1][0] + " = ?"
-
-        cursor.execute(query, (deviceName, deviceRoom, deviceType, deviceTopic, deviceID))
+        query = """
+        UPDATE Devices
+        SET Name = ?, Room = ?, Type = ?, Function = ?, Topic = ?
+        WHERE ID = ?
+        """
+        cursor.execute(query, (
+            name,
+            room,
+            type_.lower(),
+            function.lower(),
+            topic,
+            deviceID
+        ))
         connection.commit()
     except lite.Error as e:
         connection.rollback()
@@ -190,8 +190,25 @@ def deleteDevice(deviceID):
     cursor = connection.cursor()
 
     try:
-        query = "DELETE FROM " + setup.dbStructure[0][0] + " WHERE " + setup.dbStructure[1][0] + " = ?"
-        cursor.execute(query, (deviceID,))
+        cursor.execute("DELETE FROM Devices WHERE ID = ?", (deviceID,))
+        connection.commit()
+    except lite.Error as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()
+
+#Function to add a log entry
+def addLog(timestamp, logType, message):
+    connection = lite.connect(setup.dbName)
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(
+            "INSERT INTO Log (Timestamp, Type, Message) VALUES (?, ?, ?)",
+            (timestamp, logType, message)
+        )
         connection.commit()
     except lite.Error as e:
         connection.rollback()
