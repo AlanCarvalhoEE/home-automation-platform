@@ -18,19 +18,11 @@ public class ConfigPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position) {
-            case 0:
-                return new RoomsFragment();
-
-            case 1:
-                return new DevicesFragment();
-
-            case 2:
-                return new LogFragment();
-
-            default:
-                return new RoomsFragment();
-        }
+        return switch (position) {
+            case 1 -> new DevicesFragment();
+            case 2 -> new LogFragment();
+            default -> new RoomsFragment();
+        };
     }
 
     @Override

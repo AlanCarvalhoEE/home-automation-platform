@@ -1,7 +1,5 @@
 package com.alan.homeautomationapp.core;
 
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,7 +41,9 @@ public class DialogManager {
     // Method to open "Add room" dialog
     public static void openAddRoomDialog(Activity activity, Consumer<RoomData> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_room, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_add_room, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -50,9 +51,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Button confirmButton = dialog.findViewById(R.id.yesButton);
@@ -78,9 +83,12 @@ public class DialogManager {
     }
 
     // Method to open "Configure room" dialog
-    public static void openConfigureRoomDialog(Activity activity, RoomData roomData, Consumer<RoomData> onConfirm) {
+    public static void openConfigureRoomDialog(Activity activity, RoomData roomData,
+                                               Consumer<RoomData> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_room, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_add_room, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -88,9 +96,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Button confirmButton = dialog.findViewById(R.id.yesButton);
@@ -119,9 +131,12 @@ public class DialogManager {
     }
 
     // Method to open "Delete room" dialog
-    public static void openDeleteRoomDialog(Activity activity, String roomID, String roomName, Consumer<RoomData> onConfirm) {
+    public static void openDeleteRoomDialog(Activity activity, String roomID, String roomName,
+                                            Consumer<RoomData> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_delete_room, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_delete_room, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -129,9 +144,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
@@ -150,7 +169,9 @@ public class DialogManager {
                                                    DeviceDiscoveryManager discoveryManager,
                                                    Consumer<DiscoveredDevice> onDeviceSelected) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_discovered_devices, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_discovered_devices, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -158,9 +179,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         LinearLayout discoveredLayout = dialog.findViewById(R.id.discoveredLayout);
 
@@ -203,7 +228,9 @@ public class DialogManager {
     public static void openAddDeviceDialog(Activity activity, DiscoveredDevice discoveredDevice,
                                            List<String> roomsList, Consumer<DeviceData> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_device, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_add_device, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -211,9 +238,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
@@ -264,7 +295,9 @@ public class DialogManager {
                                                  Consumer<DeviceData> onConfirm,
                                                  Consumer<DeviceData> onFirmwareUpdate) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_configure_device, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_configure_device, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -272,9 +305,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
@@ -381,14 +418,17 @@ public class DialogManager {
 
         DeviceManager.getInstance(activity.getApplicationContext()).addListener(updateListener);
 
-        dialog.setOnDismissListener(d ->
-                DeviceManager.getInstance(activity.getApplicationContext()).removeListener(updateListener));
+        dialog.setOnDismissListener(d -> DeviceManager.getInstance
+                (activity.getApplicationContext()).removeListener(updateListener));
     }
 
     // Method to open "Delete device" dialog
-    public static void openDeleteDeviceDialog(Activity activity, String deviceID, Consumer<String> onConfirm) {
+    public static void openDeleteDeviceDialog(Activity activity, String deviceID,
+                                              Consumer<String> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_delete_device, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_delete_device, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -396,9 +436,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         Button confirmButton = dialog.findViewById(R.id.yesButton);
         Button cancelButton = dialog.findViewById(R.id.noButton);
@@ -416,7 +460,9 @@ public class DialogManager {
     public static void openConfigureLdrDialog(Activity activity, int currentReading,
                                               int currentThreshold, Consumer<Integer> onConfirm) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_config_ldr, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_config_ldr, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -424,9 +470,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         TextView readingTextView = dialog.findViewById(R.id.readingTextView);
         SeekBar thresholdSeekBar = dialog.findViewById(R.id.thresholdSeekBar);
@@ -477,7 +527,9 @@ public class DialogManager {
     // Method to open "Language selection" dialog
     public static void openLanguageSelectionDialog(Activity activity, String currentLanguage) {
 
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_language, null);
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_language, root, false);
 
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -485,9 +537,13 @@ public class DialogManager {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
-        window.setLayout(
-                (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9), WRAP_CONTENT);
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         RadioGroup languageRadioGroup = dialog.findViewById(R.id.languageRadioGroup);
         Button confirmButton = dialog.findViewById(R.id.yesButton);

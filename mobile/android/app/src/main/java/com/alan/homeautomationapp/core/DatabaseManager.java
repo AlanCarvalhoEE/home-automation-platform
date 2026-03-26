@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.alan.homeautomationapp.devices.DeviceData;
 import com.alan.homeautomationapp.log.LogData;
@@ -107,7 +108,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE " + DEVICES_TABLE_NAME + " ADD COLUMN " + DEVICE_FUNCTION_COL + " TEXT");
+            db.execSQL("ALTER TABLE " + DEVICES_TABLE_NAME + " ADD COLUMN " +
+                    DEVICE_FUNCTION_COL + " TEXT");
         }
     }
 
@@ -175,7 +177,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("DB_PARSE", "Failed to parse database JSON", e);
             throw new RuntimeException("Failed to parse database JSON", e);
         }
     }

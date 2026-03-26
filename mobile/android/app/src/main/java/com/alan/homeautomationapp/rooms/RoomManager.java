@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 // Class responsible for managing rooms
 public class RoomManager {
@@ -51,7 +52,7 @@ public class RoomManager {
         roomsMap.remove(roomId);
 
         if (log) {
-            String message = context.getString(R.string.log_room_message) + room.getName() +
+            String message = context.getString(R.string.log_room_message) + Objects.requireNonNull(room).getName() +
                     context.getString(R.string.log_delete_message) + ".";
             DatabaseManager.getInstance(context).logEvent(LogType.room_deleted, message);
         }
@@ -64,7 +65,7 @@ public class RoomManager {
         if (room != null) room.setName(newName);
 
         if (log) {
-            String message = context.getString(R.string.log_device_message) + room.getName() +
+            String message = context.getString(R.string.log_device_message) + Objects.requireNonNull(room).getName() +
                     context.getString(R.string.log_configure_message) + newName + ".";
             DatabaseManager.getInstance(context).logEvent(LogType.room_configured, message);
         }

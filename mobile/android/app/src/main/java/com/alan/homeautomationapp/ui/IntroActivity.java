@@ -28,11 +28,11 @@ import java.util.Objects;
 // Class responsible for running the intro activity (intro screen)
 public class IntroActivity extends AppCompatActivity {
 
-    private DatabaseManager databaseManager;                                // DatabaseManager instance
-    MQTTclient mqttClient;                                                  // MQTTclient instance
-    DeviceManager deviceManager;                                            // DeviceManager instance
-    private final Handler introHandler = new Handler();                     // IntroActivity finish handler
-    private boolean databaseUpdated = false;                                // Store the database update status
+    private DatabaseManager databaseManager;                  // DatabaseManager instance
+    MQTTclient mqttClient;                                    // MQTTclient instance
+    DeviceManager deviceManager;                              // DeviceManager instance
+    private final Handler introHandler = new Handler();       // IntroActivity finish handler
+    private boolean databaseUpdated = false;                  // Store the database update status
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,8 @@ public class IntroActivity extends AppCompatActivity {
             connectionDialog.setCanceledOnTouchOutside(false);
 
             Window roomWindow = connectionDialog.getWindow();
-            Objects.requireNonNull(roomWindow).setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(roomWindow).setLayout(
+                    1000, ViewGroup.LayoutParams.WRAP_CONTENT);
             roomWindow.setBackgroundDrawableResource(android.R.color.transparent);
 
             Button yesButton = connectionDialog.findViewById(R.id.yesButton);

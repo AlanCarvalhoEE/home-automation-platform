@@ -24,7 +24,6 @@ import java.util.Objects;
 // Class responsible for running the main activity (main screen)
 public class MainActivity extends AppCompatActivity {
 
-    private DatabaseManager databaseManager;                // DatabaseManager instance
     private DeviceManager.DeviceUpdateListener listener;    // DeviceManager listener
 
     @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
@@ -35,16 +34,18 @@ public class MainActivity extends AppCompatActivity {
         // Load the layout
         setContentView(R.layout.activity_main);
 
-        // Initialize database instance
-        databaseManager = DatabaseManager.getInstance(this);
+        // DatabaseManager instance
+        DatabaseManager databaseManager = DatabaseManager.getInstance(this);
         databaseManager.getWritableDatabase();
 
         // Configure the action bar
-        Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
         View actionBarView = getSupportActionBar().getCustomView();
-        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) actionBarView.getParent();
+        androidx.appcompat.widget.Toolbar toolbar =
+                (androidx.appcompat.widget.Toolbar) actionBarView.getParent();
         toolbar.setContentInsetsAbsolute(0,0);
 
         // Component references
@@ -56,9 +57,11 @@ public class MainActivity extends AppCompatActivity {
         // Configure the language button
         String currentLanguage = LanguageManager.getLanguage();
         switch (currentLanguage) {
-            case "pt": languageImageButton.setImageDrawable(getDrawable(R.drawable.portuguese_image));
+            case "pt": languageImageButton.setImageDrawable(
+                    getDrawable(R.drawable.portuguese_image));
                 break;
-            default: languageImageButton.setImageDrawable(getDrawable(R.drawable.english_image));
+            default: languageImageButton.setImageDrawable(
+                    getDrawable(R.drawable.english_image));
         }
 
         // Update rooms on the spinner
@@ -82,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
         // Room selection spinner listener
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                MainScreenRenderer.updateDevices(MainActivity.this, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                                       int position, long id) {
+                MainScreenRenderer.updateDevices(MainActivity.this,
+                        roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -109,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
         MainScreenRenderer.updateRooms(this, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
-            MainScreenRenderer.updateDevices(this, roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
+            MainScreenRenderer.updateDevices(this, roomSpinner.getSelectedItem().toString(),
+                    roomDevicesLayout);
         }
     }
 

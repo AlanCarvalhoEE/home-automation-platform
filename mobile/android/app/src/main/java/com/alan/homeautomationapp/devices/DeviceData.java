@@ -18,7 +18,8 @@ public class DeviceData {
     private int ldrValue;
 
     // DeviceData constructor
-    public DeviceData(String id, String name, String room, String type, String function, String topic) {
+    public DeviceData(String id, String name, String room, String type,
+                      String function, String topic) {
         this.id = id;
         this.name = name;
         this.room = room;

@@ -1,7 +1,6 @@
 package com.alan.homeautomationapp.devices;
 
 import com.alan.homeautomationapp.core.MQTTclient;
-import com.alan.homeautomationapp.devices.DiscoveredDevice;
 
 import org.json.JSONObject;
 
@@ -9,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 // Class responsible for managing discovered devices
@@ -46,7 +46,7 @@ public class DeviceDiscoveryManager {
 
                 synchronized (discoveredDevices) {
                     if (discoveredDevices.containsKey(id)) {
-                        discoveredDevices.get(id).updateLastSeen();
+                        Objects.requireNonNull(discoveredDevices.get(id)).updateLastSeen();
                         return;
                     }
 

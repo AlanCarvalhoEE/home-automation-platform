@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -35,11 +36,13 @@ public class ConfigurationActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Configure the action bar
-        Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        Objects.requireNonNull(this.getSupportActionBar()).
+                setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
         View actionBarView = getSupportActionBar().getCustomView();
-        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) actionBarView.getParent();
+        androidx.appcompat.widget.Toolbar toolbar =
+                (androidx.appcompat.widget.Toolbar) actionBarView.getParent();
         toolbar.setContentInsetsAbsolute(0,0);
 
         // Component references
@@ -53,10 +56,12 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // Configure the language button
         String currentLanguage = LanguageManager.getLanguage();
-        switch (currentLanguage) {
-            case "pt": languageImageButton.setImageDrawable(getDrawable(R.drawable.portuguese_image));
-                break;
-            default: languageImageButton.setImageDrawable(getDrawable(R.drawable.english_image));
+        if (currentLanguage.equals("pt")) {
+            languageImageButton.setImageDrawable(
+                    AppCompatResources.getDrawable(this, R.drawable.portuguese_image));
+        } else {
+            languageImageButton.setImageDrawable(
+                    AppCompatResources.getDrawable(this, R.drawable.english_image));
         }
 
         viewPager.setAdapter(new ConfigPagerAdapter(this));
