@@ -19,8 +19,7 @@ def on_connect(client, userdata, flags, rc, properties):
 
     try:
         database = dbhandler.getDatabase()
-        database_str = json.dumps(database, ensure_ascii=False)
-        client.publish("hap/main/database/data", database_str, qos=1, retain=True)
+        client.publish("hap/main/database/data", database, qos=1, retain=True)
         print("Published initial database")
     except Exception as e:
         print(f"Error publishing initial database: {e}")
@@ -50,18 +49,17 @@ def on_message(client, userdata, message):
 
         elif topic == "hap/main/database/add_device":
             data = payload.split(',')
-            dbhandler.addDevice(data[0], data[1], data[2], data[3], data[4])
+            dbhandler.addDevice(data[0], data[1], data[2], data[3], data[4], data[5])
 
         elif topic == "hap/main/database/delete_device":
             dbhandler.deleteDevice(payload)
 
         elif topic == "hap/main/database/update_device":
             data = payload.split(',')
-            dbhandler.updateDevice(data[0], data[1], data[2], data[3], data[4])
+            dbhandler.updateDevice(data[0], data[1], data[2], data[3], data[4], data[5])
 
         database = dbhandler.getDatabase()
-        database_str = json.dumps(database, ensure_ascii=False)
-        client.publish("hap/main/database/data", database_str, qos=1, retain=True)
+        client.publish("hap/main/database/data", database, qos=1, retain=True)
 
     except Exception as e:
         print(f"✗ ERROR processing MQTT message on topic {topic}:")
