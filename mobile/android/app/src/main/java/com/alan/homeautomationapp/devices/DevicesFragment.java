@@ -166,6 +166,13 @@ public class DevicesFragment extends Fragment {
                                         "," + deviceData.getFunction() + "," + deviceData.getTopic();
                                 mqttClient.publish("hap/main/database/update_device", payload);
 
+                                if (deviceData.getLdrThreshold() >= 0) {
+                                    String topic = "hap/device/" + deviceData.getId() + "/adjust_ldr";
+
+                                    mqttClient.publish(topic,
+                                            String.valueOf(deviceData.getLdrThreshold()));
+                                }
+
                                 refreshDevices();
                             },
 

@@ -16,9 +16,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.alan.homeautomationapp.R;
 import com.alan.homeautomationapp.devices.DeviceData;
@@ -295,6 +296,7 @@ public class DialogManager {
                                                  Consumer<DeviceData> onConfirm,
                                                  Consumer<DeviceData> onFirmwareUpdate) {
 
+        DeviceManager deviceManager = DeviceManager.getInstance(activity);
         ViewGroup root = activity.findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(activity).inflate
                 (R.layout.dialog_configure_device, root, false);
@@ -316,6 +318,8 @@ public class DialogManager {
         EditText nameEditText = dialog.findViewById(R.id.nameEditText);
         Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
         Spinner functionSpinner = dialog.findViewById(R.id.functionSpinner);
+        TextView ldrThresholdEditText = dialog.findViewById(R.id.ldrThresholdEditText);
+        TextView ldrReadingTextView = dialog.findViewById(R.id.ldrReadingValueTextView);
         TextView currentVersionTextView = dialog.findViewById(R.id.currentVersionTextView);
         TextView latestVersionTextView = dialog.findViewById(R.id.latestVersionTextView);
         TextView firmwareStatusTextView = dialog.findViewById(R.id.firmwareStatusTextView);
@@ -334,13 +338,21 @@ public class DialogManager {
         functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
         functionSpinner.setAdapter(functionAdapter);
 
-        String currentFirmwareVersion = device.getFirmwareVersion();
+        DeviceData currentDevice = deviceManager.getDevice(device.getId());
 
-        nameEditText.setText(device.getName());
+        String currentFirmwareVersion = currentDevice.getFirmwareVersion();
+
+        nameEditText.setText(currentDevice.getName());
         currentVersionTextView.setText(currentFirmwareVersion);
         latestVersionTextView.setText(latestFirmwareVersion);
-        roomSpinner.setSelection(roomAdapter.getPosition(device.getRoom()));
-        functionSpinner.setSelection(functionAdapter.getPosition(device.getFunction()));
+        roomSpinner.setSelection(roomAdapter.getPosition(currentDevice.getRoom()));
+        functionSpinner.setSelection(functionAdapter.getPosition(currentDevice.getFunction()));
+        ldrThresholdEditText.setText(String.valueOf(currentDevice.getLdrThreshold()));
+
+        if (currentDevice.getFunction().contains("ldr")) {
+            ConstraintLayout ldrLayout = dialog.findViewById(R.id.ldrLayout);
+            ldrLayout.setVisibility(View.VISIBLE);
+        }
 
         confirmButton.setEnabled(true);
 
@@ -371,10 +383,14 @@ public class DialogManager {
             String deviceName = nameEditText.getText().toString();
             String deviceRoom = roomSpinner.getSelectedItem().toString();
             String deviceFunction = functionSpinner.getSelectedItem().toString();
+            int ldrThreshold = Integer.parseInt(ldrThresholdEditText.getText().toString());
 
-            if (onConfirm != null) {onConfirm.accept(
-                    new DeviceData(device.getId(), deviceName, deviceRoom, device.getType(),
-                            deviceFunction, device.getTopic()));}
+            DeviceData updated = new DeviceData(device.getId(), deviceName, deviceRoom,
+                    device.getType(), deviceFunction, device.getTopic());
+
+            updated.setLdrThreshold(ldrThreshold);
+
+            onConfirm.accept(updated);
             dialog.dismiss();
         });
 
@@ -414,13 +430,13 @@ public class DialogManager {
                         cancelButton.setEnabled(true);
                     }
                 }
+
+                ldrReadingTextView.setText(String.valueOf(updatedDevice.getLdrValue()));
             });
         };
 
-        DeviceManager.getInstance(activity.getApplicationContext()).addListener(updateListener);
-
-        dialog.setOnDismissListener(d -> DeviceManager.getInstance
-                (activity.getApplicationContext()).removeListener(updateListener));
+        deviceManager.addListener(updateListener);
+        dialog.setOnDismissListener(d -> deviceManager.removeListener(updateListener));
     }
 
     // Method to open "Delete device" dialog
@@ -455,74 +471,6 @@ public class DialogManager {
         });
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());
-    }
-
-    // Method to open "Configure LDR" dialog
-    public static void openConfigureLdrDialog(Activity activity, int currentReading,
-                                              int currentThreshold, Consumer<Integer> onConfirm) {
-
-        ViewGroup root = activity.findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(activity).inflate
-                (R.layout.dialog_config_ldr, root, false);
-
-        Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(Objects.requireNonNull(dialogView));
-        dialog.show();
-        dialog.setCanceledOnTouchOutside(false);
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setLayout(
-                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
-        TextView readingTextView = dialog.findViewById(R.id.readingTextView);
-        SeekBar thresholdSeekBar = dialog.findViewById(R.id.thresholdSeekBar);
-        TextView thresholdTextView = dialog.findViewById(R.id.thresholdTextView);
-        Button confirmButton = dialog.findViewById(R.id.yesButton);
-        Button cancelButton = dialog.findViewById(R.id.noButton);
-
-        if (currentReading != -1) {
-            readingTextView.setText(String.valueOf(currentReading));
-        }
-
-        if (currentThreshold != -1) {
-            thresholdSeekBar.setProgress(currentThreshold);
-            thresholdTextView.setText(String.valueOf(currentThreshold));
-        }
-
-        thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    thresholdTextView.setText(String.valueOf(progress));
-                    confirmButton.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        confirmButton.setOnClickListener(v -> {
-
-            int selectedThreshold = thresholdSeekBar.getProgress();
-
-            if (onConfirm != null) {
-                onConfirm.accept(selectedThreshold);
-            }
-
-            dialog.dismiss();
-        });
-
-        cancelButton.setOnClickListener(v -> dialog.dismiss());
     }
 
     // Method to open "Language selection" dialog

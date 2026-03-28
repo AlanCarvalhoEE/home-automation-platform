@@ -73,6 +73,11 @@ public class DeviceData {
         this.room = room;
     }
 
+    // Method to set the device function
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
     // Method to get the device's firmware version
     public String getFirmwareVersion() {
         return firmwareVersion;

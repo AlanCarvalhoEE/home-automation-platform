@@ -1,7 +1,7 @@
 // Project - HAP - Home Automation Platform 
 // Code - ON-OFF module
 // Author - Alan Carvalho
-// Date - 19/03/2026
+// Date - 28/03/2026
 
 // Libraries
 #include <ESP8266WiFi.h>
@@ -13,7 +13,7 @@
 
 // Firmware Information
 #define TYPE "on-off"
-#define FW_VERSION "1.0.2"
+#define FW_VERSION "1.0.4"
 
 // Topics
 #define HAP_TOPIC "hap"
@@ -55,7 +55,11 @@ const long reportPrintInterval = 500;         // Interval to print the report (m
 unsigned long lastSwitchChange = 0;           // Last time the switch state has changed (ms)
 const long debounceInterval = 500;            // Interval to debounce the switch state changing (ms)
 unsigned long lastLdrCheck = 0;               // Last time the LDR input was checked (ms)
-const long ldrCheckInterval = 10000;          // Interval to check the LDR input (ms)
+const long ldrCheckInterval = 2000;           // Interval to check the LDR input (ms)
+unsigned long lastStatePublish = 0;           // Last time the device has published to the state topic (ms)
+const long statePublishInterval = 2000;       // Interval to publish to state topic (ms)
+unsigned long lastStatusPublish = 0;          // Last time the device has published to the status topic (ms)
+const long statusPublishInterval = 2000;      // Interval to publish to status topic (ms)
 
 // MQTT Strings
 String deviceId;                              // The device's ID
@@ -124,9 +128,11 @@ void loop() {
   if (mqttClient.connected()) mqttClient.loop();  // Whatch MQTT topics
 
   if (!ldrEnabled) checkSwitch();   // Check switch changes
-  if (ldrEnabled) checkLDR();       // Check LDR changes
+  checkLDR();                       // Check LDR changes
 
   publishDiscovery(); // Publish to discovery topic
+  publishState();     // Publish to state topic
+  publishStatus();    // Publish to status topic
   printReport();      // Print relevant data
 }
 
@@ -303,13 +309,16 @@ void checkLDR() {
 
     ldrReading = analogRead(LDR_PIN);
 
-    if (!loadOn && (ldrReading > (ldrThreshold + ldrHisteresis))) {
-      loadOn = true;
-      digitalWrite(RELAY_PIN, HIGH);
-    }
-    else if (loadOn && (ldrReading < (ldrThreshold - ldrHisteresis))) {
-      loadOn = false;
-      digitalWrite(RELAY_PIN, LOW);
+    if (ldrEnabled) {
+      
+      if (!loadOn && (ldrReading > (ldrThreshold + ldrHisteresis))) {
+        loadOn = true;
+        digitalWrite(RELAY_PIN, HIGH);
+      }
+      else if (loadOn && (ldrReading < (ldrThreshold - ldrHisteresis))) {
+        loadOn = false;
+        digitalWrite(RELAY_PIN, LOW);
+      }
     }
 
     publishState();
@@ -320,18 +329,34 @@ void checkLDR() {
 // Function to publish device state
 void publishState() {
 
-  StaticJsonDocument<192> doc;
+  if ((millis() - lastStatePublish) > statePublishInterval) {
+  
+    StaticJsonDocument<192> doc;
 
-  doc["fw_version"] = FW_VERSION;
-  doc["load_status"] = loadOn ? "ON" : "OFF";
-  doc["ldr_status"] = ldrEnabled ? "ENABLED" : "DISABLED";
-  doc["ldr_threshold"] = ldrThreshold;
-  doc["ldr_value"] = ldrReading;
+    doc["fw_version"] = FW_VERSION;
+    doc["load_status"] = loadOn ? "ON" : "OFF";
+    doc["ldr_status"] = ldrEnabled ? "ENABLED" : "DISABLED";
+    doc["ldr_threshold"] = ldrThreshold;
+    doc["ldr_value"] = ldrReading;
 
-  char buffer[192];
-  serializeJson(doc, buffer);
+    char buffer[192];
+    serializeJson(doc, buffer);
 
-  mqttClient.publish(getStateTopic.c_str(), buffer, true);
+    mqttClient.publish(getStateTopic.c_str(), buffer, true);
+
+    lastStatePublish = millis();
+  }
+}
+
+// Function to publish device status (ONLINE or OFFLINE)
+void publishStatus() {
+
+  if ((millis() - lastStatusPublish) > statusPublishInterval) {
+  
+    mqttClient.publish(statusTopic.c_str(), "ONLINE", true);
+
+    lastStatusPublish = millis();
+  }
 }
 
 // Function to publish to the discovery topic

@@ -56,7 +56,7 @@ public class DeviceManager {
         if (device != null) {
             device.setName(newName);
             device.setRoom(newRoom);
-            device.setName(newFunction);
+            device.setFunction(newFunction);
         }
 
         if (log) {

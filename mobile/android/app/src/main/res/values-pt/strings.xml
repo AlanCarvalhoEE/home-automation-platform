@@ -14,8 +14,9 @@
     <string name="topic_label">Tópico:</string>
     <string name="id_label">ID:</string>
     <string name="time_label">Hora:</string>
+    <string name="ldr_label">LDR</string>
     <string name="ldr_reading_label">Leitura</string>
-    <string name="threshold_label">Limiar</string>
+    <string name="ldr_threshold_label">Limiar</string>
     <string name="search_label">Buscar dispositivos</string>
     <string name="discovered_label">Dispositivos encontrados</string>
     <string name="firmware_label">Firmware</string>
