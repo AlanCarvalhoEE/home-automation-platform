@@ -19,12 +19,15 @@ import com.alan.homeautomationapp.core.LanguageManager;
 import com.alan.homeautomationapp.R;
 import com.alan.homeautomationapp.devices.DeviceManager;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 // Class responsible for running the main activity (main screen)
 public class MainActivity extends AppCompatActivity {
 
-    private DeviceManager.DeviceUpdateListener listener;    // DeviceManager listener
+    private DeviceManager.DeviceUpdateListener listener;            // DeviceManager listener
+    private final Map<String, View> deviceViews = new HashMap<>();  // Views map
 
     @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
     @Override
@@ -68,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         MainScreenRenderer.updateRooms(this, roomSpinner);
         if (roomSpinner.getAdapter().getCount() > 0) {
             String roomName = roomSpinner.getSelectedItem().toString();
-            MainScreenRenderer.updateDevices(this, roomName, roomDevicesLayout);
+
+            MainScreenRenderer.renderDevices(this, roomName, roomDevicesLayout);
         }
 
         // Configuration button listener
@@ -87,8 +91,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
                                        int position, long id) {
-                MainScreenRenderer.updateDevices(MainActivity.this,
-                        roomSpinner.getSelectedItem().toString(), roomDevicesLayout);
+                MainScreenRenderer.renderDevices(
+                        MainActivity.this,
+                        roomSpinner.getSelectedItem().toString(),
+                        roomDevicesLayout
+                );
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
@@ -97,10 +104,7 @@ public class MainActivity extends AppCompatActivity {
         // Listener to update the screen when there is an update on devices
         listener = device ->
                 runOnUiThread(() ->
-                        MainScreenRenderer.updateDevices(
-                                MainActivity.this,
-                                roomSpinner.getSelectedItem().toString(),
-                                roomDevicesLayout)
+                        MainScreenRenderer.updateDeviceView(device)
         );
         DeviceManager.getInstance(this).addListener(listener);
     }
@@ -113,9 +117,15 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout roomDevicesLayout = findViewById(R.id.roomDevicesLayout);
 
         MainScreenRenderer.updateRooms(this, roomSpinner);
-        if (roomSpinner.getAdapter().getCount() > 0) {
-            MainScreenRenderer.updateDevices(this, roomSpinner.getSelectedItem().toString(),
-                    roomDevicesLayout);
+
+        if (roomSpinner.getAdapter() != null &&
+                roomSpinner.getAdapter().getCount() > 0 &&
+                roomSpinner.getSelectedItem() != null) {
+
+            String roomName = roomSpinner.getSelectedItem().toString();
+
+            MainScreenRenderer.renderDevices(this, roomName, roomDevicesLayout
+            );
         }
     }
 

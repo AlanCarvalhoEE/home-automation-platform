@@ -4,87 +4,153 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.widget.ArrayAdapter;
 
 import com.alan.homeautomationapp.R;
-import com.alan.homeautomationapp.devices.DeviceController;
 import com.alan.homeautomationapp.devices.DeviceData;
 import com.alan.homeautomationapp.devices.DeviceManager;
+import com.alan.homeautomationapp.devices.DeviceController;
 import com.alan.homeautomationapp.rooms.RoomManager;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-// Class responsible for rendering the main screen
 public class MainScreenRenderer {
 
-    // Method to update rooms
-    public static void updateRooms(Context context, Spinner spinner) {
-        ArrayAdapter<String> adapter;
 
-        adapter = new ArrayAdapter<>(
-                context, R.layout.spinner_item, RoomManager.getInstance(context).getAllRoomNames());
-        spinner.setAdapter(adapter);
+    private static final Map<String, View> deviceViews = new HashMap<>();
+    private static String currentRoom = "";
+
+    // Method to update the rooms
+    public static void updateRooms(Context context, Spinner roomSpinner) {
+
+        List<String> rooms = new ArrayList<>(RoomManager.getInstance(context).getAllRoomNames());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item, rooms);
+        roomSpinner.setAdapter(adapter);
     }
 
-    // Method to update devices
-    @SuppressLint({"InflateParams", "SetTextI18n"})
-    public static void updateDevices(Context context, String room, LinearLayout layout) {
+    // Method to render devices
+    @SuppressLint("InflateParams")
+    public static void renderDevices(
+            Context context,
+            String room,
+            LinearLayout layout) {
+
+        if (room.equals(currentRoom) && layout.getChildCount() > 0) return;
+        currentRoom = room;
 
         layout.removeAllViews();
+        deviceViews.clear();
 
-        Collection<DeviceData> devices = DeviceManager.getInstance(context).getAllDevices();
+        Collection<DeviceData> devices =
+                DeviceManager.getInstance(context).getAllDevices();
+
         LayoutInflater inflater = LayoutInflater.from(context);
 
         for (DeviceData device : devices) {
+
             if (!device.getRoom().trim().equalsIgnoreCase(room.trim())) continue;
 
-            if (device.getFunction().contains("lamp")) {
+            View view = addDeviceView(inflater, layout, device);
 
-                View vi = inflater.inflate(R.layout.device_lamp, layout, false);
-
-                TextView lampNameTextView = vi.findViewById(R.id.lampNameTextView);
-                ToggleButton lampControlToggleButton = vi.findViewById(R.id.lampControlToggleButton);
-
-                lampNameTextView.setText(device.getName());
-
-                lampControlToggleButton.setChecked("ON".equals(device.getLoadStatus()));
-                lampControlToggleButton.setClickable(!"ENABLED".equals(device.getLdrStatus()));
-
-                lampControlToggleButton.setOnCheckedChangeListener((btn, isChecked) ->
-                        DeviceController.setLoad(device.getId(), isChecked));
-
-                if (device.getFunction().contains("ldr")) {
-                    ToggleButton lampLdrToggleButton = vi.findViewById(R.id.lampLdrToggleButton);
-                    lampLdrToggleButton.setVisibility(View.VISIBLE);
-                    lampLdrToggleButton.setChecked("ENABLED".equals(device.getLdrStatus()));
-                    lampLdrToggleButton.setOnCheckedChangeListener((btn, isChecked) ->
-                            DeviceController.setLdr(device.getId(), isChecked));
-                }
-
-                layout.addView(vi);
-
-                boolean online = "ONLINE".equals(device.getStatus());
-                setViewStatus(vi, online, true);
+            if (view != null) {
+                layout.addView(view);
+                deviceViews.put(device.getId(), view);
+                bindDeviceView(view, device);
             }
         }
     }
 
-    // Method to set device visibility based on its status (ONLINE or OFFLINE)
-    public static void setViewStatus(View view, boolean enabled, boolean isRoot) {
+    // Method to add a device view
+    private static View addDeviceView(
+            LayoutInflater inflater,
+            LinearLayout layout,
+            DeviceData device) {
 
-        if (isRoot) {
-            view.setAlpha(enabled ? 1.0f : 0.5f);
+        String function = device.getFunction() != null
+                ? device.getFunction().toLowerCase()
+                : "";
+
+        if (function.contains("lamp")) {
+            return inflater.inflate(R.layout.device_lamp, layout, false);
         }
-        view.setEnabled(enabled);
 
-        if (view instanceof ViewGroup group) {
-            for (int i = 0; i < group.getChildCount(); i++) {
-                setViewStatus(group.getChildAt(i), enabled, false);
+        return null;
+    }
+
+    // Method to update a device view
+    public static void updateDeviceView(DeviceData device) {
+
+        View view = deviceViews.get(device.getId());
+
+        if (view == null) return;
+
+        bindDeviceView(view, device);
+    }
+
+    // Method to bind UI elements
+    @SuppressLint("SetTextI18n")
+    private static void bindDeviceView(View view, DeviceData device) {
+
+        String function = device.getFunction() != null
+                ? device.getFunction().toLowerCase()
+                : "";
+
+        if (function.contains("lamp")) {
+
+            TextView name = view.findViewById(R.id.lampNameTextView);
+            ToggleButton control = view.findViewById(R.id.lampControlToggleButton);
+            ToggleButton ldr = view.findViewById(R.id.lampLdrToggleButton);
+
+            name.setText(device.getName());
+
+            boolean isOn = "ON".equals(device.getLoadStatus());
+            boolean ldrEnabled = "ENABLED".equals(device.getLdrStatus());
+            boolean online = "ONLINE".equals(device.getStatus());
+            boolean hasLdr = function.contains("ldr");
+
+            control.setOnCheckedChangeListener(null);
+            ldr.setOnCheckedChangeListener(null);
+
+            control.setChecked(isOn);
+            ldr.setChecked(ldrEnabled);
+
+            ldr.setVisibility(hasLdr ? View.VISIBLE : View.GONE);
+            control.setClickable(!ldrEnabled);
+
+            control.setOnCheckedChangeListener((btn, isChecked) -> {
+                if (!btn.isPressed()) return;
+                DeviceController.setLoad(device.getId(), isChecked);
+            });
+
+            if (hasLdr) {
+                ldr.setOnCheckedChangeListener((btn, isChecked) -> {
+                    if (!btn.isPressed()) return;
+                    DeviceController.setLdr(device.getId(), isChecked);
+                });
+            }
+
+            setViewStatus(view, online, true);
+        }
+    }
+
+    // Method to set the view status
+    private static void setViewStatus(View view, boolean enabled, boolean affectChildren) {
+
+        view.setAlpha(enabled ? 1.0f : 0.5f);
+
+        if (affectChildren && view instanceof LinearLayout) {
+            LinearLayout layout = (LinearLayout) view;
+
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                layout.getChildAt(i).setEnabled(enabled);
             }
         }
     }

@@ -104,13 +104,31 @@ public class IntroActivity extends AppCompatActivity {
                     int threshold      = json.optInt("ldr_threshold", -1);
                     int ldrValue       = json.optInt("ldr_value", -1);
 
-                    device.setFirmwareVersion(fwVersion);
-                    device.setLoadStatus(loadStatus);
-                    device.setLdrStatus(ldrStatus);
-                    device.setLdrThreshold(threshold);
-                    device.setLdrValue(ldrValue);
+                    boolean changed = false;
 
-                    DeviceManager.getInstance(this).notifyDeviceUpdated(device);
+                    if (!fwVersion.equals(device.getFirmwareVersion())) {
+                        device.setFirmwareVersion(fwVersion);
+                        changed = true;
+                    }
+                    if (!loadStatus.equals(device.getLoadStatus())) {
+                        device.setLoadStatus(loadStatus);
+                        changed = true;
+                    }
+                    if (!ldrStatus.equals(device.getLdrStatus())) {
+                        device.setLdrStatus(ldrStatus);
+                        changed = true;
+                    }
+                    if (threshold != device.getLdrThreshold()) {
+                        device.setLdrThreshold(threshold);
+                        changed = true;
+                    }
+                    if (ldrValue != device.getLdrValue()) {
+                        device.setLdrValue(ldrValue);
+                        changed = true;
+                    }
+                    if (changed) {
+                        DeviceManager.getInstance(this).notifyDeviceUpdated(device);
+                    }
 
                 } catch (Exception ignored) {}
             });
@@ -127,9 +145,11 @@ public class IntroActivity extends AppCompatActivity {
                     if (device == null) return;
 
                     String status = message.trim();
-                    device.setStatus(status);
 
-                    DeviceManager.getInstance(this).notifyDeviceUpdated(device);
+                    if (!status.equals(device.getStatus())) {
+                        device.setStatus(status);
+                        DeviceManager.getInstance(this).notifyDeviceUpdated(device);
+                    }
 
                 } catch (Exception ignored) {}
             });

@@ -27,6 +27,7 @@ import com.alan.homeautomationapp.devices.DeviceDiscoveryManager;
 import com.alan.homeautomationapp.devices.DeviceFunction;
 import com.alan.homeautomationapp.devices.DeviceManager;
 import com.alan.homeautomationapp.devices.DiscoveredDevice;
+import com.alan.homeautomationapp.firmware.FirmwareManager;
 import com.alan.homeautomationapp.rooms.RoomData;
 import com.alan.homeautomationapp.ui.MainActivity;
 
@@ -292,7 +293,6 @@ public class DialogManager {
     // Method to open "Configure device" dialog
     public static void openConfigureDeviceDialog(Activity activity, DeviceData device,
                                                  List<String> roomsList,
-                                                 String latestFirmwareVersion,
                                                  Consumer<DeviceData> onConfirm,
                                                  Consumer<DeviceData> onFirmwareUpdate) {
 
@@ -339,15 +339,38 @@ public class DialogManager {
         functionSpinner.setAdapter(functionAdapter);
 
         DeviceData currentDevice = deviceManager.getDevice(device.getId());
+        ldrReadingTextView.setText(
+                String.valueOf(currentDevice.getLdrValue())
+        );
 
         String currentFirmwareVersion = currentDevice.getFirmwareVersion();
 
         nameEditText.setText(currentDevice.getName());
         currentVersionTextView.setText(currentFirmwareVersion);
-        latestVersionTextView.setText(latestFirmwareVersion);
         roomSpinner.setSelection(roomAdapter.getPosition(currentDevice.getRoom()));
         functionSpinner.setSelection(functionAdapter.getPosition(currentDevice.getFunction()));
         ldrThresholdEditText.setText(String.valueOf(currentDevice.getLdrThreshold()));
+
+        final String[] latestFirmwareVersion = new String[1];
+        FirmwareManager.getFirmwareDataAsync(device.getType(), firmwareData -> {
+
+            if (!dialog.isShowing()) return;
+
+            latestFirmwareVersion[0] = firmwareData.version;
+            String currentFirmwareVersionLocal = currentDevice.getFirmwareVersion();
+
+            latestVersionTextView.setText(latestFirmwareVersion[0]);
+
+            if (currentFirmwareVersionLocal.equals(latestFirmwareVersion[0])) {
+                firmwareStatusTextView.setText(
+                        activity.getString(R.string.firmware_updated_message));
+                firmwareUpdateImageButton.setEnabled(false);
+            } else {
+                firmwareStatusTextView.setText(
+                        activity.getString(R.string.firmware_not_updated_message));
+                firmwareUpdateImageButton.setEnabled(true);
+            }
+        });
 
         if (currentDevice.getFunction().contains("ldr")) {
             ConstraintLayout ldrLayout = dialog.findViewById(R.id.ldrLayout);
@@ -355,14 +378,6 @@ public class DialogManager {
         }
 
         confirmButton.setEnabled(true);
-
-        if (currentFirmwareVersion.equals(latestFirmwareVersion)) {
-            firmwareStatusTextView.setText(activity.getString(R.string.firmware_updated_message));
-        } else {
-            firmwareStatusTextView.setText(activity.getString(R.string.firmware_not_updated_message));
-        }
-
-        firmwareUpdateImageButton.setEnabled(!currentFirmwareVersion.equals(latestFirmwareVersion));
 
         nameEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
@@ -414,7 +429,7 @@ public class DialogManager {
 
                 if ("ONLINE".equals(status)) {
                     if (updatedDevice.getFirmwareVersion()
-                            .equals(latestFirmwareVersion)) {
+                            .equals(latestFirmwareVersion[0])) {
 
                         currentVersionTextView.setText(updatedDevice.getFirmwareVersion());
                         firmwareStatusTextView.setText(activity.getString(R.string.firmware_updated_message));

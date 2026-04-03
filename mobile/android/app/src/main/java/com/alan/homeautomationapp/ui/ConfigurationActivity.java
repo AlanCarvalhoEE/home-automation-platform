@@ -31,10 +31,6 @@ public class ConfigurationActivity extends AppCompatActivity {
         // Load the layout
         setContentView(R.layout.activity_configuration);
 
-        // Setup the StrictMode tool
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         // Configure the action bar
         Objects.requireNonNull(this.getSupportActionBar()).
                 setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

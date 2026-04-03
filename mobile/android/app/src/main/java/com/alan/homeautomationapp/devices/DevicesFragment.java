@@ -16,13 +16,14 @@ import com.alan.homeautomationapp.core.DialogManager;
 import com.alan.homeautomationapp.firmware.FirmwareData;
 import com.alan.homeautomationapp.firmware.FirmwareManager;
 import com.alan.homeautomationapp.core.MQTTclient;
-import com.alan.homeautomationapp.ui.MainScreenRenderer;
 import com.alan.homeautomationapp.R;
 import com.alan.homeautomationapp.rooms.RoomManager;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 // Class responsible for running the devices fragment
@@ -33,6 +34,7 @@ public class DevicesFragment extends Fragment {
     private MQTTclient mqttClient;
     private DeviceDiscoveryManager discoveryManager;
     private LinearLayout devicesLayout;
+    private final Map<String, View> deviceViews = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -78,13 +80,13 @@ public class DevicesFragment extends Fragment {
                                     mqttClient.publish(
                                             "hap/main/database/add_device", payload);
 
-                                    refreshDevices();
+                                    addDeviceView(deviceData);
                                 }
                         )
                 );}
         );
 
-        refreshDevices();
+        renderDevices();
         return view;
     }
 
@@ -93,7 +95,7 @@ public class DevicesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         listener = device ->
-                requireActivity().runOnUiThread(this::refreshDevices);
+                requireActivity().runOnUiThread(() -> updateDeviceView(device));
 
         DeviceManager.getInstance(requireContext()).addListener(listener);
     }
@@ -105,102 +107,146 @@ public class DevicesFragment extends Fragment {
         DeviceManager.getInstance(requireContext()).removeListener(listener);
     }
 
-    // Method to refresh devices on screen
-    private void refreshDevices() {
+    // Method to render devices
+    private void renderDevices() {
 
         devicesLayout.removeAllViews();
-        Set<String> devicesList = DeviceManager.getInstance(requireContext()).getAllDeviceIds();
+        deviceViews.clear();
+
+        Set<String> devicesList =
+                DeviceManager.getInstance(requireContext()).getAllDeviceIds();
+
+        for (String deviceID : devicesList) {
+            DeviceData device =
+                    DeviceManager.getInstance(requireContext()).getDevice(deviceID);
+
+            addDeviceView(device);
+        }
+    }
+
+    // Method to add a device view
+    private void addDeviceView(DeviceData device) {
 
         LayoutInflater inflater = LayoutInflater.from(requireContext());
 
-        for (String deviceID : devicesList) {
+        View deviceView = inflater.inflate(
+                R.layout.device_info, devicesLayout, false);
 
-            DeviceData device = DeviceManager.getInstance(requireContext()).getDevice(deviceID);
+        devicesLayout.addView(deviceView);
+        deviceViews.put(device.getId(), deviceView);
 
-            String deviceName = device.getName();
-            String deviceRoom = device.getRoom();
-            String deviceType = device.getType();
-            String deviceFunction = device.getFunction();
+        bindDeviceView(deviceView, device);
+    }
 
-            View deviceView = inflater.inflate(
-                    R.layout.device_info, devicesLayout, false);
+    // Method to update a devce view
+    private void updateDeviceView(DeviceData device) {
 
-            TextView deviceNameTextView = deviceView.findViewById(R.id.deviceNameTextView);
-            TextView deviceIdTextView = deviceView.findViewById(R.id.deviceIdTextView);
-            TextView deviceRoomTextView = deviceView.findViewById(R.id.deviceRoomTextView);
-            TextView deviceTypeTextView = deviceView.findViewById(R.id.deviceTypeTextView);
-            TextView deviceFunctionTextView = deviceView.findViewById(R.id.deviceFunctionTextView);
-            ImageButton deviceConfigImageButton = deviceView.findViewById(R.id.deviceConfigImageButton);
-            ImageButton deviceDeleteImageButton = deviceView.findViewById(R.id.deviceDeleteImageButton);
+        View deviceView = deviceViews.get(device.getId());
 
-            deviceNameTextView.setText(deviceName);
-            deviceIdTextView.setText(deviceID);
-            deviceTypeTextView.setText(deviceType);
-            deviceFunctionTextView.setText(deviceFunction);
-            deviceRoomTextView.setText(deviceRoom);
+        if (deviceView == null) return;
 
-            FirmwareData firmwareData;
-            try {
-                firmwareData = FirmwareManager.getFirmwareData(deviceType);
-            } catch (IOException | JSONException e) {
-                throw new RuntimeException(e);
-            }
-            String latestFirmwareVersion = firmwareData.version;
+        bindDeviceView(deviceView, device);
+    }
 
-            //Configure button listener
-            deviceConfigImageButton.setOnClickListener(
-                    v -> DialogManager.openConfigureDeviceDialog(requireActivity(), device,
-                            RoomManager.getInstance(requireContext()).getAllRoomNames(),
-                            latestFirmwareVersion, deviceData -> {
-                                databaseManager.configureDevice(deviceData.getId(),
-                                        deviceData.getName(), deviceData.getRoom(),
-                                        deviceData.getType(), deviceData.getFunction(),
-                                        deviceData.getTopic());
+    // Method to bind UI elements
+    private void bindDeviceView(View deviceView, DeviceData device) {
 
-                                DeviceManager.getInstance(requireContext()).configureDevice(deviceID,
-                                        deviceData.getName(), deviceData.getRoom(),
-                                        deviceData.getFunction(), true);
+        TextView deviceNameTextView = deviceView.findViewById(R.id.deviceNameTextView);
+        TextView deviceIdTextView = deviceView.findViewById(R.id.deviceIdTextView);
+        TextView deviceRoomTextView = deviceView.findViewById(R.id.deviceRoomTextView);
+        TextView deviceTypeTextView = deviceView.findViewById(R.id.deviceTypeTextView);
+        TextView deviceFunctionTextView = deviceView.findViewById(R.id.deviceFunctionTextView);
+        ImageButton deviceConfigImageButton = deviceView.findViewById(R.id.deviceConfigImageButton);
+        ImageButton deviceDeleteImageButton = deviceView.findViewById(R.id.deviceDeleteImageButton);
 
-                                String payload = deviceData.getId() + "," + deviceData.getName() +
-                                        "," + deviceData.getRoom() + "," + deviceData.getType() +
-                                        "," + deviceData.getFunction() + "," + deviceData.getTopic();
-                                mqttClient.publish("hap/main/database/update_device", payload);
+        deviceNameTextView.setText(device.getName());
+        deviceIdTextView.setText(device.getId());
+        deviceRoomTextView.setText(device.getRoom());
+        deviceTypeTextView.setText(device.getType());
+        deviceFunctionTextView.setText(device.getFunction());
 
-                                if (deviceData.getLdrThreshold() >= 0) {
-                                    String topic = "hap/device/" + deviceData.getId() + "/adjust_ldr";
+        // Configure button listener
+        deviceConfigImageButton.setOnClickListener(
+                v -> DialogManager.openConfigureDeviceDialog(
+                        requireActivity(), device,
+                        RoomManager.getInstance(requireContext()).getAllRoomNames(),
 
-                                    mqttClient.publish(topic,
-                                            String.valueOf(deviceData.getLdrThreshold()));
-                                }
+                        deviceData -> {
+                            databaseManager.configureDevice(
+                                    deviceData.getId(),
+                                    deviceData.getName(),
+                                    deviceData.getRoom(),
+                                    deviceData.getType(),
+                                    deviceData.getFunction(),
+                                    deviceData.getTopic());
 
-                                refreshDevices();
-                            },
+                            DeviceManager.getInstance(requireContext())
+                                    .configureDevice(
+                                            device.getId(),
+                                            deviceData.getName(),
+                                            deviceData.getRoom(),
+                                            deviceData.getFunction(),
+                                            true);
 
-                    deviceData -> {
-                        String payload = "{\"version\":\"" + firmwareData.version + "\"}";
-                        mqttClient.publish(
-                                "hap/device/" + deviceData.getId() + "/update", payload);
-                    }));
+                            String payload = deviceData.getId() + "," +
+                                    deviceData.getName() + "," +
+                                    deviceData.getRoom() + "," +
+                                    deviceData.getType() + "," +
+                                    deviceData.getFunction() + "," +
+                                    deviceData.getTopic();
 
-            // Delete button listener
-            deviceDeleteImageButton.setOnClickListener(v ->
-                    DialogManager.openDeleteDeviceDialog(requireActivity(), deviceID,
-                            deviceData -> {
+                            mqttClient.publish(
+                                    "hap/main/database/update_device", payload);
 
-                                databaseManager.deleteDevice(deviceID);
+                            if (deviceData.getLdrThreshold() >= 0) {
+                                String topic = "hap/device/" +
+                                        deviceData.getId() + "/adjust_ldr";
 
-                                DeviceManager.getInstance(requireContext()).deleteDevice(
-                                        deviceID, true);
+                                mqttClient.publish(topic,
+                                        String.valueOf(deviceData.getLdrThreshold()));
+                            }
+                        },
 
-                                mqttClient.publish("hap/main/database/delete_device", deviceID);
+                        deviceData -> {
 
-                                refreshDevices();
-                            }));
+                            FirmwareManager.getFirmwareDataAsync(deviceData.getType(), firmwareData -> {
 
-            devicesLayout.addView(deviceView);
+                                String payload = "{\"version\":\"" +
+                                        firmwareData.version + "\"}";
 
-            boolean online = "ONLINE".equals(device.getStatus());
-            deviceView.setAlpha(online ? 1.0f : 0.5f);
-        }
+                                mqttClient.publish(
+                                        "hap/device/" +
+                                                deviceData.getId() + "/update",
+                                        payload);
+                            });
+                        }
+                )
+        );
+
+        // Delete button listener
+        deviceDeleteImageButton.setOnClickListener(v ->
+                DialogManager.openDeleteDeviceDialog(
+                        requireActivity(), device.getId(),
+                        deviceData -> {
+
+                            databaseManager.deleteDevice(device.getId());
+
+                            DeviceManager.getInstance(requireContext())
+                                    .deleteDevice(device.getId(), true);
+
+                            mqttClient.publish(
+                                    "hap/main/database/delete_device",
+                                    device.getId());
+
+                            // 🔥 remove only this view
+                            devicesLayout.removeView(deviceView);
+                            deviceViews.remove(device.getId());
+                        }
+                )
+        );
+
+        // Online status (visual)
+        boolean online = "ONLINE".equals(device.getStatus());
+        deviceView.setAlpha(online ? 1.0f : 0.5f);
     }
 }
