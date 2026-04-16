@@ -119,8 +119,13 @@ public class MainScreenRenderer {
             control.setOnCheckedChangeListener(null);
             ldr.setOnCheckedChangeListener(null);
 
-            control.setChecked(isOn);
-            ldr.setChecked(ldrEnabled);
+            if (control.isChecked() != isOn) {
+                control.setChecked(isOn);
+            }
+
+            if (ldr.isChecked() != ldrEnabled) {
+                ldr.setChecked(ldrEnabled);
+            }
 
             ldr.setVisibility(hasLdr ? View.VISIBLE : View.GONE);
             control.setClickable(!ldrEnabled);

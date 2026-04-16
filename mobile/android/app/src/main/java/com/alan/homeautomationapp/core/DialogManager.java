@@ -40,6 +40,8 @@ import java.util.function.Consumer;
 // Class responsible for managing dialogs
 public class DialogManager {
 
+    private boolean isBinding = false;
+
     // Method to open "Add room" dialog
     public static void openAddRoomDialog(Activity activity, Consumer<RoomData> onConfirm) {
 
