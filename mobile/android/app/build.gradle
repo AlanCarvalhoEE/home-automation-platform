@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.alan.homeautomationapp'
+    namespace 'com.hap.homeautomation'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.alan.homeautomationapp"
+        applicationId "com.hap.homeautomation"
         minSdk 24
         targetSdk 33
         versionCode 1
