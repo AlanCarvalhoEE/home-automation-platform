@@ -64,10 +64,13 @@
     <string name="firmware_update_description">Update firmware</string>
 
     //  Messages
-    <string name="connecting_message">Connecting to server</string>
-    <string name="loading_message">Loading data</string>
-    <string name="connection_failed_message">Connection failed.\nTry again?</string>
-    <string name="database_failed_message">Data update failed.\nTry again?</string>
+    <string name="vpn_check_message">Checking VPN</string>
+    <string name="vpn_installation_error_message">ZeroTier One APP is required.\nProceed with installation?</string>
+    <string name="vpn_connection_error_message">ZeroTier One not connected.\nProceed with connection?</string>
+    <string name="server_check_message">Connecting to server</string>
+    <string name="server_error_message">Server connection failed.\nTry again?</string>
+    <string name="database_check_message">Loading data</string>
+    <string name="database_error_message">Data update failed.\nTry again?</string>
     <string name="confirm_device_delete_message">Confirm device deletion?</string>
     <string name="confirm_room_delete_message">Confirm room deletion?</string>
     <string name="firmware_updated_message">Firmware up to date</string>

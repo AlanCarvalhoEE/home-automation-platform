@@ -64,10 +64,13 @@
     <string name="firmware_update_description">Atualizar firmware</string>
 
     //  Messages
-    <string name="connecting_message">Conectando ao servidor</string>
-    <string name="loading_message">Carregando dados</string>
-    <string name="connection_failed_message">Falha na conexão.\nDeseja tentar novamente?</string>
-    <string name="database_failed_message">Falha na atualização dos dados.\nDeseja tentar novamente?</string>
+    <string name="vpn_check_message">Verificando VPN</string>
+    <string name="vpn_installation_error_message">O APP ZeroTier One é necessário.\nProsseguir com a instalação?</string>
+    <string name="vpn_connection_error_message">ZeroTier One não conectado.\nProsseguir com a conexão?</string>
+    <string name="server_check_message">Conectando ao servidor</string>
+    <string name="server_error_message">Falha ao conectar com o servidor.\nTentar novamente?</string>
+    <string name="database_check_message">Carregando dados</string>
+    <string name="database_error_message">Falha na atualização dos dados.\nTentar novamente?</string>
     <string name="confirm_device_delete_message">Deseja realmente apagar esse dispositivo?</string>
     <string name="confirm_room_delete_message">Deseja realmente apagar esse cômodo?</string>
     <string name="firmware_updated_message">Firmware atualizado</string>
