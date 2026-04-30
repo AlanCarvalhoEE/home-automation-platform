@@ -31,7 +31,10 @@ public class MainScreenRenderer {
     // Method to update the rooms
     public static void updateRooms(Context context, Spinner roomSpinner) {
 
-        List<String> rooms = new ArrayList<>(RoomManager.getInstance(context).getAllRoomNames());
+        List<String> rooms = new ArrayList<>();
+        rooms.add(context.getString(R.string.all_rooms_label));
+        rooms.addAll(RoomManager.getInstance(context).getAllRoomNames());
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item, rooms);
         roomSpinner.setAdapter(adapter);
     }
@@ -56,14 +59,15 @@ public class MainScreenRenderer {
 
         for (DeviceData device : devices) {
 
-            if (!device.getRoom().trim().equalsIgnoreCase(room.trim())) continue;
+            if (!room.equals(context.getString(R.string.all_rooms_label)) &&
+                    !device.getRoom().trim().equalsIgnoreCase(room.trim())) continue;
 
             View view = addDeviceView(inflater, layout, device);
 
             if (view != null) {
                 layout.addView(view);
                 deviceViews.put(device.getId(), view);
-                bindDeviceView(view, device);
+                bindDeviceView(view, room, device);
             }
         }
     }
@@ -86,18 +90,18 @@ public class MainScreenRenderer {
     }
 
     // Method to update a device view
-    public static void updateDeviceView(DeviceData device) {
+    public static void updateDeviceView(String selectedRoom, DeviceData device) {
 
         View view = deviceViews.get(device.getId());
 
         if (view == null) return;
 
-        bindDeviceView(view, device);
+        bindDeviceView(view, selectedRoom, device);
     }
 
     // Method to bind UI elements
     @SuppressLint("SetTextI18n")
-    private static void bindDeviceView(View view, DeviceData device) {
+    private static void bindDeviceView(View view, String selectedRoom, DeviceData device) {
 
         String function = device.getFunction() != null
                 ? device.getFunction().toLowerCase()
@@ -108,8 +112,11 @@ public class MainScreenRenderer {
             TextView name = view.findViewById(R.id.lampNameTextView);
             ToggleButton control = view.findViewById(R.id.lampControlToggleButton);
             ToggleButton ldr = view.findViewById(R.id.lampLdrToggleButton);
+            TextView deviceRoomView = view.findViewById(R.id.deviceRoomTextView);
 
             name.setText(device.getName());
+            if (selectedRoom.equals("All")) deviceRoomView.setVisibility(View.VISIBLE);
+            deviceRoomView.setText(device.getRoom());
 
             boolean isOn = "ON".equals(device.getLoadStatus());
             boolean ldrEnabled = "ENABLED".equals(device.getLdrStatus());

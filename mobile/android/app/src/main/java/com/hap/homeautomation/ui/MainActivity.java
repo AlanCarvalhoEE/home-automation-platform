@@ -27,7 +27,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private DeviceManager.DeviceUpdateListener listener;            // DeviceManager listener
-    private final Map<String, View> deviceViews = new HashMap<>();  // Views map
 
     @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
     @Override
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         // Listener to update the screen when there is an update on devices
         listener = device ->
                 runOnUiThread(() ->
-                        MainScreenRenderer.updateDeviceView(device)
+                        MainScreenRenderer.updateDeviceView(roomSpinner.getSelectedItem().toString(),device)
         );
         DeviceManager.getInstance(this).addListener(listener);
     }

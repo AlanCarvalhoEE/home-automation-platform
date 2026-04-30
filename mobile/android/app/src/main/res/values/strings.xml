@@ -28,6 +28,7 @@
     <string name="rooms_tab_label">Rooms</string>
     <string name="devices_tab_label">Devices</string>
     <string name="log_tab_label">Log</string>
+    <string name="all_rooms_label">All</string>
 
     // Buttons
     <string name="confirm_button">Confirm</string>
