@@ -1,0 +1,968 @@
+<project title="hap_on-off_module_diagram" version="0.100.0">
+    <titleblocktemplates>
+        <titleblocktemplate name="A4_1">
+            <information></information>
+            <logos>
+                <logo type="svg" name="Qet.svg" storage=""/>
+            </logos>
+            <grid cols="t22%;r100%;t22%;" rows="25;25;">
+                <field col="0" displaylabel="true" name="author" align="left" hadjust="true" row="0" valign="center">
+                    <value>
+                        <translation lang="en">%author</translation>
+                    </value>
+                    <label>
+                        <translation lang="ar">المؤلف</translation>
+                        <translation lang="ca">Autor</translation>
+                        <translation lang="cs">Autor</translation>
+                        <translation lang="da">Forfatter</translation>
+                        <translation lang="de">Autor</translation>
+                        <translation lang="el">Σχεδίαση</translation>
+                        <translation lang="en">Author</translation>
+                        <translation lang="es">Autor</translation>
+                        <translation lang="fr">Auteur</translation>
+                        <translation lang="hr">Autor</translation>
+                        <translation lang="it">Autore</translation>
+                        <translation lang="pl">Autor</translation>
+                        <translation lang="pt">Autor</translation>
+                        <translation lang="pt_BR">Autor</translation>
+                        <translation lang="ro">Autor</translation>
+                        <translation lang="ru">Автор</translation>
+                        <translation lang="zh">作者</translation>
+                    </label>
+                </field>
+                <field col="1" displaylabel="false" name="title" rowspan="1" align="center" hadjust="true" row="0" valign="center">
+                    <value>
+                        <translation lang="en">%title</translation>
+                    </value>
+                    <label>
+                        <translation lang="ar">عنوان</translation>
+                        <translation lang="ca">Títol</translation>
+                        <translation lang="cs">Název</translation>
+                        <translation lang="da">Titel</translation>
+                        <translation lang="de">Titel</translation>
+                        <translation lang="en">Title</translation>
+                        <translation lang="es">Título</translation>
+                        <translation lang="fr">Titre</translation>
+                        <translation lang="hr">Naslov</translation>
+                        <translation lang="it">Titolo</translation>
+                        <translation lang="pl">Tytuł</translation>
+                        <translation lang="pt">Título</translation>
+                        <translation lang="pt_BR">Título</translation>
+                        <translation lang="ro">Titlu</translation>
+                        <translation lang="ru">Название</translation>
+                        <translation lang="zh">职称</translation>
+                    </label>
+                </field>
+                <field col="2" displaylabel="true" name="file" align="left" hadjust="true" row="0" valign="center">
+                    <value>
+                        <translation lang="en">%filename</translation>
+                    </value>
+                    <label>
+                        <translation lang="ar">ملف</translation>
+                        <translation lang="ca">Fitxer</translation>
+                        <translation lang="cs">Soubor</translation>
+                        <translation lang="da">Filnavn</translation>
+                        <translation lang="de">Datei</translation>
+                        <translation lang="el">Αρχείο</translation>
+                        <translation lang="en">File</translation>
+                        <translation lang="es">Archivo</translation>
+                        <translation lang="fr">Fichier</translation>
+                        <translation lang="hr">Datoteka</translation>
+                        <translation lang="it">File</translation>
+                        <translation lang="pl">Plik</translation>
+                        <translation lang="pt">Ficheiro</translation>
+                        <translation lang="pt_BR">Arquivo</translation>
+                        <translation lang="ro">Fisier</translation>
+                        <translation lang="ru">Файл</translation>
+                        <translation lang="zh">文件名</translation>
+                    </label>
+                </field>
+                <field col="0" displaylabel="true" name="date" align="left" hadjust="true" row="1" valign="center">
+                    <value>
+                        <translation lang="en">%date</translation>
+                    </value>
+                    <label>
+                        <translation lang="ar">تاريخ</translation>
+                        <translation lang="ca">Data</translation>
+                        <translation lang="cs">Datum</translation>
+                        <translation lang="da">Dato</translation>
+                        <translation lang="de">Datum</translation>
+                        <translation lang="el">Ημ/νία</translation>
+                        <translation lang="en">Date</translation>
+                        <translation lang="es">Fecha</translation>
+                        <translation lang="fr">Date</translation>
+                        <translation lang="hr">Datum</translation>
+                        <translation lang="it">Data</translation>
+                        <translation lang="pl">Data</translation>
+                        <translation lang="pt">Data</translation>
+                        <translation lang="pt_BR">Data</translation>
+                        <translation lang="ro">Data</translation>
+                        <translation lang="ru">Дата</translation>
+                        <translation lang="zh">日期</translation>
+                    </label>
+                </field>
+                <field col="2" displaylabel="true" name="Page" align="left" hadjust="true" row="1" valign="center">
+                    <value>
+                        <translation lang="en">%folio</translation>
+                    </value>
+                    <label>
+                        <translation lang="ar">صفحة</translation>
+                        <translation lang="ca">Folio</translation>
+                        <translation lang="cs">Folio</translation>
+                        <translation lang="da">Ark</translation>
+                        <translation lang="de">Seite</translation>
+                        <translation lang="el">Σελίδα</translation>
+                        <translation lang="en">Page</translation>
+                        <translation lang="es">Folio</translation>
+                        <translation lang="fr">Folio</translation>
+                        <translation lang="hr">List</translation>
+                        <translation lang="it">Foglio</translation>
+                        <translation lang="pl">Arkusz</translation>
+                        <translation lang="pt">Folha</translation>
+                        <translation lang="pt_BR">Folha</translation>
+                        <translation lang="ro">Pagina</translation>
+                        <translation lang="ru">Фолио</translation>
+                        <translation lang="zh">当前页</translation>
+                    </label>
+                </field>
+            </grid>
+        </titleblocktemplate>
+    </titleblocktemplates>
+    <properties>
+        <property name="saveddate" show="1">30/04/2026</property>
+        <property name="saveddate-eu" show="1">30-04-2026</property>
+        <property name="saveddate-us" show="1">2026-04-30</property>
+        <property name="savedfilename" show="1">hap_on-off_module_diagram</property>
+        <property name="savedfilepath" show="1">D:/Projetos/HomeAutomationPlatform/docs/diagrams/source/hap_on-off_module_diagram.qet</property>
+        <property name="savedtime" show="1">15:05</property>
+    </properties>
+    <newdiagrams>
+        <border cols="17" colsize="60" rows="8" displaycols="true" displayrows="true" rowsize="80"/>
+        <inset date="null" title="" titleblocktemplate="A4_1" titleblocktemplateCollection="common" auto_page_num="Create an auto folio numbering" displayAt="bottom" filename="" author="" plant="" locmach="" indexrev="" folio="%id/%total" version="">
+            <properties>
+                <property name="author" show="1"></property>
+                <property name="client" show="1"></property>
+                <property name="date" show="1"></property>
+                <property name="filename" show="1"></property>
+                <property name="label1" show="1"></property>
+                <property name="label2" show="1"></property>
+                <property name="label3" show="1"></property>
+                <property name="model" show="1"></property>
+                <property name="objet" show="1"></property>
+                <property name="projet" show="1"></property>
+                <property name="revision" show="1"></property>
+                <property name="title" show="1"></property>
+            </properties>
+        </inset>
+        <conductors num="_" conductor_color="" type="multi" displaytext="1" onetextperfolio="0" vertirotatetext="270" color2="#000000" horizrotatetext="0" bicolor="false" condsize="1" numsize="7" tension_protocol="" bus="" dash-size="2" conductor_section="" vertical-alignment="AlignRight" function="" horizontal-alignment="AlignBottom" text_color="#000000" cable="" formula=""/>
+        <report label="%f-%l%c"/>
+        <xrefs>
+            <xref type="protection" displayhas="cross" offset="0" slave_label="(%f-%l%c)" showpowerctc="true" delayprefix="" switchprefix="" powerprefix="" snapto="label" xrefpos="" master_label="%f-%l%c"/>
+            <xref type="coil" displayhas="cross" offset="40" slave_label="(%f-%l%c)" showpowerctc="true" delayprefix="" switchprefix="" powerprefix="" snapto="label" xrefpos="AlignTop" master_label="%f-%l%c"/>
+            <xref type="commutator" displayhas="cross" offset="0" slave_label="(%f-%l%c)" showpowerctc="true" delayprefix="" switchprefix="" powerprefix="" snapto="label" xrefpos="" master_label="%f-%l%c"/>
+        </xrefs>
+        <conductors_autonums freeze_new_conductors="false" current_autonum=""/>
+        <folio_autonums/>
+        <element_autonums freeze_new_elements="false" current_autonum=""/>
+    </newdiagrams>
+    <diagram colsize="60" indexrev="" displaycols="true" plant="" locmach="" title="HAP ON-OFF Module Wiring Diagram" rows="8" rowsize="80" height="660" filename="hap_on-off_module_diagram" order="1" date="20260430" author="Alan Carvalho" version="0.100.0" freezeNewConductor="false" cols="17" titleblocktemplateCollection="embedded" displayAt="bottom" auto_page_num="Create an auto folio numbering" folio="%id/%total" displayrows="true" freezeNewElement="false" titleblocktemplate="A4_1">
+        <properties>
+            <property name="author" show="1"></property>
+            <property name="date" show="1"></property>
+            <property name="filename" show="1"></property>
+            <property name="folio" show="1"></property>
+            <property name="title" show="1"></property>
+        </properties>
+        <defaultconductor num="_" conductor_color="" type="multi" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" bicolor="false" condsize="1" numsize="7" tension_protocol="" bus="" dash-size="2" conductor_section="" vertical-alignment="AlignRight" function="" horizontal-alignment="AlignBottom" text_color="#000000" cable="" formula=""/>
+        <elements>
+            <element type="embed://import/10_electric/10_allpole/114_connections/splice.elmt" x="240" y="240" z="10" freezeLabel="false" prefix="" uuid="{ff5abf32-32a8-4b9d-9d76-dd775c0e18a5}" orientation="0">
+                <terminals>
+                    <terminal x="-6" y="0" id="0" orientation="3"/>
+                    <terminal x="0" y="0" id="1" orientation="1"/>
+                    <terminal x="0" y="6" id="2" orientation="2"/>
+                </terminals>
+                <inputs/>
+                <properties>
+                    <element_type terminal_led="false" terminal_type="generic" terminal_function="generic"/>
+                </properties>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="1.5" y="-1.45" rotation="0" font="Liberation Sans,9,-1,5,0,0,0,0,0,0,Regular" text_width="-1" uuid="{164412b6-8d39-439e-9469-6352d62bbdd4}" keep_visual_rotation="true" text_from="ElementInfo" Valignment="AlignTop">
+                        <text></text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+            <element type="embed://import/10_electric/10_allpole/380_signaling_operating/20_push_buttons/tirette.elmt" x="240" y="360" z="10" freezeLabel="false" prefix="S" uuid="{76c49444-89d5-4659-ae39-33f1a8b99053}" orientation="0">
+                <terminals>
+                    <terminal x="0" y="-17" id="3" orientation="0"/>
+                    <terminal x="0" y="17" id="4" orientation="2"/>
+                </terminals>
+                <inputs/>
+                <elementInformations>
+                    <elementInformation name="label" show="1">SW1</elementInformation>
+                </elementInformations>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="12" y="-9.5" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{09a93e4b-ca96-4645-9c16-ff1aaec08ef0}" keep_visual_rotation="false" text_from="ElementInfo" Valignment="AlignTop">
+                        <text>SW1</text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+            <element type="embed://import/10_electric/10_allpole/114_connections/splice.elmt" x="360" y="260" z="10" freezeLabel="false" prefix="" uuid="{db18cf71-24a1-47f6-aaad-5ea99aa935e3}" orientation="0">
+                <terminals>
+                    <terminal x="-6" y="0" id="5" orientation="3"/>
+                    <terminal x="0" y="0" id="6" orientation="1"/>
+                    <terminal x="0" y="6" id="7" orientation="2"/>
+                </terminals>
+                <inputs/>
+                <properties>
+                    <element_type terminal_led="false" terminal_type="generic" terminal_function="generic"/>
+                </properties>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="1.5" y="-1.45" rotation="0" font="Liberation Sans,9,-1,5,0,0,0,0,0,0,Regular" text_width="-1" uuid="{97592c53-21e9-4f80-b448-932d7e7e966b}" keep_visual_rotation="true" text_from="ElementInfo" Valignment="AlignTop">
+                        <text></text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+            <element type="embed://import/10_electric/10_allpole/110_network_supplies/src_1p_pe_n.elmt" x="180" y="260" z="10" freezeLabel="false" prefix="" uuid="{b046356a-4c6f-48f1-9260-c98266337bcd}" orientation="0">
+                <terminals>
+                    <terminal x="6" y="-20" id="8" orientation="1"/>
+                    <terminal x="6" y="0" id="9" orientation="1"/>
+                    <terminal x="6" y="20" id="10" orientation="1"/>
+                </terminals>
+                <inputs/>
+                <elementInformations>
+                    <elementInformation name="label" show="1">110/220 Vac</elementInformation>
+                </elementInformations>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="-12" y="-46.95" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{76bdbb48-f982-4165-968c-e8300b5cd39a}" keep_visual_rotation="false" text_from="ElementInfo" Valignment="AlignTop">
+                        <text>110/220 Vac</text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+            <element type="embed://import/lamp.elmt" x="480" y="360" z="10" freezeLabel="false" prefix="" uuid="{dc1e9ac1-6ade-4eb4-b3f5-3591719fb8ca}" orientation="0">
+                <terminals>
+                    <terminal x="0" y="-15" id="11" orientation="0"/>
+                    <terminal x="0" y="14" id="12" orientation="2"/>
+                </terminals>
+                <inputs/>
+                <elementInformations>
+                    <elementInformation name="label" show="1">LD1</elementInformation>
+                </elementInformations>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="14" y="-10" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text_width="-1" uuid="{5836d902-ba18-43ab-a1ff-a53c4d7b5f96}" keep_visual_rotation="true" text_from="ElementInfo" Valignment="AlignVCenter">
+                        <text>LD1</text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+            <element type="embed://import/hap_on-off_module.elmt" x="360" y="420" z="10" freezeLabel="false" prefix="" uuid="{e5ba2bb7-4252-4392-9fc3-2f7e1fd2be8c}" orientation="0">
+                <terminals>
+                    <terminal x="-20" y="-21" id="13" orientation="0"/>
+                    <terminal x="0" y="-21" id="14" orientation="0"/>
+                    <terminal x="20" y="-21" id="15" orientation="0"/>
+                    <terminal x="-36" y="10" id="16" orientation="3"/>
+                    <terminal x="36" y="10" id="17" orientation="1"/>
+                </terminals>
+                <inputs/>
+                <elementInformations>
+                    <elementInformation name="label" show="1">U1</elementInformation>
+                </elementInformations>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignHCenter" x="-11" y="24" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text_width="-1" uuid="{f1dc71d5-a8e3-457e-9f3a-976b4a362321}" keep_visual_rotation="true" text_from="ElementInfo" Valignment="AlignTop">
+                        <text>U1</text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+        </elements>
+        <conductors>
+            <conductor num="_" conductor_color="" type="multi" element2_name="Single-pole source + PE +N" x="0" y="0" displaytext="0" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="Splice" bicolor="false" element1="{ff5abf32-32a8-4b9d-9d76-dd775c0e18a5}" condsize="1" numsize="7" element2="{b046356a-4c6f-48f1-9260-c98266337bcd}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{367dd739-791b-4d8f-9e49-4a70fd990b19}" terminalname1="1" terminal2="{6a808326-9aed-4c61-92b1-799b418218bf}" terminalname2="L" element2_label="110/220 Vac" element1_label="" color="#ff0000" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="_" conductor_color="" type="multi" element2_name="Single-pole source + PE +N" x="0" y="0" displaytext="0" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="Splice" bicolor="false" element1="{db18cf71-24a1-47f6-aaad-5ea99aa935e3}" condsize="1" numsize="7" element2="{b046356a-4c6f-48f1-9260-c98266337bcd}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{367dd739-791b-4d8f-9e49-4a70fd990b19}" terminalname1="1" terminal2="{e54d11d9-f490-45c8-93a4-e1af7f588fb5}" terminalname2="N" element2_label="110/220 Vac" element1_label="" color="#0055ff" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="" conductor_color="" type="multi" element2_name="Single-pole source + PE +N" x="0" y="0" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="HAP ON-OFF Module" bicolor="false" element1="{e5ba2bb7-4252-4392-9fc3-2f7e1fd2be8c}" condsize="1" numsize="7" element2="{b046356a-4c6f-48f1-9260-c98266337bcd}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{13786e34-1b97-4dc6-89b5-8044f2d69e29}" terminalname1="PE" terminal2="{e17ad991-7b38-4e0e-98f5-3072ae836974}" terminalname2="PE" element2_label="110/220 Vac" element1_label="U1" color="#00aa00" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="_" conductor_color="" type="multi" element2_name="Pull switch" x="0" y="0" displaytext="0" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="Splice" bicolor="false" element1="{ff5abf32-32a8-4b9d-9d76-dd775c0e18a5}" condsize="1" numsize="7" element2="{76c49444-89d5-4659-ae39-33f1a8b99053}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{1d3bb613-e8e2-4bcd-8515-ff9a0459b3c3}" terminalname1="3" terminal2="{4c57e78a-224f-441d-92ef-70824f420b67}" terminalname2="" element2_label="SW1" element1_label="" color="#ff0000" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="_" conductor_color="" type="multi" element2_name="Splice" x="0" y="0" displaytext="0" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="HAP ON-OFF Module" bicolor="false" element1="{e5ba2bb7-4252-4392-9fc3-2f7e1fd2be8c}" condsize="1" numsize="7" element2="{db18cf71-24a1-47f6-aaad-5ea99aa935e3}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{ef8e4936-5ac7-41df-aa58-b24f285e645b}" terminalname1="N" terminal2="{1d3bb613-e8e2-4bcd-8515-ff9a0459b3c3}" terminalname2="3" element2_label="" element1_label="U1" color="#0055ff" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="_" conductor_color="" type="multi" element2_name="Splice" x="0" y="0" displaytext="0" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="HAP ON-OFF Module" bicolor="false" element1="{e5ba2bb7-4252-4392-9fc3-2f7e1fd2be8c}" condsize="1" numsize="7" element2="{ff5abf32-32a8-4b9d-9d76-dd775c0e18a5}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{90b1a227-4ff6-41fe-a4d4-7fb18fca4b33}" terminalname1="L" terminal2="{f75b8c8d-508b-4346-a6df-8cda82201d98}" terminalname2="2" element2_label="" element1_label="U1" color="#ff0000" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="_" conductor_color="" type="multi" element2_name="Lamp" x="0" y="0" displaytext="0" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="Splice" bicolor="false" element1="{db18cf71-24a1-47f6-aaad-5ea99aa935e3}" condsize="1" numsize="7" element2="{dc1e9ac1-6ade-4eb4-b3f5-3591719fb8ca}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{f75b8c8d-508b-4346-a6df-8cda82201d98}" terminalname1="2" terminal2="{59515551-dbaf-462a-a721-7a89b8e84ec3}" terminalname2="" element2_label="LD1" element1_label="" color="#0055ff" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="" conductor_color="" type="multi" element2_name="HAP ON-OFF Module" x="0" y="0" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="Pull switch" bicolor="false" element1="{76c49444-89d5-4659-ae39-33f1a8b99053}" condsize="1" numsize="7" element2="{e5ba2bb7-4252-4392-9fc3-2f7e1fd2be8c}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{032d7333-6ab5-4590-b52a-258c44cbff87}" terminalname1="" terminal2="{16e53cb8-6bd7-4e1c-b107-dd3ac15b8ef3}" terminalname2="SW" element2_label="U1" element1_label="SW1" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+            <conductor num="" conductor_color="" type="multi" element2_name="HAP ON-OFF Module" x="0" y="0" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" element1_name="Lamp" bicolor="false" element1="{dc1e9ac1-6ade-4eb4-b3f5-3591719fb8ca}" condsize="1" numsize="7" element2="{e5ba2bb7-4252-4392-9fc3-2f7e1fd2be8c}" tension_protocol="" dash-size="2" bus="" freezeLabel="false" conductor_section="" vertical-alignment="AlignRight" terminal1="{d7da6910-6769-4a9f-8b19-bd8e6b540c56}" terminalname1="" terminal2="{0b2a3c33-b681-4b45-aa14-b0cc0cb0f4a4}" terminalname2="LOAD" element2_label="U1" element1_label="LD1" function="" horizontal-alignment="AlignBottom" text_color="#000000" formula="" cable="">
+                <sequentialNumbers/>
+            </conductor>
+        </conductors>
+        <inputs>
+            <input x="560" y="260" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-weight:600;&quot;>NOTES:&lt;/span>&lt;/p>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>1 - Multiple switches can be used in parallel. Actions in any of them &lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>      will change the LOAD output state.&lt;/p>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8.25pt;&quot;>&lt;br />&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>2 - Multiple loads can be connected in parallel, but the total current &lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>      must be less than 5A.&lt;/p>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8.25pt;&quot;>&lt;br />&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>3 - When there is no need for a switch, the SW input can be left &lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>      unconnected.&lt;/p>&lt;/body>&lt;/html>"/>
+        </inputs>
+    </diagram>
+    <collection>
+        <category name="import">
+            <names>
+                <name lang="ca">Elements importats</name>
+                <name lang="cs">Zavedené prvky</name>
+                <name lang="da">Importerede elementer</name>
+                <name lang="de">Importierte Elemente</name>
+                <name lang="el">Εισηγμένα στοιχεία</name>
+                <name lang="en">Imported elements</name>
+                <name lang="es">Elementos importados</name>
+                <name lang="fr">Éléments importés</name>
+                <name lang="hr">Uvezeni elementi</name>
+                <name lang="it">Elementi importati</name>
+                <name lang="ja">インバートされた要素</name>
+                <name lang="nl">Elementen geïmporteerd</name>
+                <name lang="nl_BE">Elementen geïmporteerd</name>
+                <name lang="pl">Elementy importowane</name>
+                <name lang="pt">Elementos importados</name>
+                <name lang="pt_BR">Elementos importados</name>
+                <name lang="ro">Elemente importate</name>
+                <name lang="ru">Импортированные элементы</name>
+                <name lang="sl">Uvoženi elementi</name>
+                <name lang="sv">Importerade element</name>
+                <name lang="tr">İthal öğeler</name>
+                <name lang="uk">Імпортовані елементи</name>
+                <name lang="zh">导入元件</name>
+            </names>
+            <category name="10_electric">
+                <names>
+                    <name lang="cs">Elektrotechnika</name>
+                    <name lang="da">Elektrisk</name>
+                    <name lang="de">Elektrik</name>
+                    <name lang="el">Ηλεκτρικά</name>
+                    <name lang="en">Electric</name>
+                    <name lang="es">Eléctrica</name>
+                    <name lang="fr">Electrique</name>
+                    <name lang="it">Elettrica</name>
+                    <name lang="ja">電気</name>
+                    <name lang="nl">Elektrotechniek</name>
+                    <name lang="pl">Elektrotechnika</name>
+                    <name lang="pt_BR">Elétrica</name>
+                    <name lang="ru">Электротехника</name>
+                    <name lang="zn">电气工程</name>
+                </names>
+                <category name="10_allpole">
+                    <names>
+                        <name lang="cs">Vícežilový</name>
+                        <name lang="da">Flere ledere</name>
+                        <name lang="de">Allpolig</name>
+                        <name lang="el">Πολυγραμμικό</name>
+                        <name lang="en">All-pole</name>
+                        <name lang="es">Multifilar</name>
+                        <name lang="fr">Multifilaire</name>
+                        <name lang="hu">Többvonalas szimbólumok</name>
+                        <name lang="it">Multifilare</name>
+                        <name lang="ja">複線</name>
+                        <name lang="nl">Veel polig</name>
+                        <name lang="pl">Schematy wieloliniowe</name>
+                        <name lang="pt_BR">Multifilar</name>
+                        <name lang="ru">Многополюсные</name>
+                    </names>
+                    <category name="380_signaling_operating">
+                        <names>
+                            <name lang="cs">Značení a příkazy</name>
+                            <name lang="de">Melde- und Bedieneinrichtungen</name>
+                            <name lang="el">Σήμανση και χειρισμός</name>
+                            <name lang="en">Signaling and operating</name>
+                            <name lang="es">Señalización y comando</name>
+                            <name lang="fr">Signalétique et commande</name>
+                            <name lang="it">Segnalazione e comando</name>
+                            <name lang="ja">信号と操作</name>
+                            <name lang="nl">Signalering en bediening</name>
+                            <name lang="pl">Obwody sterownicze</name>
+                            <name lang="pt_BR">Sinalização e comando</name>
+                            <name lang="ru">Сигнализация и управление</name>
+                        </names>
+                        <category name="20_push_buttons">
+                            <names>
+                                <name lang="ar">مفاتيح ضاغطة</name>
+                                <name lang="cs">Tlačítka</name>
+                                <name lang="de">Drucktaster</name>
+                                <name lang="el">Μπουτόν</name>
+                                <name lang="en">Push-buttons</name>
+                                <name lang="es">Pulsadores</name>
+                                <name lang="fr">Boutons-poussoirs</name>
+                                <name lang="it">Pulsanti</name>
+                                <name lang="nl">Knop druk</name>
+                                <name lang="pl">Przyciski</name>
+                                <name lang="pt">Botões de pressão</name>
+                                <name lang="ru">Кнопки</name>
+                            </names>
+                            <element name="tirette.elmt">
+                                <definition type="element" link_type="master" hotspot_x="8" hotspot_y="30" width="20" height="60" version="0.100.0">
+                                    <uuid uuid="{64db5cfc-627d-f245-37e9-d26b6d4a7b8f}"/>
+                                    <names>
+                                        <name lang="ar">مفتاح بسحّاب</name>
+                                        <name lang="ca">Tire de l'interruptor</name>
+                                        <name lang="cs">Stiskací vypínač</name>
+                                        <name lang="de">Zugschalter</name>
+                                        <name lang="el">Μπουτόν</name>
+                                        <name lang="en">Pull switch</name>
+                                        <name lang="es">Pulsador</name>
+                                        <name lang="fr">Tirette</name>
+                                        <name lang="it">Pulsante a tirante</name>
+                                        <name lang="nl">fout symbool</name>
+                                        <name lang="pl">Łącznik przyciskowy z powrotem samoczynnym</name>
+                                        <name lang="ru">Кнопка (НР)</name>
+                                    </names>
+                                    <kindInformations>
+                                        <kindInformation name="type">commutator</kindInformation>
+                                    </kindInformations>
+                                    <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                    <description>
+                                        <line end1="none" end2="none" y1="0" antialias="false" y2="0" style="line-style:dashed;line-weight:thin;filling:none;color:black" x1="-2" length1="1.5" x2="8" length2="1.5"/>
+                                        <polygon closed="false" y1="-10" antialias="true" y2="10" y3="20" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-5" x2="0" x3="0"/>
+                                        <line end1="none" end2="none" y1="-20" antialias="false" y2="-10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="0" length2="1.5"/>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="12" y="-9.5" z="4" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{a6e3922c-b358-4442-b5cb-1589c40e5bcc}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <line end1="none" end2="none" y1="-5" antialias="false" y2="5" style="line-style:normal;line-weight:thin;filling:none;color:black" x1="9" length1="1.5" x2="9" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-5" antialias="false" y2="-5" style="line-style:normal;line-weight:thin;filling:none;color:black" x1="6" length1="1.5" x2="9" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="5" antialias="false" y2="5" style="line-style:normal;line-weight:thin;filling:none;color:black" x1="6" length1="1.5" x2="9" length2="1.5"/>
+                                        <terminal type="Generic" x="0" y="-21" name="" uuid="{4c57e78a-224f-441d-92ef-70824f420b67}" orientation="n"/>
+                                        <terminal type="Generic" x="0" y="21" name="" uuid="{032d7333-6ab5-4590-b52a-258c44cbff87}" orientation="s"/>
+                                    </description>
+                                </definition>
+                            </element>
+                        </category>
+                    </category>
+                    <category name="110_network_supplies">
+                        <names>
+                            <name lang="cs">Napájení</name>
+                            <name lang="da">Netværkskilder</name>
+                            <name lang="de">Netzquellen</name>
+                            <name lang="el">Παροχές δικτύου</name>
+                            <name lang="en">Network sources</name>
+                            <name lang="es">Fuentes de red</name>
+                            <name lang="fr">Sources réseau</name>
+                            <name lang="hu">Hálózati források</name>
+                            <name lang="it">Alimentazione da rete</name>
+                            <name lang="ja">電源網</name>
+                            <name lang="nl">Netvoedingen</name>
+                            <name lang="pl">Sieć elektroenergetyczna</name>
+                            <name lang="pt_BR">Alimentação</name>
+                            <name lang="ru">Подвод питания, сеть</name>
+                        </names>
+                        <element name="src_1pn.elmt">
+                            <definition type="element" link_type="simple" hotspot_x="21" hotspot_y="18" width="40" height="40" version="0.100.0">
+                                <uuid uuid="{651fb75f-f645-6d0d-2b65-6ecfb3a72726}"/>
+                                <names>
+                                    <name lang="ar">مصدر وحيد القطبية + محايد N</name>
+                                    <name lang="ca">Font unipolar + neutre</name>
+                                    <name lang="cs">Přípojnice 1f+N</name>
+                                    <name lang="de">Wechselstrom L + N</name>
+                                    <name lang="el">Μονοφασικό + Ουδέτερος</name>
+                                    <name lang="en">Single-pole source + neutral</name>
+                                    <name lang="es">Fuente unipolo + neutro</name>
+                                    <name lang="fr">Source unipolaire + neutre</name>
+                                    <name lang="hu">F + N</name>
+                                    <name lang="it">Sorgente unipolare + neutro</name>
+                                    <name lang="nl">Wisselspanning L + nul N</name>
+                                    <name lang="pl">Linia jednofazowa (dwuprzewodowa)</name>
+                                    <name lang="pt">Fonte unipolar + neutro</name>
+                                    <name lang="ru">Однополюсный + нейтраль</name>
+                                </names>
+                                <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                <description>
+                                    <dynamic_text Halignment="AlignLeft" frame="false" x="-5" y="-37.95" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{0299e777-d64a-454c-9d71-3cd926dfafde}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                        <text/>
+                                        <info_name>label</info_name>
+                                    </dynamic_text>
+                                    <line end1="none" end2="none" y1="-10" antialias="false" y2="-10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="10" length2="1.5"/>
+                                    <line end1="none" end2="none" y1="10" antialias="false" y2="10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="10" length2="1.5"/>
+                                    <text x="-12" y="13" rotation="0" font="Liberation Sans,5,-1,5,50,0,0,0,0,0,Regular" color="#000000" text="N"/>
+                                    <text x="-12" y="-7" rotation="0" font="Liberation Sans,5,-1,5,50,0,0,0,0,0,Regular" color="#000000" text="L"/>
+                                    <terminal type="Generic" x="10" y="-10" name="L" uuid="{d0cbef7a-4588-4641-9727-e601c0a646ed}" orientation="e"/>
+                                    <terminal type="Generic" x="10" y="10" name="N" uuid="{3b036ac7-3dd0-4f87-8054-e80140a36823}" orientation="e"/>
+                                </description>
+                            </definition>
+                        </element>
+                        <element name="src_1p_pe_n.elmt">
+                            <definition type="element" link_type="simple" hotspot_x="21" hotspot_y="28" width="40" height="60" version="0.100.0">
+                                <uuid uuid="{0634ff24-5f6a-a914-24f7-d04c43e837c3}"/>
+                                <names>
+                                    <name lang="ar">مصدر وحيد القطبية + أرضي PE + محايد N</name>
+                                    <name lang="ca">Font unipolar + PE + N</name>
+                                    <name lang="cs">Přípojnice 1f+N+PE</name>
+                                    <name lang="de">Wechselstrom + PE +N</name>
+                                    <name lang="el">Μονοφασικό +N +PE</name>
+                                    <name lang="en">Single-pole source + PE +N</name>
+                                    <name lang="es">Fuente unipolo + PE +N</name>
+                                    <name lang="fr">Source unipolaire + PE +N</name>
+                                    <name lang="hu">F + N + PE</name>
+                                    <name lang="it">Sorgente unipolare + PE +N</name>
+                                    <name lang="nl">1 fase + aarde + nul</name>
+                                    <name lang="pl">Linia jednofazowa (trójprzewodowa)</name>
+                                    <name lang="ru">Однополюсный + PE +N</name>
+                                </names>
+                                <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                <description>
+                                    <dynamic_text Halignment="AlignLeft" frame="false" x="-12" y="-46.95" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{99cc9aed-9351-4f90-a932-d9a35bc4268e}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                        <text/>
+                                        <info_name>label</info_name>
+                                    </dynamic_text>
+                                    <line end1="none" end2="none" y1="20" antialias="false" y2="20" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="10" length2="1.5"/>
+                                    <line end1="none" end2="none" y1="-20" antialias="false" y2="-20" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="10" length2="1.5"/>
+                                    <text x="-12" y="23" rotation="0" font="Liberation Sans,5,-1,5,50,0,0,0,0,0,Regular" color="#000000" text="PE"/>
+                                    <line end1="none" end2="none" y1="0" antialias="false" y2="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="10" length2="1.5"/>
+                                    <text x="-12" y="3" rotation="0" font="Liberation Sans,5,-1,5,50,0,0,0,0,0,Regular" color="#000000" text="N"/>
+                                    <text x="-12" y="-17" rotation="0" font="Liberation Sans,5,-1,5,50,0,0,0,0,0,Regular" color="#000000" text="L"/>
+                                    <terminal type="Generic" x="10" y="0" name="N" uuid="{e54d11d9-f490-45c8-93a4-e1af7f588fb5}" orientation="e"/>
+                                    <terminal type="Generic" x="10" y="20" name="PE" uuid="{e17ad991-7b38-4e0e-98f5-3072ae836974}" orientation="e"/>
+                                    <terminal type="Generic" x="10" y="-20" name="L" uuid="{6a808326-9aed-4c61-92b1-799b418218bf}" orientation="e"/>
+                                </description>
+                            </definition>
+                        </element>
+                    </category>
+                    <category name="391_consumers_actuators">
+                        <names>
+                            <name lang="cs">Spotřebiče</name>
+                            <name lang="de">Verbraucher und Aktoren</name>
+                            <name lang="el">Καταναλώσεις και ενεργοποιητές</name>
+                            <name lang="en">Consumers and actuators</name>
+                            <name lang="es">Consumibles y actuadores</name>
+                            <name lang="fr">Consommateurs et actionneurs</name>
+                            <name lang="it">Utilizzatori e attuatori</name>
+                            <name lang="ja">消費装置と作動装置</name>
+                            <name lang="nl">Verbruikers en bewegingen</name>
+                            <name lang="pl">Odbiorniki i urządzenia wykonawcze</name>
+                            <name lang="pt_BR">Consumíveis e atuadores</name>
+                            <name lang="ru">Исполнительные механизмы</name>
+                        </names>
+                        <category name="60_lightings">
+                            <names>
+                                <name lang="cs">Osvětlení</name>
+                                <name lang="de">Beleuchtungen</name>
+                                <name lang="el">Φωτιστικά</name>
+                                <name lang="en">Lightings</name>
+                                <name lang="es">Luces</name>
+                                <name lang="fr">Eclairages</name>
+                                <name lang="it">Illuminazione</name>
+                                <name lang="nl">Lampen</name>
+                                <name lang="pl">Źródła światła</name>
+                                <name lang="ru">Источники света</name>
+                            </names>
+                            <element name="lamp.elmt">
+                                <definition type="element" link_type="simple" hotspot_x="15" hotspot_y="30" width="30" height="60" version="0.100.0">
+                                    <uuid uuid="{5344c765-67a3-f372-30d7-9acaaeb0257d}"/>
+                                    <names>
+                                        <name lang="ca">Làmpada</name>
+                                        <name lang="cs">Žárovka</name>
+                                        <name lang="de">Lampe</name>
+                                        <name lang="el">Λάμπα</name>
+                                        <name lang="en">Lamp</name>
+                                        <name lang="es">Lampara de filamento</name>
+                                        <name lang="fr">Lampe</name>
+                                        <name lang="it">Lampada</name>
+                                        <name lang="nl">Lamp</name>
+                                        <name lang="pl">Żarówka</name>
+                                    </names>
+                                    <informations>Author: Arun Kishore Eswara
+
+License: Creative Commons Attribution 3.0 base License</informations>
+                                    <description>
+                                        <arc x="-4" y="-2" antialias="true" style="line-style:normal;line-weight:normal;filling:none;color:black" start="0" width="4" height="6.6" angle="192"/>
+                                        <polygon closed="false" y1="2.5" antialias="true" y2="12" y3="20" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-3.9" x2="-2" x3="-2"/>
+                                        <polygon closed="false" y1="2.5" antialias="true" y2="12" y3="20" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="3.9" x2="2" x3="2"/>
+                                        <ellipse x="-12" y="-25" antialias="true" style="line-style:normal;line-weight:normal;filling:none;color:black" width="24" height="35"/>
+                                        <rect ry="0" x="-4.5" y="10" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="9" height="8" rx="0"/>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="14" y="-8" z="6" rotation="0" font="Liberation Sans,8,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{c86beaee-a9e4-44db-97a6-155c700b9495}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <arc x="0" y="-2" antialias="true" style="line-style:normal;line-weight:normal;filling:none;color:black" start="348" width="4" height="6.6" angle="192"/>
+                                        <terminal type="Generic" x="2" y="20" name="" uuid="{303a7435-9c54-4aac-b4ab-1ddbb909d6e3}" orientation="s"/>
+                                        <terminal type="Generic" x="-2" y="20" name="" uuid="{8f8527b2-a1f6-49b2-88bb-ab0ff1eeb86c}" orientation="s"/>
+                                    </description>
+                                </definition>
+                            </element>
+                        </category>
+                    </category>
+                    <category name="114_connections">
+                        <names>
+                            <name lang="cs">Spojení</name>
+                            <name lang="da">Forbindelser</name>
+                            <name lang="de">Verbindungen</name>
+                            <name lang="el">Ενώσεις</name>
+                            <name lang="en">Connections</name>
+                            <name lang="es">Conexiones</name>
+                            <name lang="fr">Connections</name>
+                            <name lang="hu">Csatlakozások</name>
+                            <name lang="it">Collegamenti</name>
+                            <name lang="ja">接続</name>
+                            <name lang="nl">Verbindingen</name>
+                            <name lang="pl">Połączenia</name>
+                            <name lang="pt_BR">Conexões</name>
+                            <name lang="ru">Соединения</name>
+                        </names>
+                        <element name="combine.elmt">
+                            <definition type="element" link_type="terminal" hotspot_x="12" hotspot_y="10" width="30" height="30" version="0.100.0">
+                                <uuid uuid="{25b86710-ec64-bba3-affc-734f90dfa283}"/>
+                                <names>
+                                    <name lang="ar">وصلة</name>
+                                    <name lang="ca">Combina</name>
+                                    <name lang="cs">Spoj</name>
+                                    <name lang="de">Klemmstelle (2)</name>
+                                    <name lang="en">Combine</name>
+                                    <name lang="es">Unión</name>
+                                    <name lang="fr">Jonction</name>
+                                    <name lang="hu">Egyesítő három vezetékhez</name>
+                                    <name lang="it">Collegamento</name>
+                                    <name lang="pl">Połączenie 1</name>
+                                    <name lang="ru">Соединение</name>
+                                </names>
+                                <kindInformations>
+                                    <kindInformation name="type">generic</kindInformation>
+                                    <kindInformation name="function">generic</kindInformation>
+                                </kindInformations>
+                                <informations>edited with "QET_ElementScaler"</informations>
+                                <description>
+                                    <line end1="none" end2="none" y1="0" antialias="false" y2="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="7" length1="1.5" x2="1" length2="1.5"/>
+                                    <dynamic_text Halignment="AlignLeft" frame="false" x="2" y="8.5" z="2" rotation="0" font="Liberation Sans,1,-1,5,0,0,0,0,0,0,Regular" text_width="-1" uuid="{43af2b14-2822-4ba2-988b-bda2005f69fd}" keep_visual_rotation="true" Valignment="AlignTop" text_from="UserText">
+                                        <text>_</text>
+                                    </dynamic_text>
+                                    <polygon closed="false" y1="10" antialias="false" y2="6" y3="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" y4="0" x2="0" x3="6" x4="10"/>
+                                    <line end1="none" end2="none" y1="0" antialias="false" y2="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="-4" length2="1.5"/>
+                                    <terminal type="Generic" x="-4" y="0" name="1" uuid="{4884a3c5-d4f2-486c-8bb1-66bf33a72732}" orientation="w"/>
+                                    <terminal type="Generic" x="0" y="10" name="3" uuid="{50eebfc5-ba94-4339-b95b-603f8340fbd0}" orientation="s"/>
+                                    <terminal type="Generic" x="10" y="0" name="2" uuid="{5b594843-4a1f-4c02-8c77-84bf01c45167}" orientation="e"/>
+                                </description>
+                            </definition>
+                        </element>
+                        <element name="splice.elmt">
+                            <definition type="element" link_type="terminal" hotspot_x="18" hotspot_y="10" width="30" height="30" version="0.100.0">
+                                <uuid uuid="{77777239-1791-943b-8f79-8174e74bb962}"/>
+                                <names>
+                                    <name lang="ca">Empalme</name>
+                                    <name lang="cs">Spojka</name>
+                                    <name lang="de">Spleiß</name>
+                                    <name lang="en">Splice</name>
+                                    <name lang="es">Empalme</name>
+                                    <name lang="fr">Epissure</name>
+                                    <name lang="hu">Egyesítő három vezetékhez</name>
+                                    <name lang="it">Spaziatura</name>
+                                    <name lang="pl">Połączenie 3</name>
+                                    <name lang="ru">Сращивание</name>
+                                </names>
+                                <kindInformations>
+                                    <kindInformation name="type">generic</kindInformation>
+                                    <kindInformation name="function">generic</kindInformation>
+                                </kindInformations>
+                                <informations>edited with "QET_ElementScaler"</informations>
+                                <description>
+                                    <dynamic_text Halignment="AlignLeft" frame="false" x="1.5" y="-1.45" z="1" rotation="0" font="Liberation Sans,9,-1,5,0,0,0,0,0,0,Regular" text_width="-1" uuid="{b653b162-d4c8-4660-a5ca-e6ca05a56de9}" keep_visual_rotation="true" Valignment="AlignTop" text_from="ElementInfo">
+                                        <text/>
+                                        <info_name>label</info_name>
+                                    </dynamic_text>
+                                    <polygon closed="false" y1="0" antialias="false" y2="0" y3="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="4" y4="5" x2="-10" y5="10" x3="-5" x4="0" x5="0"/>
+                                    <terminal type="Generic" x="0" y="10" name="3" uuid="{1d3bb613-e8e2-4bcd-8515-ff9a0459b3c3}" orientation="s"/>
+                                    <terminal type="Generic" x="-10" y="0" name="1" uuid="{367dd739-791b-4d8f-9e49-4a70fd990b19}" orientation="w"/>
+                                    <terminal type="Generic" x="4" y="0" name="2" uuid="{f75b8c8d-508b-4346-a6df-8cda82201d98}" orientation="e"/>
+                                </description>
+                            </definition>
+                        </element>
+                    </category>
+                </category>
+                <category name="91_en_60617">
+                    <names>
+                        <name lang="cs">EN 60617</name>
+                        <name lang="da">DS/IEC 60617</name>
+                        <name lang="de">DIN EN 60617</name>
+                        <name lang="en">IEC 60617</name>
+                        <name lang="es">IEC 60617</name>
+                        <name lang="fr">EN 60617</name>
+                        <name lang="ja">電気用図記号 (JIS C 0617 / IEC 60617)</name>
+                        <name lang="pt_BR">IEC 60617</name>
+                    </names>
+                    <category name="en_60617_08">
+                        <names>
+                            <name lang="cs">08- Měřicí přístroje, zdroje světla a signalizační zařízení</name>
+                            <name lang="da">08- Måleinstrumenter, lamper og signaludstyr</name>
+                            <name lang="de">08- Meß-, Melde- und Signaleinrichtungen</name>
+                            <name lang="en">08- Measuring instruments, lamps and signalling devices</name>
+                            <name lang="es">08- Dispositivos de medición, lámparas y dispositivos de señalización</name>
+                            <name lang="fr">08- Appareils de mesure, lampes et dispositifs de siglalisation</name>
+                            <name lang="ja">08- 計器，ランプ及び信号装置</name>
+                            <name lang="pt_BR">08- Instrumentos de medição, lâmpadas e dispositivos de sinalização</name>
+                        </names>
+                        <category name="en_60617_08_10">
+                            <names>
+                                <name lang="cs">10- Zdroje světla a signalizační zařízení</name>
+                                <name lang="de">10- Leuchtmelder und Signaleinrichtungen</name>
+                                <name lang="en">10- Lamps and signalling devices</name>
+                                <name lang="fr">10- Lampes et dispositifs de signalisation</name>
+                                <name lang="ja">10- ランプ及び信号報知装置</name>
+                                <name lang="pt_BR">10- Lâmpadas e dispositivos de sinalização</name>
+                            </names>
+                            <element name="en_60617_08_10_01.elmt">
+                                <definition type="element" link_type="simple" hotspot_x="15" hotspot_y="25" width="30" height="30" version="0.100.0">
+                                    <uuid uuid="{f21693d5-58a5-7d55-9421-3fee0564bf30}"/>
+                                    <names>
+                                        <name lang="ca">Làmpada, símbol general</name>
+                                        <name lang="cs">Zdroj světla
+    Signální zdroj světla</name>
+                                        <name lang="de">Lampe. Leuchtmelder, allgemein</name>
+                                        <name lang="en">Lamp, general symbol</name>
+                                        <name lang="fr">Lampe de signalisation, symbole général</name>
+                                    </names>
+                                    <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                    <description>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="5" y="12.5" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{e68e6613-4f95-4f11-ac1c-8776f915dc6d}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <ellipse x="-10" y="-20" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="20" height="20"/>
+                                        <line end1="none" end2="none" y1="-3" antialias="false" y2="-17" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-7" length1="1.5" x2="7" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-17" antialias="false" y2="-3" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-7" length1="1.5" x2="7" length2="1.5"/>
+                                    </description>
+                                </definition>
+                            </element>
+                            <element name="en_60617_08_10_02.elmt">
+                                <definition type="element" link_type="simple" hotspot_x="25" hotspot_y="37" width="50" height="40" version="0.100.0">
+                                    <uuid uuid="{75ac9124-240a-7348-c443-7602e3759c31}"/>
+                                    <names>
+                                        <name lang="ca">Làmpada de senyalització, tipus intermitent</name>
+                                        <name lang="cs">Zábleskový zdroj světla</name>
+                                        <name lang="de">Sichtmelder, elektromechanisch,
+Schauzeichen,
+Fallklappe</name>
+                                        <name lang="en">Signal lamp, flashing type</name>
+                                        <name lang="fr">Lampe de signalisation, type clignotant</name>
+                                    </names>
+                                    <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                    <description>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="5" y="12.5" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{937ab7c9-05f8-4914-9a8f-7fadbde28b6e}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <ellipse x="-10" y="-20" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="20" height="20"/>
+                                        <line end1="none" end2="none" y1="-3" antialias="false" y2="-17" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-7" length1="1.5" x2="7" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-17" antialias="false" y2="-3" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-7" length1="1.5" x2="7" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-10" antialias="false" y2="-10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-20" length1="1.5" x2="-10" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-10" antialias="false" y2="-10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="10" length1="1.5" x2="20" length2="1.5"/>
+                                        <polygon x6="5" closed="false" y1="-25" antialias="false" y2="-25" y3="-34" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-5" y4="-34" x2="-2" y5="-25" x3="-2" y6="-25" x4="2" x5="2"/>
+                                    </description>
+                                </definition>
+                            </element>
+                        </category>
+                    </category>
+                    <category name="en_60617_11">
+                        <names>
+                            <name lang="cs">11- Stavební a topografické instalační výkresy a schémata</name>
+                            <name lang="da">11- Bygningsmæssige og topografiske installationstegninger og -skemaer</name>
+                            <name lang="de">11- Gebäudebezogene und topographische Installationspläne und Schaltpläne</name>
+                            <name lang="en">11- Architectural and topographical installation plans and diagrams</name>
+                            <name lang="es">11- Dibujos y planos arquitectónicos y topográficos</name>
+                            <name lang="fr">11- Schémas et plans d'installation, architecturaux et topographiques</name>
+                            <name lang="ja">11- 建築設備及び地図上の設備を示す設置平面図及び線図</name>
+                            <name lang="pt_BR">11- Plantas e diagramas de instalação arquitetônicos e topográficos</name>
+                        </names>
+                        <category name="en_60617_11_14">
+                            <names>
+                                <name lang="cs">14- Spínače</name>
+                                <name lang="de">14- Schalter</name>
+                                <name lang="en">14- Switches</name>
+                                <name lang="fr">14- Interrupteurs</name>
+                                <name lang="ja">14- スイッチ</name>
+                                <name lang="pt_BR">14- Interruptores</name>
+                            </names>
+                            <element name="en_60617_11_14_11.elmt">
+                                <definition type="element" link_type="simple" hotspot_x="25" hotspot_y="25" width="30" height="30" version="0.100.0">
+                                    <uuid uuid="{a8aea8fd-59a4-3c25-8812-2e6bb4afb8f3}"/>
+                                    <names>
+                                        <name lang="ca">Polsador amb llum indicadora</name>
+                                        <name lang="cs">Tlačítko s vestavěnou signálkou</name>
+                                        <name lang="de">Taster mit Leuchte</name>
+                                        <name lang="en">Push-button with indicator lamp</name>
+                                        <name lang="fr">Bouton-poussoir lumineux</name>
+                                    </names>
+                                    <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                    <description>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="5" y="12.5" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{9d1811b4-eb8a-4c7f-b6d8-956d6470c08b}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <ellipse x="-20" y="-20" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="20" height="20"/>
+                                        <ellipse x="-15" y="-15" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="10" height="10"/>
+                                        <line end1="none" end2="none" y1="-13" antialias="false" y2="-7" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-13" length1="1.5" x2="-7" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-13" antialias="false" y2="-7" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-7" length1="1.5" x2="-13" length2="1.5"/>
+                                    </description>
+                                </definition>
+                            </element>
+                        </category>
+                        <category name="en_60617_11_15">
+                            <names>
+                                <name lang="cs">15- Světelné vývody a jejich zařízení</name>
+                                <name lang="de">15- Auslässe und Installationen für Leuchten</name>
+                                <name lang="en">15- Lighting, lamps</name>
+                                <name lang="fr">15- Installations d'éclairage, lampes</name>
+                                <name lang="ja">15- 照明用コンセント及び器具</name>
+                                <name lang="pt_BR">15- Iluminação, lâmpadas</name>
+                            </names>
+                            <element name="en_60617_11_15_03.elmt">
+                                <definition type="element" link_type="simple" hotspot_x="25" hotspot_y="25" width="30" height="30" version="0.100.0">
+                                    <uuid uuid="{46a7ed6f-92ea-26e8-0c8e-3296b52622cd}"/>
+                                    <names>
+                                        <name lang="ca">Làmpada, símbol general</name>
+                                        <name lang="cs">Světelný zdroj</name>
+                                        <name lang="de">Leuchte, allgemein</name>
+                                        <name lang="en">Lamp, general symbol</name>
+                                        <name lang="fr">Lampe, symbole général</name>
+                                    </names>
+                                    <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                    <description>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="5" y="12.5" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{d4471fca-0261-44c4-a1c8-f448afcf6bbd}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <ellipse x="-20" y="-20" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="20" height="20"/>
+                                        <line end1="none" end2="none" y1="-17" antialias="false" y2="-3" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-16" length1="1.5" x2="-4" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="-17" antialias="false" y2="-3" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-4" length1="1.5" x2="-17" length2="1.5"/>
+                                    </description>
+                                </definition>
+                            </element>
+                        </category>
+                    </category>
+                </category>
+                <category name="11_singlepole">
+                    <names>
+                        <name lang="cs">Jednopólové</name>
+                        <name lang="da">Enkel leder</name>
+                        <name lang="de">Einpolig</name>
+                        <name lang="el">Μονογραμμικό</name>
+                        <name lang="en">Single pole</name>
+                        <name lang="es">Polo simple</name>
+                        <name lang="fr">Unifilaire</name>
+                        <name lang="it">Unifilare</name>
+                        <name lang="ja">単線</name>
+                        <name lang="nl">Enkel pool</name>
+                        <name lang="pl">Schematy jednoliniowe</name>
+                        <name lang="ru">Однополюсные</name>
+                    </names>
+                    <category name="500_home_installation">
+                        <names>
+                            <name lang="ar">منزليات</name>
+                            <name lang="cs">Domácí elektrotechnika</name>
+                            <name lang="de">Haustechnik Installation</name>
+                            <name lang="el">Οικιακά</name>
+                            <name lang="en">Home installation</name>
+                            <name lang="es">Electrodoméstico</name>
+                            <name lang="fr">Installation domestique</name>
+                            <name lang="it">Impianti civili</name>
+                            <name lang="ja">住宅機器</name>
+                            <name lang="nl">Huisinstallatie</name>
+                            <name lang="pl">Instalacje w obiektach budowlanych</name>
+                            <name lang="pt">Electrodomésticos</name>
+                            <name lang="ru">Бытовая техника</name>
+                        </names>
+                        <category name="30_architectural">
+                            <names>
+                                <name lang="ar">هندسية</name>
+                                <name lang="cs">Architektura</name>
+                                <name lang="de">Architektur</name>
+                                <name lang="el">Αρχιτεκτονικά</name>
+                                <name lang="en">Architectural</name>
+                                <name lang="es">Arquitectura</name>
+                                <name lang="fr">Architecture</name>
+                                <name lang="it">Planimetrici</name>
+                                <name lang="nl">Plattegrond</name>
+                                <name lang="pl">Rysunek architektoniczno-budowlany</name>
+                                <name lang="ru">Архитектурные</name>
+                            </names>
+                            <element name="lampe_1.elmt">
+                                <definition type="element" link_type="simple" hotspot_x="30" hotspot_y="10" width="40" height="40" version="0.100.0">
+                                    <uuid uuid="{5c7d71b3-f61f-65ad-8a00-e5743611ddb7}"/>
+                                    <names>
+                                        <name lang="ca">llum</name>
+                                        <name lang="cs">Světlo</name>
+                                        <name lang="fr">lampe</name>
+                                        <name lang="it">lampada</name>
+                                    </names>
+                                    <informations>edited with "QET_ElementScaler"</informations>
+                                    <description>
+                                        <dynamic_text Halignment="AlignLeft" frame="false" x="-17" y="26.5" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{937ba256-2451-4e01-bd9f-e07d6764cbc7}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                            <text/>
+                                            <info_name>label</info_name>
+                                        </dynamic_text>
+                                        <line end1="none" end2="none" y1="-5" antialias="false" y2="25" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-25" length1="1.5" x2="5" length2="1.5"/>
+                                        <line end1="none" end2="none" y1="25" antialias="false" y2="-5" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-25" length1="1.5" x2="5" length2="1.5"/>
+                                        <terminal type="Generic" x="-10" y="11" name="" uuid="{e362dae4-5598-4590-b14b-db60434a55f2}" orientation="n"/>
+                                    </description>
+                                </definition>
+                            </element>
+                        </category>
+                    </category>
+                </category>
+            </category>
+            <element name="lamp.elmt">
+                <definition type="element" link_type="simple" hotspot_x="20" hotspot_y="25" width="40" height="50" version="0.100.0">
+                    <uuid uuid="{0b2c2f59-7536-42b1-b346-9455077021d6}"/>
+                    <names>
+                        <name lang="en">Lamp</name>
+                        <name lang="pt">Lamp</name>
+                    </names>
+                    <elementInformations/>
+                    <description>
+                        <circle x="-15" y="-15" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" diameter="30"/>
+                        <line end1="none" end2="none" y1="10" antialias="false" y2="-10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-10" length1="1.5" x2="10" length2="1.5"/>
+                        <line end1="none" end2="none" y1="-10" antialias="false" y2="10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-10" length1="1.5" x2="10" length2="1.5"/>
+                        <terminal type="Generic" x="0" y="-19" name="" uuid="{59515551-dbaf-462a-a721-7a89b8e84ec3}" orientation="n"/>
+                        <terminal type="Generic" x="0" y="18" name="" uuid="{d7da6910-6769-4a9f-8b19-bd8e6b540c56}" orientation="s"/>
+                    </description>
+                </definition>
+            </element>
+            <element name="hap_on-off_module.elmt">
+                <definition type="element" link_type="simple" hotspot_x="44" hotspot_y="31" width="90" height="60" version="0.100.0">
+                    <uuid uuid="{c810a94c-370c-4ed2-97e2-f76dbcc2cb3b}"/>
+                    <names>
+                        <name lang="en">HAP ON-OFF Module</name>
+                        <name lang="pt">HAP ON-OFF Module</name>
+                    </names>
+                    <elementInformations/>
+                    <description>
+                        <text x="-2" y="-18" font="Liberation Sans,5,-1,0,50,0,0,0,0,0,Regular" rotation="0" color="#000000" text="N"/>
+                        <text x="-38" y="12" font="Liberation Sans,5,-1,0,50,0,0,0,0,0,Regular" rotation="0" color="#000000" text="SW"/>
+                        <text x="19" y="12" font="Liberation Sans,5,-1,0,50,0,0,0,0,0,Regular" rotation="0" color="#000000" text="LOAD"/>
+                        <text x="15" y="-18" font="Liberation Sans,5,-1,0,50,0,0,0,0,0,Regular" rotation="0" color="#000000" text="PE"/>
+                        <rect ry="0" x="-40" y="-25" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="80" height="50" rx="0"/>
+                        <text x="-25" y="0" font="Liberation Sans,6,-1,0,50,0,0,0,0,0,Regular" rotation="0" color="#000000" text="HAP ON-OFF"/>
+                        <text x="-22" y="-18" font="Liberation Sans,5,-1,0,50,0,0,0,0,0,Regular" rotation="0" color="#000000" text="L"/>
+                        <terminal type="Generic" x="-40" y="10" name="SW" uuid="{16e53cb8-6bd7-4e1c-b107-dd3ac15b8ef3}" orientation="w"/>
+                        <terminal type="Generic" x="-20" y="-25" name="L" uuid="{90b1a227-4ff6-41fe-a4d4-7fb18fca4b33}" orientation="n"/>
+                        <terminal type="Generic" x="20" y="-25" name="PE" uuid="{13786e34-1b97-4dc6-89b5-8044f2d69e29}" orientation="n"/>
+                        <terminal type="Generic" x="0" y="-25" name="N" uuid="{ef8e4936-5ac7-41df-aa58-b24f285e645b}" orientation="n"/>
+                        <terminal type="Generic" x="40" y="10" name="LOAD" uuid="{0b2a3c33-b681-4b45-aa14-b0cc0cb0f4a4}" orientation="e"/>
+                    </description>
+                </definition>
+            </element>
+        </category>
+    </collection>
+</project>
