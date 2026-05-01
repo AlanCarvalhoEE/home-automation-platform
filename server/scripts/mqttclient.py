@@ -1,13 +1,12 @@
 # Project: HAP - Home Automation Platform
 # Code: Raspberry MQTT client script
 # Author: Alan Carvalho
-# Date: 03/08/2025
+# Date: 01/05/2026
 
 import paho.mqtt.client as mqtt
 import dbhandler
 import time
 import json
-
 
 ip = "localhost"
 port = 1883
@@ -39,24 +38,34 @@ def on_message(client, userdata, message):
         if topic == "hap/main/database/add_room":
             data = payload.split(',')
             dbhandler.addRoom(data[0], data[1])
+            dbhandler.addLog("ROOM_ADDED", f"Room {data[1]} added.")
 
         elif topic == "hap/main/database/update_room":
             data = payload.split(',')
+            oldName = dbhandler.getRoomName(data[0])
             dbhandler.updateRoom(data[0], data[1])
+            dbhandler.addLog("ROOM_UPDATED", f"Room {oldName} updated as {data[1]}.")
 
         elif topic == "hap/main/database/delete_room":
+            roomName = dbhandler.getRoomName(payload)
             dbhandler.deleteRoom(payload)
+            dbhandler.addLog("ROOM_DELETED", f"Room {roomName} deleted.")
 
         elif topic == "hap/main/database/add_device":
             data = payload.split(',')
             dbhandler.addDevice(data[0], data[1], data[2], data[3], data[4], data[5])
+            dbhandler.addLog("DEVICE_ADDED", f"Device {data[1]} added to {data[2]}.")
 
         elif topic == "hap/main/database/delete_device":
+            oldName = dbhandler.getDeviceName(payload)
             dbhandler.deleteDevice(payload)
+            dbhandler.addLog("DEVICE_DELETED", f"Device {oldName} deleted.")
 
         elif topic == "hap/main/database/update_device":
             data = payload.split(',')
+            oldName = dbhandler.getDeviceName(data[0])
             dbhandler.updateDevice(data[0], data[1], data[2], data[3], data[4], data[5])
+            dbhandler.addLog("DEVICE_UPDATED", f"Device {oldName} updated as {data[1]} at {data[2]}.")
 
         database = dbhandler.getDatabase()
         client.publish("hap/main/database/data", database, qos=1, retain=True)

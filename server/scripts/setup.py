@@ -36,7 +36,7 @@ databaseStructure = {
     "Log": {
         "columns": [
             ("ID", "INTEGER PRIMARY KEY AUTOINCREMENT"),
-            ("Timestamp", "INTEGER"),
+            ("Timestamp", "TEXT"),
             ("Type", "TEXT"),
             ("Message", "TEXT"),
         ]

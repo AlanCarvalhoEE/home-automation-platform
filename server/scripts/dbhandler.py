@@ -1,12 +1,13 @@
 # Project: HAP - Home Automation Platform
 # Code: Raspberry database handler script
 # Author: Alan Carvalho
-# Date: 12/02/2026
+# Date: 01/05/2026
 
 # Libraries
 import setup            # setup.py script
 import sqlite3 as lite  # Library to work with sqlite database
 import json             # Library to work with json packages
+import time             # Library to work with time of the day
 
 
 # Function to create and configure the database
@@ -128,6 +129,18 @@ def deleteRoom(roomID):
         cursor.close()
         connection.close()
 
+# Function to get a room name
+def getRoomName(roomID):
+    connection = lite.connect(setup.dbName)
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("SELECT Name FROM Rooms WHERE ID = ?", (roomID,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    finally:
+        cursor.close()
+        connection.close()
 
 # Function to add new devices
 def addDevice(deviceID, name, room, type_, function, topic):
@@ -199,12 +212,26 @@ def deleteDevice(deviceID):
         cursor.close()
         connection.close()
 
-#Function to add a log entry
-def addLog(timestamp, logType, message):
+# Function to get a device name
+def getDeviceName(deviceID):
     connection = lite.connect(setup.dbName)
     cursor = connection.cursor()
 
     try:
+        cursor.execute("SELECT Name FROM Devices WHERE ID = ?", (deviceID,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    finally:
+        cursor.close()
+        connection.close()
+
+#Function to add a log entry
+def addLog(logType, message):
+    connection = lite.connect(setup.dbName)
+    cursor = connection.cursor()
+
+    try:
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         cursor.execute(
             "INSERT INTO Log (Timestamp, Type, Message) VALUES (?, ?, ?)",
             (timestamp, logType, message)
