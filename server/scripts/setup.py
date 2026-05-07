@@ -3,9 +3,10 @@
 # Author: Alan Carvalho
 # Date: 11/08/2024
 
+import credentials
 
 # Database name
-dbName = "home_automation_db.db"
+dbName = credentials.DATABASE_NAME
 
 # Database structure
 databaseStructure = {
@@ -36,7 +37,7 @@ databaseStructure = {
     "Log": {
         "columns": [
             ("ID", "INTEGER PRIMARY KEY AUTOINCREMENT"),
-            ("Timestamp", "INTEGER"),
+            ("Timestamp", "TEXT"),
             ("Type", "TEXT"),
             ("Message", "TEXT"),
         ]
