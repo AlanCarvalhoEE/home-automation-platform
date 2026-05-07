@@ -1,0 +1,15 @@
+git
+mosquitto
+mosquitto-clients
+python-is-python3
+python3-pip
+python3-rpi.gpio
+sqlite3
+network-manager
+iptables-persistent
+rsync
+curl
+nano
+htop
+tree
+zerotier-one
