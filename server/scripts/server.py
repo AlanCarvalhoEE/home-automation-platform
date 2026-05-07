@@ -4,9 +4,10 @@
 # Date: 08/05/2024
 
 # Libraries
-import socket           # Library for sockets implementation
-import threading        # Library to allow concurrent processes
-from pubsub import pub  # Library to handle data publishing to another script 
+import credentials
+import socket          
+import threading       
+from pubsub import pub  
 
 # Client connections variables
 connections = []
@@ -53,8 +54,8 @@ def newConnections(socket):
 
 def main():
     # Server host and port
-    host = '0.0.0.0'
-    port = 5560
+    host = credentials.SERVER_HOST
+    port = credentials.SERVER_PORT
 
     # Create new server socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

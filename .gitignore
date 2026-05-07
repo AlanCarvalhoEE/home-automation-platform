@@ -6,6 +6,7 @@ credentials.h
 
 #Server
 __pycache__/
+credentials.py
 *.pyc
 *.pyo
 *.db

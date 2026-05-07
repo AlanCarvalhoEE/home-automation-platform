@@ -4,12 +4,13 @@
 # Date: 01/05/2026
 
 import paho.mqtt.client as mqtt
+import credentials
 import dbhandler
 import time
 import json
 
-ip = "localhost"
-port = 1883
+ip = credentials.MQTT_BROKER_IP
+port = credentials.MQTT_BROKER_PORT
 
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
