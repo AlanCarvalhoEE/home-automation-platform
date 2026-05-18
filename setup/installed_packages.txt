@@ -10,6 +10,4 @@ iptables-persistent
 rsync
 curl
 nano
-htop
 tree
-zerotier-one

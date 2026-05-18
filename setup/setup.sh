@@ -9,6 +9,9 @@ sudo apt update
 echo "Installing APT packages..."
 sudo xargs -a installed_packages.txt apt install -y
 
+echo "Installing ZeroTier..."
+curl -s https://install.zerotier.com | sudo bash
+
 echo "Creating Python virtual environment..."
 python3 -m venv venv
 
@@ -20,7 +23,7 @@ pip install --upgrade pip
 pip3 install -r requirements.txt
 
 echo "Installing systemd services..."
-sudo cp services/*.service /etc/systemd/system/
+sudo cp ../server/services/*.service /etc/systemd/system/
 
 echo "Enabling services..."
 sudo systemctl daemon-reload
