@@ -20,7 +20,7 @@ public class FirmwareManager {
     public static FirmwareData getFirmwareData(String type)
             throws IOException, JSONException {
 
-        URL url = new URL(Credentials.FIRMWARE_URL);
+        URL url = new URL(Credentials.getFirmwareURL());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
