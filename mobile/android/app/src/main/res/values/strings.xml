@@ -65,6 +65,9 @@
     <string name="firmware_update_description">Update firmware</string>
 
     //  Messages
+    <string name="connection_check_message">Checking connection</string>
+    <string name="local_connection_message">Connected via local network</string>
+    <string name="vpn_connection_message">Connected via VPN</string>
     <string name="vpn_check_message">Checking VPN</string>
     <string name="vpn_installation_error_message">ZeroTier One APP is required.\nProceed with installation?</string>
     <string name="vpn_connection_error_message">ZeroTier One not connected.\nProceed with connection?</string>

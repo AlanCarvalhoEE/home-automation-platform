@@ -6,18 +6,16 @@ import android.os.Handler;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.hap.homeautomation.core.Credentials;
+import com.hap.homeautomation.R;
+import com.hap.homeautomation.core.ConnectionManager;
 import com.hap.homeautomation.core.DatabaseManager;
 import com.hap.homeautomation.core.DialogManager;
 import com.hap.homeautomation.core.MQTTclient;
-import com.hap.homeautomation.R;
-import com.hap.homeautomation.core.VPNmanager;
-import com.hap.homeautomation.rooms.RoomData;
-import com.hap.homeautomation.rooms.RoomManager;
 import com.hap.homeautomation.devices.DeviceData;
 import com.hap.homeautomation.devices.DeviceManager;
+import com.hap.homeautomation.rooms.RoomData;
+import com.hap.homeautomation.rooms.RoomManager;
 
 import org.json.JSONObject;
 
@@ -49,10 +47,10 @@ public class IntroActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         // Initialize the MQTTclient instance
-        mqttClient = MQTTclient.getInstance();
+        //mqttClient = MQTTclient.getInstance();
 
-        // Check VPN connection status
-        checkVPNconnection();
+        // Check connection status
+        checkConnection();
     }
 
     @Override
@@ -61,12 +59,13 @@ public class IntroActivity extends AppCompatActivity {
 
         if(waitingUserAction) {
             waitingUserAction = false;
-            checkVPNconnection();
+            checkConnection();
         }
     }
 
     // Method to connect to MQTT
     public void connectMQTT() {
+
         mqttClient.connect(new MQTTclient.MqttConnectionCallback() {
             @Override
             public void onSuccess() {
@@ -83,68 +82,94 @@ public class IntroActivity extends AppCompatActivity {
         });
     }
 
-    // Method to check the VPN installation
-    public void checkVPNconnection() {
+    // Method to check the connection to server
+    public void checkConnection() {
 
         new Thread(() -> {
 
-            boolean vpnInstallation = VPNmanager.checkInstallation(this);
-            boolean vpnConnection = VPNmanager.checkVPNconnection(this);
-            boolean serverConnection = VPNmanager.checkserverConnection(
-                    Credentials.SERVER_IP, Credentials.SERVER_PORT, 2000);
-
             TextView messageTextView = findViewById(R.id.messageTextView);
 
-            runOnUiThread(() -> {
+            runOnUiThread(() ->
+                    messageTextView.setText(getString(R.string.connection_check_message)));
 
-                messageTextView.setText(getString(R.string.vpn_check_message));
+            boolean localConnection = ConnectionManager.connectLocal();
 
-                introHandler.postDelayed(() -> {
+            try { Thread.sleep(1500); }
+            catch (Exception ignored) {}
 
-                    if (!vpnInstallation) {
+            if (localConnection) {
 
-                        DialogManager.openIntroDialog(this,
-                                getString(R.string.vpn_installation_error_message), () -> {
-                                    waitingUserAction = true;
-                                    VPNmanager.openPlayStore(this);
-                                }
-                        );
-                        return;
-                    }
+                runOnUiThread(() ->
+                        messageTextView.setText(getString(R.string.local_connection_message)));
 
-                    messageTextView.setText(getString(R.string.server_check_message));
+                try { Thread.sleep(1500); }
+                catch (Exception ignored) {}
 
-                    introHandler.postDelayed(() -> {
+                mqttClient = MQTTclient.getInstance();
+                connectMQTT();
 
-                        if (!vpnConnection) {
+                runOnUiThread(() ->
+                        messageTextView.setText(getString(R.string.database_check_message)));
 
-                            DialogManager.openIntroDialog(this,
-                                    getString(R.string.vpn_connection_error_message), () -> {
-                                        waitingUserAction = true;
-                                        VPNmanager.openZeroTier(this);
-                                    }
-                            );
-                            return;
-                        }
+                introHandler.postDelayed(this::checkDatabase, 3000);
 
-                        messageTextView.setText(getString(R.string.database_check_message));
+                return;
+            }
 
-                        introHandler.postDelayed(() -> {
+            runOnUiThread(() -> messageTextView.setText(R.string.vpn_check_message));
 
-                            if (!serverConnection) {
-                                DialogManager.openIntroDialog(this,
-                                        getString(R.string.server_error_message),
-                                        this::checkVPNconnection);
-                                return;
-                            }
+            try { Thread.sleep(1500); }
+            catch (Exception ignored) {}
 
-                            connectMQTT();
-                            introHandler.postDelayed(this::checkDatabase, 2000);
+            boolean vpnInstalled = ConnectionManager.isVPNinstalled(this);
 
-                        }, 1200);
-                    }, 1200);
-                }, 1200);
-            });
+            if (!vpnInstalled) {
+
+                runOnUiThread(() -> DialogManager.openIntroDialog(
+                        this, getString(R.string.vpn_installation_error_message),
+                        () -> {
+
+                            waitingUserAction = true;
+                            ConnectionManager.openPlayStore(this);
+                        }));
+
+                return;
+            }
+
+            boolean vpnConnected = ConnectionManager.isVPNconnected(this);
+
+            if (vpnConnected) {
+
+                boolean vpnConnection =
+                        ConnectionManager.connectVPN(this);
+
+                if (vpnConnection) {
+
+                    runOnUiThread(() ->
+                            messageTextView.setText(getString(R.string.vpn_connection_message)));
+
+                    try { Thread.sleep(1500); }
+                    catch (Exception ignored) {}
+
+                    mqttClient = MQTTclient.getInstance();
+                    connectMQTT();
+
+                    runOnUiThread(() ->
+                            messageTextView.setText(getString(R.string.database_check_message)));
+
+                    introHandler.postDelayed(this::checkDatabase, 3000);
+
+                    return;
+                }
+            }
+
+            runOnUiThread(() -> DialogManager.openIntroDialog(
+                    this, getString(R.string.vpn_connection_error_message),
+                    () -> {
+
+                        waitingUserAction = true;
+                        ConnectionManager.openVPNapp(this);
+                    }));
         }).start();
     }
 

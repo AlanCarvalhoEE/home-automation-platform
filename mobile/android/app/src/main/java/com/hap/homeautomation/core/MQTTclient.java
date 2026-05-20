@@ -23,7 +23,7 @@ public class MQTTclient {
         client = MqttClient.builder()
                 .useMqttVersion3()
                 .identifier(ID)
-                .serverHost(Credentials.SERVER_IP)
+                .serverHost(Credentials.getServerIP())
                 .serverPort(Credentials.SERVER_PORT)
                 .automaticReconnectWithDefaultConfig()
                 .addConnectedListener(context ->
