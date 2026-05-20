@@ -97,6 +97,76 @@ hap/
 
 ---
 
+## System Setup Steps
+
+- Install a lightweight Raspberry Pi OS:
+  - Raspberry Pi OS Lite (recommended)
+  - Enable SSH during installation
+  - Configure a static local IP address
+
+- Update the system:
+```
+sudo apt update
+sudo apt upgrade -y
+```
+
+- Install and configure GIT:
+```
+sudo apt install git -y
+```
+
+- Clone the repository:
+```
+git clone https://github.com/AlanCarvalhoEE/hap.git
+```
+
+- Enter project folder:
+```
+cd hap
+```
+
+- Edit your credentials:
+```
+cp server/scripts/credentials_example.py server/scripts/credentials.py
+nano server/scripts/credentials.py
+```
+
+- Run setup.sh:
+```
+cd setup
+chmod +x setup.sh
+./setup.sh
+```
+  - The script will install all the needed packages, dependencies and services.
+
+- Configure Mosquitto:
+```
+sudo nano /etc/mosquitto/mosquitto.conf
+```
+  - Include to the end of the file:
+  ```
+  listener 1883
+  allow_anonymous true
+  ```
+
+- Restart Mosquitto:
+```
+sudo systemctl restart mosquitto
+```
+
+- Connect to your ZeroTier network (must be previously created on web browser):
+```
+sudo zerotier-cli join <network_id>
+```
+  - After zoining, the device must be allowed on the ZeroTier network dashboard.
+
+- Reboot the Raspberry Pi:
+```
+sudo reboot now
+```
+
+---
+
 ## Current Status
 
 - Core server architecture implemented
