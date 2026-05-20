@@ -158,7 +158,7 @@ sudo systemctl restart mosquitto
 ```
 sudo zerotier-cli join <network_id>
 ```
-  - After zoining, the device must be allowed on the ZeroTier network dashboard.
+  - After joining, the device must be allowed on the ZeroTier network dashboard.
 
 - Reboot the Raspberry Pi:
 ```
