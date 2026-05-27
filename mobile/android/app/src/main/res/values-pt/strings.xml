@@ -17,8 +17,10 @@
     <string name="ldr_label">LDR</string>
     <string name="ldr_reading_label">Leitura</string>
     <string name="ldr_threshold_label">Limiar</string>
-    <string name="search_label">Buscar dispositivos</string>
+    <string name="add_device_label">Adicionar dispositivo</string>
     <string name="discovered_label">Dispositivos encontrados</string>
+    <string name="device_selection_label">Selecione o tipo do dispositivo</string>
+    <string name="camera_label">Câmera</string>
     <string name="firmware_label">Firmware</string>
     <string name="current_firmware_label">Atual:</string>
     <string name="latest_firmware_label">Último:</string>
@@ -48,6 +50,7 @@
     <string name="room_add_description">Adicionar novo cômodo</string>
     <string name="device_add_description">Adicionar novo dispositivo</string>
     <string name="device_search_description">Buscar dispositivos</string>
+    <string name="device_keyboard_description">Inserir dispositivos manualmente</string>
     <string name="room_open_description">Mostrar informações do cômodo</string>
     <string name="configuration_button_description">Abrir janela de configurações</string>
     <string name="language_button_description">Selecionar o idioma</string>

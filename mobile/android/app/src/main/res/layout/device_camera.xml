@@ -91,6 +91,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/cameraControlToggleButton" />
 
+                <TextView
+                    android:id="@+id/cameraRoomTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"
+                    android:singleLine="true"
+                    android:textColor="@color/darkGrey"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cameraNameTextView" />
+
                 <FrameLayout
                     android:id="@+id/videoLayout"
                     android:layout_width="0dp"
@@ -100,7 +113,7 @@
                     app:layout_constraintDimensionRatio="640:480"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cameraNameTextView" >
+                    app:layout_constraintTop_toBottomOf="@id/cameraRoomTextView" >
 
                     <org.videolan.libvlc.util.VLCVideoLayout
                         android:id="@+id/cameraVideoLayout"

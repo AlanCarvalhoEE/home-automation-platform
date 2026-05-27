@@ -120,7 +120,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/idTextView"/>
 
                 <TextView
-                    android:id="@+id/deviceRoomTextView"
+                    android:id="@+id/lampRoomTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

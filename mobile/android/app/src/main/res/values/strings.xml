@@ -17,8 +17,10 @@
     <string name="ldr_label">LDR</string>
     <string name="ldr_reading_label">Reading:</string>
     <string name="ldr_threshold_label">Threshold:</string>
-    <string name="search_label">Search devices</string>
+    <string name="add_device_label">Add device</string>
     <string name="discovered_label">Devices found</string>
+    <string name="device_selection_label">Select the device type</string>
+    <string name="camera_label">Camera</string>
     <string name="firmware_label">Firmware</string>
     <string name="current_firmware_label">Current:</string>
     <string name="latest_firmware_label">Latest:</string>
@@ -48,6 +50,7 @@
     <string name="room_add_description">Add new room</string>
     <string name="device_add_description">Add new device</string>
     <string name="device_search_description">Search devices</string>
+    <string name="device_keyboard_description">Manually insert devices</string>
     <string name="room_open_description">Show room information</string>
     <string name="configuration_button_description">Open configuration screen</string>
     <string name="language_button_description">Select the language</string>

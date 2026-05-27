@@ -20,7 +20,7 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/searchLabelTextView"
+            android:id="@+id/addDeviceLabelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -30,7 +30,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="@string/search_label"
+            android:text="@string/add_device_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,9 +44,23 @@
             android:padding="5dp"
             android:scaleType="centerCrop"
             android:contentDescription="@string/device_search_description"
-            app:layout_constraintStart_toEndOf="@id/searchLabelTextView"
-            app:layout_constraintTop_toTopOf="@id/searchLabelTextView"
-            app:layout_constraintBottom_toBottomOf="@id/searchLabelTextView"/>
+            app:layout_constraintStart_toEndOf="@id/addDeviceLabelTextView"
+            app:layout_constraintTop_toTopOf="@id/addDeviceLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@id/addDeviceLabelTextView"/>
+
+        <ImageButton
+            android:id="@+id/deviceManualImageButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_keyboard_states"
+            android:cropToPadding="false"
+            android:layout_marginStart="15dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/device_keyboard_description"
+            app:layout_constraintStart_toEndOf="@id/deviceSearchImageButton"
+            app:layout_constraintTop_toTopOf="@id/addDeviceLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@id/addDeviceLabelTextView"/>
 
         <ScrollView
             android:layout_width="0dp"
@@ -55,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchLabelTextView">
+            app:layout_constraintTop_toBottomOf="@id/addDeviceLabelTextView">
 
             <LinearLayout
                 android:id="@+id/devicesLayout"

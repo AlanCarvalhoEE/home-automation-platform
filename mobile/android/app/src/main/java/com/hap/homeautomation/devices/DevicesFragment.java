@@ -45,8 +45,8 @@ public class DevicesFragment extends Fragment {
 
         devicesLayout = view.findViewById(R.id.devicesLayout);
 
-        ImageButton deviceSearchImageButton =
-                view.findViewById(R.id.deviceSearchImageButton);
+        ImageButton deviceSearchImageButton = view.findViewById(R.id.deviceSearchImageButton);
+        ImageButton deviceManualImageButton = view.findViewById(R.id.deviceManualImageButton);
 
         // Search button listener
         deviceSearchImageButton.setOnClickListener(v -> {
@@ -55,7 +55,7 @@ public class DevicesFragment extends Fragment {
             );
 
                 DialogManager.openDiscoveredDevicesDialog(requireActivity(), discoveryManager,
-                        discoveredDevice -> DialogManager.openAddDeviceDialog(
+                        discoveredDevice -> DialogManager.openAddDiscoveredDeviceDialog(
                                 requireActivity(), discoveredDevice,
                                 RoomManager.getInstance(requireContext()).getAllRoomNames(),
                                 deviceData -> {
@@ -82,6 +82,29 @@ public class DevicesFragment extends Fragment {
                 );}
         );
 
+        // Manual insert button listener
+        deviceManualImageButton.setOnClickListener(v -> {
+
+                    DialogManager.openAddManualDeviceDialog(requireActivity(),
+                            RoomManager.getInstance(requireContext()).getAllRoomNames(),
+                            deviceData -> {
+
+                                databaseManager.addDevice(
+                                        deviceData.getId(), deviceData.getName(),
+                                        deviceData.getRoom(), deviceData.getType(),
+                                        deviceData.getFunction(), deviceData.getTopic());
+
+                                DeviceManager.getInstance(requireContext()).addDevice(deviceData, true);
+
+                                String payload = deviceData.getId() + "," +
+                                        deviceData.getName() + "," + deviceData.getRoom() +
+                                        "," + deviceData.getType() + "," +
+                                        deviceData.getFunction() + "," + deviceData.getTopic();
+
+                                mqttClient.publish("hap/main/database/add_device", payload);
+                                addDeviceView(deviceData);
+                            });
+                });
         renderDevices();
         return view;
     }
@@ -149,7 +172,7 @@ public class DevicesFragment extends Fragment {
 
         TextView deviceNameTextView = deviceView.findViewById(R.id.deviceNameTextView);
         TextView deviceIdTextView = deviceView.findViewById(R.id.deviceIdTextView);
-        TextView deviceRoomTextView = deviceView.findViewById(R.id.deviceRoomTextView);
+        TextView deviceRoomTextView = deviceView.findViewById(R.id.lampRoomTextView);
         TextView deviceTypeTextView = deviceView.findViewById(R.id.deviceTypeTextView);
         TextView deviceFunctionTextView = deviceView.findViewById(R.id.deviceFunctionTextView);
         ImageButton deviceConfigImageButton = deviceView.findViewById(R.id.deviceConfigImageButton);

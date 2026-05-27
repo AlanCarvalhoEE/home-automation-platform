@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +25,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.hap.homeautomation.R;
 import com.hap.homeautomation.devices.DeviceData;
 import com.hap.homeautomation.devices.DeviceDiscoveryManager;
-import com.hap.homeautomation.devices.DeviceFunction;
+import com.hap.homeautomation.devices.HapDevicesList;
 import com.hap.homeautomation.devices.DeviceManager;
 import com.hap.homeautomation.devices.DiscoveredDevice;
+import com.hap.homeautomation.devices.OtherDevicesList;
 import com.hap.homeautomation.firmware.FirmwareManager;
 import com.hap.homeautomation.rooms.RoomData;
 import com.hap.homeautomation.ui.MainActivity;
@@ -271,9 +273,11 @@ public class DialogManager {
         dialog.setOnDismissListener(d -> discoveryManager.stopDiscovery());
     }
 
-    // Method to open "Add device" dialog
-    public static void openAddDeviceDialog(Activity activity, DiscoveredDevice discoveredDevice,
-                                           List<String> roomsList, Consumer<DeviceData> onConfirm) {
+    // Method to open "Add discovered device" dialog
+    public static void openAddDiscoveredDeviceDialog(Activity activity,
+                                                     DiscoveredDevice discoveredDevice,
+                                                     List<String> roomsList,
+                                                     Consumer<DeviceData> onConfirm) {
 
         ViewGroup root = activity.findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(activity).inflate
@@ -304,7 +308,7 @@ public class DialogManager {
         roomSpinner.setAdapter(roomAdapter);
 
         List<String> functionList = new ArrayList<>();
-        for (DeviceFunction function : DeviceFunction.values()) functionList.add(function.name());
+        for (HapDevicesList function : HapDevicesList.values()) functionList.add(function.name());
 
         ArrayAdapter<String> functionAdapter;
         functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
@@ -329,6 +333,96 @@ public class DialogManager {
             if (onConfirm != null) {onConfirm.accept(
                     new DeviceData(deviceID, deviceName, deviceRoom, deviceType,
                             deviceFunction, deviceID));}
+            dialog.dismiss();
+        });
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+    }
+
+    // Method to open "Manually add device" dialog
+    public static void openAddManualDeviceDialog(Activity activity,
+                                                 List<String> roomsList,
+                                                 Consumer<DeviceData> onConfirm) {
+
+        ViewGroup root = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity).inflate
+                (R.layout.dialog_add_device, root, false);
+
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(Objects.requireNonNull(dialogView));
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(
+                    (int)(activity.getResources().getDisplayMetrics().widthPixels * 0.9),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+        Spinner roomSpinner = dialog.findViewById(R.id.roomSpinner);
+        Spinner functionSpinner = dialog.findViewById(R.id.functionSpinner);
+        ConstraintLayout idLayout = dialog.findViewById(R.id.idLayout);
+        ConstraintLayout topicLayout = dialog.findViewById(R.id.topicLayout);
+        EditText idEditText = dialog.findViewById(R.id.idEditText);
+        View idSeparator = dialog.findViewById(R.id.idSeparator);
+        EditText topicEditText = dialog.findViewById(R.id.topicEditText);
+        View topicSeparator = dialog.findViewById(R.id.topicSeparator);
+        Button confirmButton = dialog.findViewById(R.id.yesButton);
+        Button cancelButton = dialog.findViewById(R.id.noButton);
+
+        idLayout.setVisibility(View.VISIBLE);
+        idSeparator.setVisibility(View.VISIBLE);
+        topicLayout.setVisibility(View.VISIBLE);
+        topicSeparator.setVisibility(View.VISIBLE);
+
+        ArrayAdapter<String> roomAdapter;
+        roomAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, roomsList);
+        roomSpinner.setAdapter(roomAdapter);
+
+        List<String> functionList = new ArrayList<>();
+        for (OtherDevicesList function : OtherDevicesList.values()) functionList.add(function.name());
+
+        ArrayAdapter<String> functionAdapter;
+        functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
+        functionSpinner.setAdapter(functionAdapter);
+
+        Runnable validateFields = () -> {
+            boolean enabled = !nameEditText.getText().toString().trim().isEmpty() &&
+                              !idEditText.getText().toString().trim().isEmpty() &&
+                              !topicEditText.getText().toString().trim().isEmpty();
+            confirmButton.setEnabled(enabled);
+        };
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateFields.run();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        nameEditText.addTextChangedListener(textWatcher);
+        idEditText.addTextChangedListener(textWatcher);
+        topicEditText.addTextChangedListener(textWatcher);
+
+        confirmButton.setOnClickListener(v -> {
+
+            String deviceID = idEditText.getText().toString();
+            String deviceName = nameEditText.getText().toString();
+            String deviceRoom = roomSpinner.getSelectedItem().toString();
+            String deviceFunction = functionSpinner.getSelectedItem().toString();
+            String deviceTopic = topicEditText.getText().toString();
+
+            if (onConfirm != null) {onConfirm.accept(
+                    new DeviceData(deviceID, deviceName, deviceRoom, deviceFunction,
+                            deviceFunction, deviceTopic));}
             dialog.dismiss();
         });
 
@@ -378,7 +472,7 @@ public class DialogManager {
         roomSpinner.setAdapter(roomAdapter);
 
         List<String> functionList = new ArrayList<>();
-        for (DeviceFunction function : DeviceFunction.values()) functionList.add(function.name());
+        for (HapDevicesList function : HapDevicesList.values()) functionList.add(function.name());
         ArrayAdapter<String> functionAdapter;
         functionAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, functionList);
         functionSpinner.setAdapter(functionAdapter);
