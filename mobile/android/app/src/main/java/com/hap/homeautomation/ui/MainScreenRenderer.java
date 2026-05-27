@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -11,10 +13,14 @@ import android.widget.ToggleButton;
 import android.widget.ArrayAdapter;
 
 import com.hap.homeautomation.R;
+import com.hap.homeautomation.core.DevicesConnectivityChecker;
+import com.hap.homeautomation.core.VideoStreamPlayer;
 import com.hap.homeautomation.devices.DeviceData;
 import com.hap.homeautomation.devices.DeviceManager;
 import com.hap.homeautomation.devices.DeviceController;
 import com.hap.homeautomation.rooms.RoomManager;
+
+import org.videolan.libvlc.util.VLCVideoLayout;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +30,8 @@ import java.util.Map;
 
 public class MainScreenRenderer {
 
-
     private static final Map<String, View> deviceViews = new HashMap<>();
+    private static final Map<String, VideoStreamPlayer> streamPlayers = new HashMap<>();
     private static String currentRoom = "";
 
     // Method to update the rooms
@@ -49,6 +55,12 @@ public class MainScreenRenderer {
         if (room.equals(currentRoom) && layout.getChildCount() > 0) return;
         currentRoom = room;
 
+        for (VideoStreamPlayer player : streamPlayers.values()) {
+            player.stopVideo();
+            player.releaseVideo();
+        }
+
+        streamPlayers.clear();
         layout.removeAllViews();
         deviceViews.clear();
 
@@ -86,6 +98,10 @@ public class MainScreenRenderer {
             return inflater.inflate(R.layout.device_lamp, layout, false);
         }
 
+        if (function.contains("camera")) {
+            return inflater.inflate(R.layout.device_camera, layout, false);
+        }
+
         return null;
     }
 
@@ -109,12 +125,12 @@ public class MainScreenRenderer {
 
         if (function.contains("lamp")) {
 
-            TextView name = view.findViewById(R.id.lampNameTextView);
-            ToggleButton control = view.findViewById(R.id.lampControlToggleButton);
+            TextView lampNameTextView = view.findViewById(R.id.lampNameTextView);
+            ToggleButton lampControlToggleButton = view.findViewById(R.id.lampControlToggleButton);
             ToggleButton ldr = view.findViewById(R.id.lampLdrToggleButton);
-            TextView deviceRoomView = view.findViewById(R.id.deviceRoomTextView);
+            TextView deviceRoomView = view.findViewById(R.id.lampRoomTextView);
 
-            name.setText(device.getName());
+            lampNameTextView.setText(device.getName());
             if (selectedRoom.equals("All")) deviceRoomView.setVisibility(View.VISIBLE);
             deviceRoomView.setText(device.getRoom());
 
@@ -123,11 +139,11 @@ public class MainScreenRenderer {
             boolean online = "ONLINE".equals(device.getStatus());
             boolean hasLdr = function.contains("ldr");
 
-            control.setOnCheckedChangeListener(null);
+            lampControlToggleButton.setOnCheckedChangeListener(null);
             ldr.setOnCheckedChangeListener(null);
 
-            if (control.isChecked() != isOn) {
-                control.setChecked(isOn);
+            if (lampControlToggleButton.isChecked() != isOn) {
+                lampControlToggleButton.setChecked(isOn);
             }
 
             if (ldr.isChecked() != ldrEnabled) {
@@ -135,9 +151,9 @@ public class MainScreenRenderer {
             }
 
             ldr.setVisibility(hasLdr ? View.VISIBLE : View.GONE);
-            control.setClickable(!ldrEnabled);
+            lampControlToggleButton.setClickable(!ldrEnabled);
 
-            control.setOnCheckedChangeListener((btn, isChecked) -> {
+            lampControlToggleButton.setOnCheckedChangeListener((btn, isChecked) -> {
                 if (!btn.isPressed()) return;
                 DeviceController.setLoad(device.getId(), isChecked);
             });
@@ -150,6 +166,53 @@ public class MainScreenRenderer {
             }
 
             setViewStatus(view, online, true);
+        }
+
+        else if (function.contains("camera")) {
+
+            TextView cameraNameTextView = view.findViewById(R.id.cameraNameTextView);
+            ToggleButton cameraControlToggleButton = view.findViewById(R.id.cameraControlToggleButton);
+            FrameLayout videoLayout = view.findViewById(R.id.videoLayout);
+            VLCVideoLayout cameraVideoLayout = view.findViewById(R.id.cameraVideoLayout);
+            TextView deviceRoomView = view.findViewById(R.id.cameraRoomTextView);
+
+            VideoStreamPlayer player = streamPlayers.get(device.getId());
+            if (player == null) {
+                player = new VideoStreamPlayer(
+                        view.getContext(),
+                        cameraVideoLayout
+                );
+                streamPlayers.put(device.getId(), player);
+            }
+            final VideoStreamPlayer streamPlayer = player;
+
+            cameraNameTextView.setText(device.getName());
+            if (selectedRoom.equals("All")) deviceRoomView.setVisibility(View.VISIBLE);
+            deviceRoomView.setText(device.getRoom());
+
+            new Thread(() -> {
+                String ip = DevicesConnectivityChecker.getIp(device.getTopic());
+                int port = DevicesConnectivityChecker.getPort(device.getTopic());
+                boolean online = DevicesConnectivityChecker.isOnline(ip, port, 3000);
+                view.post(() -> setViewStatus(view, online, false));
+            }).start();
+
+            cameraControlToggleButton.setOnCheckedChangeListener(null);
+
+            cameraControlToggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+                if (isChecked) {
+                    videoLayout.setVisibility(View.VISIBLE);
+                    try {
+                        streamPlayer.startVideo(device.getTopic());
+                    } catch (Exception e) {
+                        toggleButton.setChecked(false);
+                    }
+                }
+                else {
+                    videoLayout.setVisibility(View.GONE);
+                    streamPlayer.stopVideo();
+                }
+            });
         }
     }
 

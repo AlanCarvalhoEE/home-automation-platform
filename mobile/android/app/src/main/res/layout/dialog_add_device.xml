@@ -80,7 +80,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_height="3dp"
                     android:background="@color/mediumGrey" />
 
@@ -121,7 +121,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_height="3dp"
                     android:background="@color/mediumGrey" />
 
@@ -162,9 +162,105 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_height="3dp"
                     android:background="@color/mediumGrey" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/idLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/idTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:singleLine="true"
+                        android:text="@string/id_label"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/idEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:hint="@string/device_id_hint"
+                        android:textColorHint="@color/mediumGrey"
+                        android:textColor="@color/lightGrey"
+                        app:layout_constraintStart_toEndOf="@id/idTextView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/idTextView"
+                        app:layout_constraintBottom_toBottomOf="@id/idTextView" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/idSeparator"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="3dp"
+                    android:background="@color/mediumGrey"
+                    android:visibility="gone"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/topicLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/topicTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:singleLine="true"
+                        android:text="@string/topic_label"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/topicEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:hint="@string/device_topic_hint"
+                        android:textColorHint="@color/mediumGrey"
+                        android:textColor="@color/lightGrey"
+                        app:layout_constraintStart_toEndOf="@id/topicTextView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/topicTextView"
+                        app:layout_constraintBottom_toBottomOf="@id/topicTextView" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/topicSeparator"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_height="3dp"
+                    android:background="@color/mediumGrey"
+                    android:visibility="gone"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

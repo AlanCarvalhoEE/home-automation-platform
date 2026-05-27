@@ -109,19 +109,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/roomDevicesLayout"
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/devicesTextView"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/devicesTextView">
+
+            <LinearLayout
+                android:id="@+id/roomDevicesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             </LinearLayout>
+            </ScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

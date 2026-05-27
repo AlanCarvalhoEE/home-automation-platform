@@ -1,6 +1,6 @@
 package com.hap.homeautomation.devices;
 
-public enum DeviceFunction {
+public enum HapDevicesList {
 
     lamp,
     lamp_ldr,

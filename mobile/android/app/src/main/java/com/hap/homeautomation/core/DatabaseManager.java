@@ -186,7 +186,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void addRoom(String roomID, String roomName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        System.out.println("JJJJJJJJJJJJJJJJJJ");
+
         values.put(ROOM_ID_COL, roomID);
         values.put(ROOM_NAME_COL, roomName);
         db.insert(ROOMS_TABLE_NAME, null, values);
